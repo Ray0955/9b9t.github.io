@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Выберите сервер</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background"></div>
+    <div class="server-selection">
+        <!-- Выбор языка -->
+        <div class="language-selector">
+            <select id="language-select">
+                <option value="ru">Русский</option>
+                <option value="uk">Українська</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+        <h1 data-lang="ru">Выберите сервер</h1>
+        <h1 data-lang="uk">Оберіть сервер</h1>
+        <h1 data-lang="en">Choose a server</h1>
+        <div class="servers">
+            <div class="server" data-server="2b2t">
+                <img src="https://via.placeholder.com/300x150?text=2b2t" alt="2b2t">
+                <h2>2b2t</h2>
+            </div>
+            <div class="server" data-server="9b9t">
+                <img src="https://via.placeholder.com/300x150?text=9b9t" alt="9b9t">
+                <h2>9b9t</h2>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

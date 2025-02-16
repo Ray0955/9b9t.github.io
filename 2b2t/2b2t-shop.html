@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2b2t Shop</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Иконка корзины из FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="background"></div>
+    <div class="header">
+        <!-- Выбор языка -->
+        <div class="language-selector">
+            <select id="language-select">
+                <option value="ru">Русский</option>
+                <option value="uk">Українська</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+        <!-- Иконка корзины -->
+        <div class="cart-icon">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count">0</span>
+        </div>
+    </div>
+
+    <div class="content">
+        <h1 data-lang="ru">Магазин 2b2t</h1>
+        <h1 data-lang="uk">Магазин 2b2t</h1>
+        <h1 data-lang="en">2b2t Shop</h1>
+
+        <!-- Список товаров -->
+        <div class="products">
+            <!-- Товар 1 -->
+            <div class="product" data-id="1" data-price="10">
+                <img src="images/obsidian.png" alt="Обсидиан">
+                <h2 data-lang="ru">Обсидиан</h2>
+                <h2 data-lang="uk">Обсидіан</h2>
+                <h2 data-lang="en">Obsidian</h2>
+                <p data-lang="ru">Цена: $10</p>
+                <p data-lang="uk">Ціна: $10</p>
+                <p data-lang="en">Price: $10</p>
+                <button class="add-to-cart" data-lang="ru">Добавить в корзину</button>
+                <button class="add-to-cart" data-lang="uk">Додати до кошика</button>
+                <button class="add-to-cart" data-lang="en">Add to Cart</button>
+            </div>
+
+            <!-- Товар 2 -->
+            <div class="product" data-id="2" data-price="20">
+                <img src="https://via.placeholder.com/150" alt="Золотые яблоки">
+                <h2 data-lang="ru">Золотые яблоки</h2>
+                <h2 data-lang="uk">Золоті яблука</h2>
+                <h2 data-lang="en">Golden Apples</h2>
+                <p data-lang="ru">Цена: $20</p>
+                <p data-lang="uk">Ціна: $20</p>
+                <p data-lang="en">Price: $20</p>
+                <button class="add-to-cart" data-lang="ru">Добавить в корзину</button>
+                <button class="add-to-cart" data-lang="uk">Додати до кошика</button>
+                <button class="add-to-cart" data-lang="en">Add to Cart</button>
+            </div>
+        </div>
+
+        <!-- Модальное окно корзины -->
+        <div class="cart-modal">
+            <div class="cart-content">
+                <h2 data-lang="ru">Корзина</h2>
+                <h2 data-lang="uk">Кошик</h2>
+                <h2 data-lang="en">Cart</h2>
+                <ul class="cart-items"></ul>
+                <p data-lang="ru">Общая сумма: $<span class="total">0</span></p>
+                <p data-lang="uk">Загальна сума: $<span class="total">0</span></p>
+                <p data-lang="en">Total: $<span class="total">0</span></p>
+                <!-- Кнопка PayPal -->
+                <div id="paypal-button-container"></div>
+                <button class="close-cart" data-lang="ru">Закрыть</button>
+                <button class="close-cart" data-lang="uk">Закрити</button>
+                <button class="close-cart" data-lang="en">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

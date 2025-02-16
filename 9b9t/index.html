@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Иконка корзины из FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="background"></div>
+    <div class="header">
+        <!-- Иконка "Назад" -->
+        <div class="back-icon" onclick="window.location.href='../index.html'">
+            <i class="fas fa-arrow-left"></i>
+        </div>
+        <!-- Выбор языка -->
+        <div class="language-selector">
+            <select id="language-select">
+                <option value="ru">Русский</option>
+                <option value="uk">Українська</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+        <!-- Иконка корзины -->
+        <div class="cart-icon" onclick="window.location.href='cart.html'">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count">0</span>
+        </div>
+    </div>
+
+    <div class="content">
+        <h1 data-lang="ru">Магазин</h1>
+        <h1 data-lang="uk">Магазин</h1>
+        <h1 data-lang="en">Shop</h1>
+
+        <!-- Список товаров -->
+        <div class="products">
+            <!-- Товар 1 -->
+            <div class="product" data-id="1" data-price="1">
+                <img src="images/obsidian.png" alt="Обсидиан">
+                <h2 data-lang="ru">ТЕСТ</h2>
+                <h2 data-lang="uk">Блоки обсидіану</h2>
+                <h2 data-lang="en">Obsidian Blocks</h2>
+                <p data-lang="ru">Цена: $1</p>
+                <p data-lang="uk">Ціна: $1</p>
+                <p data-lang="en">Price: $1</p>
+                <button class="add-to-cart">Добавить в корзину</button>
+            </div>
+
+            <!-- Товар 2 -->
+            <div class="product" data-id="2" data-price="20">
+                <img src="https://via.placeholder.com/150" alt="Золотые яблоки">
+                <h2 data-lang="ru">Золотые яблоки</h2>
+                <h2 data-lang="uk">Золоті яблука</h2>
+                <h2 data-lang="en">Golden Apples</h2>
+                <p data-lang="ru">Цена: $20</p>
+                <p data-lang="uk">Ціна: $20</p>
+                <p data-lang="en">Price: $20</p>
+                <button class="add-to-cart">Добавить в корзину</button>
+            </div>
+
+            <!-- Товар 3 -->
+            <div class="product" data-id="3" data-price="15">
+                <img src="https://via.placeholder.com/150" alt="Кристаллы Края">
+                <h2 data-lang="ru">Кристаллы Края</h2>
+                <h2 data-lang="uk">Кристали Краю</h2>
+                <h2 data-lang="en">End Crystals</h2>
+                <p data-lang="ru">Цена: $15</p>
+                <p data-lang="uk">Ціна: $15</p>
+                <p data-lang="en">Price: $15</p>
+                <button class="add-to-cart">Добавить в корзину</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
