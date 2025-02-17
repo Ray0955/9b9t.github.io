@@ -39,7 +39,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- заказы -->
+                    <!-- Сюда будут вставляться заказы -->
                 </tbody>
             </table>
         </div>
@@ -52,11 +52,11 @@
             const loginForm = document.getElementById('login-form');
             const errorMessage = document.getElementById('error-message');
 
-
+            // Сохранённые хеши логина и пароля (логин: "***", пароль: "***")
             const ADMIN_USERNAME_HASH = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918";
             const ADMIN_PASSWORD_HASH = "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9";
 
-            // (SHA-256)
+            // Функция для хеширования строки (SHA-256)
             async function hashSHA256(text) {
                 const encoder = new TextEncoder();
                 const data = encoder.encode(text);
@@ -65,7 +65,7 @@
                 return hashArray.map(byte => byte.toString(16).padStart(2, "0")).join("");
             }
 
-            
+            // Проверка логина и пароля
             loginForm.addEventListener("submit", async (e) => {
                 e.preventDefault();
 
@@ -84,12 +84,12 @@
                 }
             });
 
-            // загрузки заказов
+            // Функция загрузки заказов
             function loadOrders() {
                 const orders = JSON.parse(localStorage.getItem("orders")) || [];
                 const ordersTable = document.querySelector("#orders-table tbody");
 
-                ordersTable.innerHTML = ""; 
+                ordersTable.innerHTML = ""; // Очищаем таблицу перед загрузкой
 
                 orders.forEach(order => {
                     const row = document.createElement("tr");
