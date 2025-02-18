@@ -1,32 +1,34 @@
 document.addEventListener('DOMContentLoaded', () => {
     const languageSelect = document.getElementById('language-select');
-    const addToCartButtons = document.querySelectorAll('.add-to-cart');
-    const cartCount = document.querySelector('.cart-count');
 
     // Загрузка выбранного языка из localStorage
     const savedLanguage = localStorage.getItem('selectedLanguage') || 'ru';
-    languageSelect.value = savedLanguage;
-    changeLanguage(savedLanguage);
+    if (languageSelect) {
+        languageSelect.value = savedLanguage;
+        changeLanguage(savedLanguage); // Применяем язык при загрузке страницы
+    }
 
-    // Обработчик для выбора языка
-    languageSelect.addEventListener('change', (event) => {
-        const selectedLang = event.target.value;
-        localStorage.setItem('selectedLanguage', selectedLang);
-        changeLanguage(selectedLang);
-    });
+    // Обработчик изменения выбора языка
+    if (languageSelect) {
+        languageSelect.addEventListener('change', (event) => {
+            const selectedLang = event.target.value;
+            localStorage.setItem('selectedLanguage', selectedLang); // Сохраняем язык
+            changeLanguage(selectedLang); // Применяем язык
+        });
+    }
 
     // Функция для переключения языка
     function changeLanguage(lang) {
-        // Обновляем текст кнопки "Добавить в корзину"
-        addToCartButtons.forEach(button => {
-            if (lang === 'ru') {
-                button.innerText = 'Добавить в корзину';
-            } else if (lang === 'uk') {
-                button.innerText = 'Додати до кошика';
-            } else if (lang === 'en') {
-                button.innerText = 'Add to Cart';
+        document.querySelectorAll('[data-lang]').forEach(element => {
+            if (element.getAttribute('data-lang') === lang) {
+                element.style.display = 'block'; // Показываем элемент
+            } else {
+                element.style.display = 'none'; // Скрываем элемент
             }
         });
+    }
+});
+
 
         // Обновляем текст других элементов
         document.querySelectorAll('[data-lang]').forEach(element => {
