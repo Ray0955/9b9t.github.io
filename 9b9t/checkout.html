@@ -1,93 +1,127 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Оформление заказа</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
-    <div class="background"></div>
-    <div class="header">
-        <!-- Иконка "Назад" -->
-        <div class="back-icon" onclick="window.location.href='cart.html'">
-            <i class="fas fa-arrow-left"></i>
-        </div>
-        <!-- Выбор языка -->
-        <div class="language-selector">
-            <select id="language-select">
-                <option value="ru">Русский</option>
-                <option value="uk">Українська</option>
-                <option value="en">English</option>
-            </select>
-        </div>
-    </div>
+document.addEventListener('DOMContentLoaded', () => {
+    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+    const orderItemsList = document.querySelector('.order-items');
+    const orderTotal = document.getElementById('order-total');
+    const minOrderWarning = document.getElementById('min-order-warning');
+    const checkoutMain = document.getElementById('checkout-main');
+    const payButtons = document.querySelectorAll('.pay-button');
+    const contactForm = document.getElementById('contact-form');
+    const languageSelect = document.getElementById('language-select');
 
-    <div class="checkout-container">
-        <div class="checkout-content">
-            <h1 data-lang="ru">Оформление заказа</h1>
-            <h1 data-lang="uk">Оформлення замовлення</h1>
-            <h1 data-lang="en">Checkout</h1>
+    // Загрузка выбранного языка из localStorage
+    const savedLanguage = localStorage.getItem('selectedLanguage') || 'ru';
+    languageSelect.value = savedLanguage;
+    changeLanguage(savedLanguage);
 
-            <!-- Сообщение о минимальной сумме -->
-            <div class="min-order-warning" id="min-order-warning">
-                <i class="fas fa-exclamation-triangle"></i>
-                <p data-lang="ru">Минимальная общая цена $2. Добавьте еще несколько товаров в корзину и возвращайтесь!</p>
-                <p data-lang="uk">Мінімальна загальна ціна $2. Додайте ще кілька товарів у кошик і повертайтесь!</p>
-                <p data-lang="en">Minimum total price is $2. Add more items to your cart and come back!</p>
-            </div>
+    // Обработчик для выбора языка
+    languageSelect.addEventListener('change', (event) => {
+        const selectedLang = event.target.value;
+        localStorage.setItem('selectedLanguage', selectedLang);
+        changeLanguage(selectedLang);
+    });
 
-            <!-- Основной блок оформления заказа -->
-            <div class="checkout-main" id="checkout-main">
-                <div class="contact-info">
-                    <h2 data-lang="ru">Контактная информация</h2>
-                    <h2 data-lang="uk">Контактна інформація</h2>
-                    <h2 data-lang="en">Contact Information</h2>
+    // Функция для переключения языка
+    function changeLanguage(lang) {
+        // Переключение текстов на странице
+        document.querySelectorAll('[data-lang]').forEach(element => {
+            if (element.getAttribute('data-lang') === lang) {
+                element.style.display = 'block';
+            } else {
+                element.style.display = 'none';
+            }
+        });
 
-                    <form id="contact-form">
-                        <label for="username" data-lang="ru">Имя Пользователя:</label>
-                        <label for="username" data-lang="uk">Ім'я Користувача:</label>
-                        <label for="username" data-lang="en">Username:</label>
-                        <input type="text" id="username" name="username" required>
+        // Переключение кнопки оплаты на выбранный язык
+        payButtons.forEach(button => {
+            if (button.getAttribute('data-lang') === lang) {
+                button.style.display = 'none'; // Сначала скрываем все кнопки
+            } else {
+                button.style.display = 'none';
+            }
+        });
 
-                        <label for="discord" data-lang="ru">Ник Discord:</label>
-                        <label for="discord" data-lang="uk">Нік Discord:</label>
-                        <label for="discord" data-lang="en">Discord Nickname:</label>
-                        <input type="text" id="discord" name="discord" required>
+        // Показываем кнопку оплаты, если форма заполнена
+        const isFormValid = contactForm.checkValidity();
+        if (isFormValid) {
+            const activePayButton = document.querySelector(`.pay-button[data-lang="${lang}"]`);
+            if (activePayButton) {
+                activePayButton.style.display = 'block';
+            }
+        }
+    }
 
-                        <label for="email" data-lang="ru">Электронная почта:</label>
-                        <label for="email" data-lang="uk">Електронна пошта:</label>
-                        <label for="email" data-lang="en">Email:</label>
-                        <input type="email" id="email" name="email" required>
-                    </form>
+    // Проверка минимальной суммы
+    const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    if (total < 2) {
+        minOrderWarning.style.display = 'block';
+        checkoutMain.style.display = 'none';
+        payButtons.forEach(button => button.style.display = 'none');
+    } else {
+        minOrderWarning.style.display = 'none';
+        checkoutMain.style.display = 'flex';
+    }
 
-                    <div class="contact-notice">
-                        <p data-lang="ru">Нам нужна некоторая информация, чтобы мы могли уведомить вас о завершении заказа и связаться с вами в случае возникновения каких-либо проблем.</p>
-                        <p data-lang="uk">Нам потрібна деяка інформація, щоб ми могли повідомити вас про завершення замовлення та зв'язатися з вами у разі виникнення будь-яких проблем.</p>
-                        <p data-lang="en">We need some information so we can notify you when your order is complete and contact you if there are any issues.</p>
-                    </div>
-                </div>
+    // Отображение товаров в заказе
+    function renderOrderSummary() {
+        orderItemsList.innerHTML = '';
+        cartItems.forEach(item => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <span>${item.name} - $${item.price} x ${item.quantity}</span>
+            `;
+            orderItemsList.appendChild(li);
+        });
+        orderTotal.innerText = total.toFixed(2);
+    }
 
-                <!-- Чек товара -->
-                <div class="order-summary">
-                    <h2 data-lang="ru">Ваш заказ:</h2>
-                    <h2 data-lang="uk">Ваше замовлення:</h2>
-                    <h2 data-lang="en">Your Order:</h2>
-                    <ul class="order-items"></ul>
-                    <p class="order-total" data-lang="ru">Общая сумма: $<span id="order-total">0</span></p>
-                    <p class="order-total" data-lang="uk">Загальна сума: $<span id="order-total">0</span></p>
-                    <p class="order-total" data-lang="en">Total: $<span id="order-total">0</span></p>
-                </div>
-            </div>
+    // Обработчик для изменения полей формы
+    contactForm.addEventListener('input', () => {
+        const isFormValid = contactForm.checkValidity();
+        const currentLanguage = languageSelect.value;
 
-            <!-- Кнопка "Оплатить" (изначально скрыта) -->
-            <button class="pay-button" id="pay-button" data-lang="ru" style="display: none;">Оплатить</button>
-            <button class="pay-button" id="pay-button" data-lang="uk" style="display: none;">Оплатити</button>
-            <button class="pay-button" id="pay-button" data-lang="en" style="display: none;">Pay</button>
-        </div>
-    </div>
+        payButtons.forEach(button => {
+            if (button.getAttribute('data-lang') === currentLanguage) {
+                button.style.display = isFormValid ? 'block' : 'none';
+            } else {
+                button.style.display = 'none';
+            }
+        });
+    });
 
-    <script src="checkout.js"></script>
-</body>
-</html>
+    // Обработчик для кнопки "Оплатить"
+    payButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (contactForm.checkValidity()) {
+                // Сбор данных пользователя
+                const userData = {
+                    username: document.getElementById('username').value,
+                    discord: document.getElementById('discord').value,
+                    email: document.getElementById('email').value,
+                    order: cartItems,
+                    total: total,
+                    date: new Date().toLocaleString() // Добавляем дату заказа
+                };
+
+                // Получаем текущие заказы из localStorage
+                const orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+                // Добавляем новый заказ
+                orders.push(userData);
+
+                // Сохраняем обновлённый список заказов
+                localStorage.setItem('orders', JSON.stringify(orders));
+
+                // Очистка корзины
+                localStorage.removeItem('cart');
+
+                alert('Оплата прошла успешно! Данные сохранены.');
+                window.location.href = 'index.html'; // Перенаправление на главную страницу
+            } else {
+                alert('Заполните все поля контактной информации!');
+            }
+        });
+    });
+
+    renderOrderSummary();
+});
