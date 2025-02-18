@@ -10,21 +10,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedLanguage = localStorage.getItem('selectedLanguage') || 'ru';
     if (languageSelect) {
         languageSelect.value = savedLanguage;
+        changeLanguage(savedLanguage); // Применяем язык при загрузке страницы
     }
-    changeLanguage(savedLanguage);
 
-    // Обработчик для выбора языка
+    // Обработчик изменения выбора языка
     if (languageSelect) {
         languageSelect.addEventListener('change', (event) => {
             const selectedLang = event.target.value;
-            localStorage.setItem('selectedLanguage', selectedLang);
-            changeLanguage(selectedLang);
+            localStorage.setItem('selectedLanguage', selectedLang); // Сохраняем язык
+            changeLanguage(selectedLang); // Применяем язык
         });
     }
 
     // Функция для переключения языка
     function changeLanguage(lang) {
-        // Скрываем все элементы с атрибутом data-lang
         document.querySelectorAll('[data-lang]').forEach(element => {
             if (element.getAttribute('data-lang') === lang) {
                 element.style.display = 'block'; // Показываем элемент
