@@ -19,24 +19,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Функция для переключения языка
-    function changeLanguage(lang) {
-        document.querySelectorAll('[data-lang]').forEach(element => {
-            if (element.getAttribute('data-lang') === lang) {
-                element.style.display = 'block';
-            } else {
-                element.style.display = 'none';
-            }
-        });
-
-        // Обновляем текст кнопки "Перейти к оформлению"
-        if (lang === 'ru') {
-            checkoutButton.innerText = 'Перейти к оформлению';
-        } else if (lang === 'uk') {
-            checkoutButton.innerText = 'Перейти до оформлення';
-        } else if (lang === 'en') {
-            checkoutButton.innerText = 'Proceed to Checkout';
+function changeLanguage(lang) {
+    // Скрываем все элементы с атрибутом data-lang
+    document.querySelectorAll('[data-lang]').forEach(element => {
+        if (element.getAttribute('data-lang') === lang) {
+            element.style.display = 'block'; // Показываем элемент
+        } else {
+            element.style.display = 'none'; // Скрываем элемент
         }
+    });
+
+    // Обновляем текст кнопки "Перейти к оформлению"
+    if (lang === 'ru') {
+        checkoutButton.innerText = 'Перейти к оформлению';
+    } else if (lang === 'uk') {
+        checkoutButton.innerText = 'Перейти до оформлення';
+    } else if (lang === 'en') {
+        checkoutButton.innerText = 'Proceed to Checkout';
     }
+}
 
     // Отображение товаров в корзине
     function renderCart() {
