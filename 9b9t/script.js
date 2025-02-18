@@ -1,51 +1,78 @@
 document.addEventListener('DOMContentLoaded', () => {
     const languageSelect = document.getElementById('language-select');
-    const addToCartButtons = document.querySelectorAll('.add-to-cart');
     const cartCount = document.querySelector('.cart-count');
 
-    // Загрузка выбранного языка из localStorage
-    const savedLanguage = localStorage.getItem('selectedLanguage') || 'ru';
-    languageSelect.value = savedLanguage;
-    changeLanguage(savedLanguage);
+    // Функция для загрузки продуктов с сервера
+    function loadProducts() {
+        fetch('http://localhost:8080/api/products') 
+            .then(response => response.json()) 
+            .then(products => {
+                const productsContainer = document.querySelector('.products');
+                productsContainer.innerHTML = '';
 
-    // Обработчик для выбора языка
-    languageSelect.addEventListener('change', (event) => {
-        const selectedLang = event.target.value;
-        localStorage.setItem('selectedLanguage', selectedLang);
-        changeLanguage(selectedLang);
-    });
+                products.forEach(product => {
+                    const productElement = document.createElement('div');
+                    productElement.classList.add('product');
+                    productElement.dataset.id = product.id;
+                    productElement.dataset.price = product.price;
 
-    // Функция для переключения языка
-    function changeLanguage(lang) {
-        // Обновляем текст кнопки "Добавить в корзину"
-        addToCartButtons.forEach(button => {
-            if (lang === 'ru') {
-                button.innerText = 'Добавить в корзину';
-            } else if (lang === 'uk') {
-                button.innerText = 'Додати до кошика';
-            } else if (lang === 'en') {
-                button.innerText = 'Add to Cart';
-            }
-        });
+                    productElement.innerHTML = `
+                        <img src="${product.imageUrl}" alt="${product.nameRu}">
+                        <h2 data-lang="ru">${product.nameRu}</h2>
+                        <h2 data-lang="uk">${product.nameUk}</h2>
+                        <h2 data-lang="en">${product.nameEn}</h2>
+                        <p data-lang="ru">Цена: $${product.price}</p>
+                        <p data-lang="uk">Ціна: $${product.price}</p>
+                        <p data-lang="en">Price: $${product.price}</p>
+                        <button class="add-to-cart">Добавить в корзину</button>
+                    `;
 
-        // Обновляем текст других элементов
-        document.querySelectorAll('[data-lang]').forEach(element => {
-            if (element.getAttribute('data-lang') === lang) {
-                element.style.display = 'block';
-            } else {
-                element.style.display = 'none';
-            }
+                    productsContainer.appendChild(productElement);
+                });
+
+                // После загрузки продуктов — назначаем обработчики на кнопки "Добавить в корзину"
+                attachCartHandlers();
+            })
+            .catch(error => console.error('Ошибка при загрузке продуктов:', error));
+    }
+
+    // Функция для добавления обработчиков на кнопки "Добавить в корзину"
+    function attachCartHandlers() {
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', () => {
+                const product = button.closest('.product');
+                const productId = product.getAttribute('data-id');
+                const productName = product.querySelector('h2[data-lang="ru"]').innerText;
+                const productPrice = parseFloat(product.getAttribute('data-price'));
+                const productImage = product.querySelector('img').src;
+
+                let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                const existingItem = cart.find(item => item.id === productId);
+
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({
+                        id: productId,
+                        name: productName,
+                        price: productPrice,
+                        image: productImage,
+                        quantity: 1
+                    });
+                }
+
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCount();
+            });
         });
     }
 
-    // Обработчик для кнопок "Добавить в корзину"
-    addToCartButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const product = button.closest('.product');
-            const productId = product.getAttribute('data-id');
-            const productName = product.querySelector('h2').innerText;
-            const productPrice = parseFloat(product.getAttribute('data-price'));
-            const productImage = product.querySelector('img').src;
+    // Обновление счётчика товаров в корзине
+    function updateCartCount() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCount.innerText = totalItems;
+    }
 
             // Загрузка корзины из localStorage
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -77,4 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     cartCount.innerText = totalItems;
+
+    // Загружаем продукты при загрузке страницы
+    loadProducts();
+    updateCartCount();
 });
