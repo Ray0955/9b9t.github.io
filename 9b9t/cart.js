@@ -8,36 +8,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Загрузка выбранного языка из localStorage
     const savedLanguage = localStorage.getItem('selectedLanguage') || 'ru';
-    languageSelect.value = savedLanguage;
+    if (languageSelect) {
+        languageSelect.value = savedLanguage;
+    }
     changeLanguage(savedLanguage);
 
     // Обработчик для выбора языка
-    languageSelect.addEventListener('change', (event) => {
-        const selectedLang = event.target.value;
-        localStorage.setItem('selectedLanguage', selectedLang);
-        changeLanguage(selectedLang);
-    });
+    if (languageSelect) {
+        languageSelect.addEventListener('change', (event) => {
+            const selectedLang = event.target.value;
+            localStorage.setItem('selectedLanguage', selectedLang);
+            changeLanguage(selectedLang);
+        });
+    }
 
     // Функция для переключения языка
-function changeLanguage(lang) {
-    // Скрываем все элементы с атрибутом data-lang
-    document.querySelectorAll('[data-lang]').forEach(element => {
-        if (element.getAttribute('data-lang') === lang) {
-            element.style.display = 'block'; // Показываем элемент
-        } else {
-            element.style.display = 'none'; // Скрываем элемент
-        }
-    });
+    function changeLanguage(lang) {
+        // Скрываем все элементы с атрибутом data-lang
+        document.querySelectorAll('[data-lang]').forEach(element => {
+            if (element.getAttribute('data-lang') === lang) {
+                element.style.display = 'block'; // Показываем элемент
+            } else {
+                element.style.display = 'none'; // Скрываем элемент
+            }
+        });
 
-    // Обновляем текст кнопки "Перейти к оформлению"
-    if (lang === 'ru') {
-        checkoutButton.innerText = 'Перейти к оформлению';
-    } else if (lang === 'uk') {
-        checkoutButton.innerText = 'Перейти до оформлення';
-    } else if (lang === 'en') {
-        checkoutButton.innerText = 'Proceed to Checkout';
+        // Обновляем текст кнопки "Перейти к оформлению"
+        if (checkoutButton) {
+            if (lang === 'ru') {
+                checkoutButton.innerText = 'Перейти к оформлению';
+            } else if (lang === 'uk') {
+                checkoutButton.innerText = 'Перейти до оформлення';
+            } else if (lang === 'en') {
+                checkoutButton.innerText = 'Proceed to Checkout';
+            }
+        }
     }
-}
 
     // Отображение товаров в корзине
     function renderCart() {
@@ -45,11 +51,19 @@ function changeLanguage(lang) {
         let total = 0;
 
         if (cartItems.length === 0) {
-            emptyCartMessage.style.display = 'block';
-            checkoutButton.style.display = 'none';
+            if (emptyCartMessage) {
+                emptyCartMessage.style.display = 'block';
+            }
+            if (checkoutButton) {
+                checkoutButton.style.display = 'none';
+            }
         } else {
-            emptyCartMessage.style.display = 'none';
-            checkoutButton.style.display = 'block';
+            if (emptyCartMessage) {
+                emptyCartMessage.style.display = 'none';
+            }
+            if (checkoutButton) {
+                checkoutButton.style.display = 'block';
+            }
 
             cartItems.forEach((item, index) => {
                 const li = document.createElement('li');
@@ -67,7 +81,9 @@ function changeLanguage(lang) {
                 total += item.price * item.quantity;
             });
 
-            totalElement.innerText = total.toFixed(2);
+            if (totalElement) {
+                totalElement.innerText = total.toFixed(2);
+            }
         }
     }
 
@@ -87,9 +103,11 @@ function changeLanguage(lang) {
     };
 
     // Переход к оформлению заказа
-    checkoutButton.addEventListener('click', () => {
-        window.location.href = 'checkout.html'; // Перенаправление на checkout.html
-    });
+    if (checkoutButton) {
+        checkoutButton.addEventListener('click', () => {
+            window.location.href = 'checkout.html'; // Перенаправление на checkout.html
+        });
+    }
 
     renderCart();
 });
