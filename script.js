@@ -2,6 +2,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const servers = document.querySelectorAll('.server');
     const languageSelect = document.getElementById('language-select');
 
+    // Проверка, существует ли languageSelect
+    if (!languageSelect) {
+        console.error('Элемент выбора языка не найден!');
+        return;
+    }
+
     // Загрузка выбранного языка из localStorage
     const savedLanguage = localStorage.getItem('selectedLanguage') || 'ru';
     languageSelect.value = savedLanguage;
@@ -18,9 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function changeLanguage(lang) {
         document.querySelectorAll('[data-lang]').forEach(element => {
             if (element.getAttribute('data-lang') === lang) {
-                element.style.display = 'block';
+                element.style.display = 'block'; // Показываем элемент
             } else {
-                element.style.display = 'none';
+                element.style.display = 'none'; // Скрываем элемент
             }
         });
     }
@@ -33,6 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = '2b2t/index.html';
             } else if (selectedServer === '9b9t') {
                 window.location.href = '9b9t/index.html';
+            } else {
+                console.error('Неизвестный сервер:', selectedServer);
             }
         });
     });
