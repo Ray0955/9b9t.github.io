@@ -1,34 +1,33 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const servers = document.querySelectorAll('.server');
     const languageSelect = document.getElementById('language-select');
 
     // Загрузка выбранного языка из localStorage
     const savedLanguage = localStorage.getItem('selectedLanguage') || 'ru';
-    languageSelect.value = savedLanguage;
-    updateLanguage(savedLanguage);
+    if (languageSelect) {
+        languageSelect.value = savedLanguage;
+        changeLanguage(savedLanguage); // Применяем язык при загрузке страницы
+    }
 
-    // Обработчик изменения языка
-    languageSelect.addEventListener('change', (event) => {
-        const selectedLang = event.target.value;
-        localStorage.setItem('selectedLanguage', selectedLang); // Сохраняем выбранный язык
-        updateLanguage(selectedLang); // Обновляем язык на странице
-    });
-
-    // Функция для обновления языка
-    function updateLanguage(lang) {
-        document.querySelectorAll('[data-lang]').forEach(element => {
-            // Показываем только элементы с выбранным языком
-            element.style.display = element.getAttribute('data-lang') === lang ? 'block' : 'none';
+    // Обработчик изменения выбора языка
+    if (languageSelect) {
+        languageSelect.addEventListener('change', (event) => {
+            const selectedLang = event.target.value;
+            localStorage.setItem('selectedLanguage', selectedLang); // Сохраняем язык
+            changeLanguage(selectedLang); // Применяем язык
         });
     }
 
-    // Обработчик клика по серверу
-    servers.forEach(server => {
-        server.addEventListener('click', () => {
-            const selectedServer = server.getAttribute('data-server');
-            redirectToServer(selectedServer); // Перенаправляем на страницу сервера
+    // Функция для переключения языка
+    function changeLanguage(lang) {
+        document.querySelectorAll('[data-lang]').forEach(element => {
+            if (element.getAttribute('data-lang') === lang) {
+                element.style.display = 'block'; // Показываем элемент
+            } else {
+                element.style.display = 'none'; // Скрываем элемент
+            }
         });
-    });
+    }
+});
 
     // Функция для перенаправления на страницу сервера
     function redirectToServer(server) {
