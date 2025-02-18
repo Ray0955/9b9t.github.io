@@ -8,24 +8,26 @@
 </head>
 <body>
     <div class="background"></div>
-    <div class="server-selection">
-        <!-- Выбор языка -->
-        <div class="language-selector">
-            <select id="language-select">
-                <option value="ru">Русский</option>
-                <option value="uk">Українська</option>
-                <option value="en">English</option>
-            </select>
-        </div>
+    <!-- Выбор языка в правом верхнем углу -->
+    <div class="language-selector">
+        <select id="language-select">
+            <option value="ru">Русский</option>
+            <option value="uk">Українська</option>
+            <option value="en">English</option>
+        </select>
+    </div>
+    <div class="container">
         <h1 data-lang="ru">Выберите сервер</h1>
         <h1 data-lang="uk">Оберіть сервер</h1>
         <h1 data-lang="en">Choose a server</h1>
         <div class="servers">
             <div class="server" data-server="2b2t">
-                <img src="images/2b.jpeg" alt="2b2t">
+                <img src="images/2b.png" alt="2b2t">
+                <div class="server-name">2b2t</div>
             </div>
             <div class="server" data-server="9b9t">
-                <img src="images/9b.png" alt="2b2t">
+                <img src="images/9b.png" alt="9b9t">
+                <div class="server-name">9b9t</div>
             </div>
         </div>
     </div>
