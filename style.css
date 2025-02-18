@@ -2,8 +2,9 @@ body, html {
     margin: 0;
     padding: 0;
     height: 100%;
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     overflow: hidden;
+    color: #fff;
 }
 
 .background {
@@ -14,43 +15,80 @@ body, html {
     height: 100%;
     background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/ThebesAndSound_2b2t_Layers_of_Spawn_Render_February_2020.png/800px-ThebesAndSound_2b2t_Layers_of_Spawn_Render_February_2020.png');
     background-size: cover;
-    filter: blur(10px);
+    background-position: center;
+    filter: blur(8px);
     z-index: -1;
 }
 
-.server-selection {
+/* Выбор языка в правом верхнем углу */
+.language-selector {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 2;
+}
+
+.language-selector select {
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.language-selector select:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+    border-color: rgba(255, 255, 255, 0.8);
+}
+
+.container {
     position: relative;
     z-index: 1;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 10px;
-    max-width: 800px;
-    margin: 50px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
     text-align: center;
+}
+
+h1 {
+    font-size: 36px;
+    margin-bottom: 40px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    display: none;
+}
+
+h1[data-lang="ru"] {
+    display: block;
 }
 
 .servers {
     display: flex;
-    justify-content: space-around;
+    gap: 20px;
+    justify-content: center;
     flex-wrap: wrap;
-    margin-top: 20px;
 }
 
 .server {
     cursor: pointer;
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin: 10px;
-    background: #fff;
-    border-radius: 5px;
-    width: 300px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
+    padding: 20px;
+    width: 200px;
     text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .server:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-10px);
+    background: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 .server img {
@@ -59,8 +97,9 @@ body, html {
     border-radius: 5px;
 }
 
-.server h2 {
+.server-name {
     margin-top: 10px;
-    font-size: 24px;
-    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
 }
