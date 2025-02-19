@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для загрузки продуктов с сервера
     function loadProducts() {
-        fetch('http://localhost:8080/api/products') 
+        fetch('http://81.94.159.122:8080/api/products') 
             .then(response => response.json()) 
             .then(products => {
                 const productsContainer = document.querySelector('.products');
