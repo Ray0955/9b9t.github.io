@@ -33,6 +33,7 @@ body, html {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
+    overflow: visible;
 }
 
 .product {
