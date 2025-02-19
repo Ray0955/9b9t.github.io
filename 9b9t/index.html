@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Иконка корзины из FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="background"></div>
+    <div class="header">
+        <!-- Иконка "Назад" -->
+        <div class="back-icon" onclick="window.location.href='../index.html'">
+            <i class="fas fa-arrow-left"></i>
+        </div>
+        <!-- Выбор языка -->
+        <div class="language-selector">
+            <select id="language-select">
+                <option value="ru">Русский</option>
+                <option value="uk">Українська</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+        <!-- Иконка корзины -->
+        <div class="cart-icon" onclick="window.location.href='cart.html'">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count">0</span>
+        </div>
+    </div>
+
+    <div class="content">
+        <h1 data-lang="ru">Магазин</h1>
+        <h1 data-lang="uk">Магазин</h1>
+        <h1 data-lang="en">Shop</h1>
+
+        <!-- Список товаров -->
+        <div class="products">
+            <!-- Товар 1 -->
+            <div class="product card" data-id="1" data-price="1">
+                <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/127807240/308271159-d67a216e-bf77-4bd8-9536-d11d4fbe2d4d.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20250219%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250219T193244Z&X-Amz-Expires=300&X-Amz-Signature=24a2b1bf0a44496912d3aceaac9c78a0b724c3e48f257fab3350b66594eeb931&X-Amz-SignedHeaders=host" alt="Обсидиан" class="card__img">
+                <div class="card__data">
+                    <h1 class="card__title" data-lang="ru">ТЕСТ</h1>
+                    <h1 class="card__title" data-lang="uk">Блоки обсидіану</h1>
+                    <h1 class="card__title" data-lang="en">Obsidian Blocks</h1>
+                    <span class="card__preci" data-lang="ru">$1</span>
+                    <span class="card__preci" data-lang="uk">$1</span>
+                    <span class="card__preci" data-lang="en">$1</span>
+                    <p class="card__description" data-lang="ru">Шалкер с тотем блабалбаабалабал</p>
+                    <p class="card__description" data-lang="uk">Обсидіан — міцний матеріал для будівництва.</p>
+                    <p class="card__description" data-lang="en">Obsidian is a durable material for construction.</p>
+                    <button class="add-to-cart card__button">Добавить в корзину</button>
+                </div>
+            </div>
+        
+            <!-- Товар 2 -->
+            <div class="product card" data-id="2" data-price="20">
+                <img src="https://via.placeholder.com/150" alt="Золотые яблоки" class="card__img">
+                <div class="card__data">
+                    <h1 class="card__title" data-lang="ru">Золотые яблоки</h1>
+                    <h1 class="card__title" data-lang="uk">Золоті яблука</h1>
+                    <h1 class="card__title" data-lang="en">Golden Apples</h1>
+                    <span class="card__preci" data-lang="ru">$20</span>
+                    <span class="card__preci" data-lang="uk">$20</span>
+                    <span class="card__preci" data-lang="en">$20</span>
+                    <p class="card__description" data-lang="ru">Золотые яблоки — редкий и полезный ресурс.</p>
+                    <p class="card__description" data-lang="uk">Золоті яблука — рідкісний та корисний ресурс.</p>
+                    <p class="card__description" data-lang="en">Golden Apples are a rare and useful resource.</p>
+                    <button class="add-to-cart card__button">Добавить в корзину</button>
+                </div>
+            </div>
+        
+            <!-- Товар 3 -->
+            <div class="product card" data-id="3" data-price="15">
+                <img src="https://via.placeholder.com/150" alt="Кристаллы Края" class="card__img">
+                <div class="card__data">
+                    <h1 class="card__title" data-lang="ru">Кристаллы Края</h1>
+                    <h1 class="card__title" data-lang="uk">Кристали Краю</h1>
+                    <h1 class="card__title" data-lang="en">End Crystals</h1>
+                    <span class="card__preci" data-lang="ru">$15</span>
+                    <span class="card__preci" data-lang="uk">$15</span>
+                    <span class="card__preci" data-lang="en">$15</span>
+                    <p class="card__description" data-lang="ru">Кристаллы Края используются для активации порталов.</p>
+                    <p class="card__description" data-lang="uk">Кристали Краю використовуються для активації порталів.</p>
+                    <p class="card__description" data-lang="en">End Crystals are used to activate portals.</p>
+                    <button class="add-to-cart card__button">Добавить в корзину</button>
+                </div>
+            </div>
+        </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

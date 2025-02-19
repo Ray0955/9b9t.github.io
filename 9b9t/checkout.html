@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оформление заказа</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="background"></div>
+    <div class="header">
+        <div class="back-icon" onclick="window.location.href='cart.html'">
+            <i class="fas fa-arrow-left"></i>
+        </div>
+        <div class="language-selector">
+            <select id="language-select">
+                <option value="ru">Русский</option>
+                <option value="uk">Українська</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="checkout-container">
+        <div class="checkout-content">
+            <h1 data-lang="ru">Оформление заказа</h1>
+            <h1 data-lang="uk">Оформлення замовлення</h1>
+            <h1 data-lang="en">Checkout</h1>
+
+            <div class="min-order-warning" id="min-order-warning">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p data-lang="ru">Минимальная общая цена $2. Добавьте еще несколько товаров в корзину и возвращайтесь!</p>
+                <p data-lang="uk">Мінімальна загальна ціна $2. Додайте ще кілька товарів у кошик і повертайтесь!</p>
+                <p data-lang="en">Minimum total price is $2. Add more items to your cart and come back!</p>
+            </div>
+
+            <div class="checkout-main" id="checkout-main">
+                <div class="contact-info">
+                    <h2 data-lang="ru">Контактная информация</h2>
+                    <h2 data-lang="uk">Контактна інформація</h2>
+                    <h2 data-lang="en">Contact Information</h2>
+
+                    <form id="contact-form">
+                        <label for="username" data-lang="ru">Имя Пользователя:</label>
+                        <label for="username" data-lang="uk">Ім'я Користувача:</label>
+                        <label for="username" data-lang="en">Username:</label>
+                        <input type="text" id="username" name="username" required>
+
+                        <label for="discord" data-lang="ru">Ник Discord:</label>
+                        <label for="discord" data-lang="uk">Нік Discord:</label>
+                        <label for="discord" data-lang="en">Discord Nickname:</label>
+                        <input type="text" id="discord" name="discord" required>
+
+                        <label for="email" data-lang="ru">Электронная почта:</label>
+                        <label for="email" data-lang="uk">Електронна пошта:</label>
+                        <label for="email" data-lang="en">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                    </form>
+
+                    <div class="contact-notice">
+                        <p data-lang="ru">Нам нужна некоторая информация, чтобы мы могли уведомить вас о завершении заказа и связаться с вами в случае возникновения каких-либо проблем.</p>
+                        <p data-lang="uk">Нам потрібна деяка інформація, щоб ми могли повідомити вас про завершення замовлення та зв'язатися з вами у разі виникнення будь-яких проблем.</p>
+                        <p data-lang="en">We need some information so we can notify you when your order is complete and contact you if there are any issues.</p>
+                    </div>
+                </div>
+
+                <div class="delivery-method">
+                    <h2 data-lang="ru">Способ доставки</h2>
+                    <h2 data-lang="uk">Спосіб доставки</h2>
+                    <h2 data-lang="en">Delivery Method</h2>
+
+                    <select id="delivery-select">
+                        <option value="random" data-lang="ru">Рандомный</option>
+                        <option value="random" data-lang="uk">Випадковий</option>
+                        <option value="random" data-lang="en">Random</option>
+
+                        <option value="specific" data-lang="ru">Указанный</option>
+                        <option value="specific" data-lang="uk">Вказаний</option>
+                        <option value="specific" data-lang="en">Specific</option>
+                    </select>
+
+                    <div class="delivery-description" id="delivery-description">
+                        <p data-lang="ru" data-delivery="random">Мы доставим ваши вещи в случайное место недалеко от места возрождения, а затем отправим вам координаты по электронной почте.</p>
+                        <p data-lang="uk" data-delivery="random">Ми доставимо ваші речі у випадкове місце неподалік від місця відродження, а потім надішлемо вам координати електронною поштою.</p>
+                        <p data-lang="en" data-delivery="random">We will deliver your items to a random location near the spawn point and then send you the coordinates via email.</p>
+
+                        <p data-lang="ru" data-delivery="specific">Мы доставим ваши товары по указанным вами координатам, а затем отправим вам электронное письмо, когда закончим. Мы доставляем только по координатам надземного мира, и плата увеличивается по мере удаления ваших координат от спауна.</p>
+                        <p data-lang="uk" data-delivery="specific">Ми доставимо ваші товари за вказаними вами координатами, а потім надішлемо вам електронного листа, коли закінчимо. Ми доставляємо лише за координатами надземного світу, і плата збільшується в міру віддалення ваших координат від спауну.</p>
+                        <p data-lang="en" data-delivery="specific">We will deliver your items to the coordinates you specify and then send you an email when we're done. We only deliver to overworld coordinates, and the fee increases as your coordinates move further from spawn.</p>
+                    </div>
+
+                    <div class="coordinates-input" id="coordinates-input" style="display: none;">
+                        <label for="x-coord" data-lang="ru">Координата X:</label>
+                        <label for="x-coord" data-lang="uk">Координата X:</label>
+                        <label for="x-coord" data-lang="en">X Coordinate:</label>
+                        <input type="number" id="x-coord" name="x-coord" min="-1000000" max="1000000" step="1">
+
+                        <label for="y-coord" data-lang="ru">Координата Y:</label>
+                        <label for="y-coord" data-lang="uk">Координата Y:</label>
+                        <label for="y-coord" data-lang="en">Y Coordinate:</label>
+                        <input type="number" id="y-coord" name="y-coord" min="0" max="1000000" step="1">
+
+                        <label for="z-coord" data-lang="ru">Координата Z:</label>
+                        <label for="z-coord" data-lang="uk">Координата Z:</label>
+                        <label for="z-coord" data-lang="en">Z Coordinate:</label>
+                        <input type="number" id="z-coord" name="z-coord" min="-1000000" max="1000000" step="1">
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-summary">
+                <h2 data-lang="ru">Ваш заказ:</h2>
+                <h2 data-lang="uk">Ваше замовлення:</h2>
+                <h2 data-lang="en">Your Order:</h2>
+                <ul class="order-items"></ul>
+                <p class="order-total" data-lang="ru">Общая сумма: $<span id="order-total">0</span></p>
+                <p class="order-total" data-lang="uk">Загальна сума: $<span id="order-total">0</span></p>
+                <p class="order-total" data-lang="en">Total: $<span id="order-total">0</span></p>
+            </div>
+
+            <button class="pay-button" id="pay-button" data-lang="ru" style="display: none;">Оплатить</button>
+            <button class="pay-button" id="pay-button" data-lang="uk" style="display: none;">Оплатити</button>
+            <button class="pay-button" id="pay-button" data-lang="en" style="display: none;">Pay</button>
+        </div>
+    </div>
+
+    <script src="js/checkout.js"></script>
+</body>
+</html>
