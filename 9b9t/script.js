@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для загрузки продуктов с сервера
     function loadProducts() {
-        fetch('http://81.94.159.122:8080/api/products') 
-            .then(response => response.json()) 
+        fetch('http://81.94.159.122:8080/api/products')
+            .then(response => response.json())
             .then(products => {
                 const productsContainer = document.querySelector('.products');
                 productsContainer.innerHTML = '';
@@ -74,38 +74,9 @@ document.addEventListener('DOMContentLoaded', () => {
         cartCount.innerText = totalItems;
     }
 
-            // Загрузка корзины из localStorage
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-            // Проверяем, есть ли товар уже в корзине
-            const existingItem = cart.find(item => item.id === productId);
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cart.push({
-                    id: productId,
-                    name: productName,
-                    price: productPrice,
-                    image: productImage,
-                    quantity: 1
-                });
-            }
-
-            // Сохраняем корзину в localStorage
-            localStorage.setItem('cart', JSON.stringify(cart));
-
-            // Обновляем счетчик корзины
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            cartCount.innerText = totalItems;
-        });
-    });
-
     // Инициализация счетчика корзины
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    cartCount.innerText = totalItems;
+    updateCartCount();
 
     // Загружаем продукты при загрузке страницы
     loadProducts();
-    updateCartCount();
 });
