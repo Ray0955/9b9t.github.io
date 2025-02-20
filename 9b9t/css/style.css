@@ -594,3 +594,36 @@ body, html {
     transition-delay: 0.2s;
     opacity: 1;
 }
+/* Эффект пульсации при клике */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4); /* Цвет кнопки */
+    }
+    70% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); /* Увеличиваем тень */
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); /* Возвращаем к исходному состоянию */
+    }
+}
+
+/* Эффект изменения цвета при клике */
+@keyframes clickEffect {
+    0% {
+        background-color: var(--first-color);
+    }
+    50% {
+        background-color: #218838; /* Темно-зеленый */
+    }
+    100% {
+        background-color: var(--first-color);
+    }
+}
+
+/* Применяем эффекты к кнопке */
+.glow-button.clicked {
+    animation: pulse 0.5s ease, clickEffect 0.5s ease;
+}
