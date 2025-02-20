@@ -22,7 +22,6 @@ body, html {
     position: relative;
     z-index: 1;
     padding: 20px;
-    background: rgba(255, 255, 255, 0.8);
     border-radius: 10px;
     max-width: 800px;
     margin: 50px auto;
