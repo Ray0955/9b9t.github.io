@@ -512,9 +512,9 @@ body, html {
 
 /* Дополнительные стили */
 :root {
-    --first-color: #F2A20C;
+    --first-color: rgba(161, 5, 199, 0.96);
     --white-color: #E9EAEC;
-    --dark-color: #272D40;
+    --dark-color: rgba(0, 0, 0, 0.68);
     --dark-color-lighten: #F2F5FF;
     --body-font: 'Poppins', sans-serif;
     --h1-font-size: 1.5rem;
@@ -537,11 +537,12 @@ body, html {
 }
 
 .card__img {
+    z-index: 1;
     position: absolute;
-    width: 65%;
+    width: 80%;
     height: auto;
-    top: 50px;
-    left: 62px;
+    top: 45px;
+    left: 34px;
     filter: drop-shadow(5px 10px 15px rgba(140, 0, 255, 0.4));
     transition: transform 0.5s ease;
 }
@@ -593,7 +594,7 @@ body, html {
 }
 
 .product.card:hover .card__img {
-    transform: scale(1.1);
+    transform: scale(1.205);
 }
 
 .product.card:hover .card__data {
@@ -618,10 +619,10 @@ body, html {
 @keyframes pulse {
     0% {
         transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4); /* Цвет кнопки */
+        box-shadow: 0 0 0 0 rgba(189, 0, 252, 0.44); /* Цвет кнопки */
     }
     70% {
-        transform: scale(1.05);
+        transform: scale(1.059);
         box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); /* Увеличиваем тень */
     }
     100% {
