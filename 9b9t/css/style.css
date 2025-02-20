@@ -44,14 +44,35 @@ body, html {
 
 .product {
     position: relative;
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin: 10px;
-    background: #fff;
-    border-radius: 5px;
-    width: 200px;
+    z-index: 1;
+    padding: 20px;
+    background: transparent; 
+    border: 2px solid;
+    border-radius: 10px;
+    max-width: 800px;
+    margin: 50px auto;
     text-align: center;
+    animation: rgb-border 5s infinite linear; 
 }
+
+@keyframes rgb-border {
+    1% {
+        border-color: rgb(255, 0, 153); 
+    }
+    33% {
+        border-color: rgb(174, 3, 236); 
+    }
+    66% {
+        border-color: rgb(253, 0, 34); 
+    }
+    80% {
+        border-color: rgb(0, 230, 180); 
+    }
+    100% {
+        border-color: rgb(56, 230, 3); 
+    }
+}
+
 
 .product img {
     max-width: 100%;
