@@ -1,16 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
-    const cartList = document.querySelector('.cart-items');
-    const totalElement = document.querySelector('.total');
-    const emptyCartMessage = document.querySelector('.empty-cart-message');
-    const checkoutButton = document.querySelector('.checkout-button');
     const languageSelect = document.getElementById('language-select');
+    const addToCartButtons = document.querySelectorAll('.glow-button');
+    const cartCount = document.querySelector('.cart-count');
 
     // Загрузка выбранного языка из localStorage
     const savedLanguage = localStorage.getItem('selectedLanguage') || 'ru';
     languageSelect.value = savedLanguage;
-
-    // Применяем язык ДО отображения товаров
     changeLanguage(savedLanguage);
 
     // Обработчик для выбора языка
@@ -22,18 +17,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для переключения языка
     function changeLanguage(lang) {
-        console.log('Применяем язык:', lang);
+        // Обновляем текст кнопки "Добавить в корзину"
+        addToCartButtons.forEach(button => {
+            const spans = button.querySelectorAll('span');
+            spans.forEach(span => {
+                if (span.getAttribute('data-lang') === lang) {
+                    span.style.display = 'inline';
+                } else {
+                    span.style.display = 'none';
+                }
+            });
+        });
 
-        // Обновляем текст кнопки "Перейти к оформлению"
-        if (lang === 'ru') {
-            checkoutButton.innerText = 'Перейти к оформлению';
-        } else if (lang === 'uk') {
-            checkoutButton.innerText = 'Перейти до оформлення';
-        } else if (lang === 'en') {
-            checkoutButton.innerText = 'Proceed to Checkout';
-        }
-
-        // Обновляем видимость элементов с data-lang
+        // Обновляем текст других элементов
         document.querySelectorAll('[data-lang]').forEach(element => {
             if (element.getAttribute('data-lang') === lang) {
                 element.style.display = 'block';
@@ -41,82 +37,98 @@ document.addEventListener('DOMContentLoaded', () => {
                 element.style.display = 'none';
             }
         });
-
-        // Перерисовываем корзину
-        renderCart();
     }
 
-    // Отображение товаров в корзине
-    function renderCart() {
-        cartList.innerHTML = '';
-        let total = 0;
+    // Обработчик для кнопок "Добавить в корзину"
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const product = button.closest('.product');
+            const productId = product.getAttribute('data-id');
+            const productName = product.querySelector('.card__title').innerText;
+            const productPrice = parseFloat(product.getAttribute('data-price'));
+            const productImage = product.querySelector('.card__img').src;
 
-        if (cartItems.length === 0) {
-            // Если корзина пуста, показываем сообщение
-            document.querySelectorAll('.empty-cart-message').forEach(element => {
-                if (element.getAttribute('data-lang') === languageSelect.value) {
-                    element.style.display = 'block';
-                } else {
-                    element.style.display = 'none';
-                }
-            });
-            checkoutButton.style.display = 'none';
-        } else {
-            // Если в корзине есть товары, скрываем сообщение
-            document.querySelectorAll('.empty-cart-message').forEach(element => {
-                element.style.display = 'none';
-            });
-            checkoutButton.style.display = 'block';
+            // Загрузка корзины из localStorage
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-            // Отображаем товары
-            cartItems.forEach((item, index) => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <img src="${item.image}" alt="${item.name}">
-                    <span>${item.name} - $${item.price}</span>
-                    <div class="quantity-controls">
-                        <button onclick="changeQuantity(${index}, -1)">-</button>
-                        <span>${item.quantity}</span>
-                        <button onclick="changeQuantity(${index}, 1)">+</button>
-                    </div>
-                    <button onclick="removeItem(${index})">Удалить</button>
-                `;
-                cartList.appendChild(li);
-                total += item.price * item.quantity;
-            });
+            // Проверяем, есть ли товар уже в корзине
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: productId,
+                    name: productName,
+                    price: productPrice,
+                    image: productImage,
+                    quantity: 1
+                });
+            }
 
-            // Обновляем общую сумму
-            document.querySelectorAll('.total-amount').forEach(element => {
-                if (element.getAttribute('data-lang') === languageSelect.value) {
-                    element.style.display = 'block';
-                    element.querySelector('.total').innerText = total.toFixed(2);
-                } else {
-                    element.style.display = 'none';
-                }
-            });
-        }
-    }
+            // Сохраняем корзину в localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
 
-    // Изменение количества товара
-    window.changeQuantity = (index, delta) => {
-        cartItems[index].quantity += delta;
-        if (cartItems[index].quantity < 1) cartItems[index].quantity = 1;
-        localStorage.setItem('cart', JSON.stringify(cartItems));
-        renderCart();
-    };
-
-    // Удаление товара
-    window.removeItem = (index) => {
-        cartItems.splice(index, 1);
-        localStorage.setItem('cart', JSON.stringify(cartItems));
-        renderCart();
-    };
-
-    // Переход к оформлению заказа
-    checkoutButton.addEventListener('click', () => {
-        window.location.href = 'checkout.html';
+            // Обновляем счетчик корзины
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.innerText = totalItems;
+        });
     });
 
-    // Инициализация корзины
-    renderCart();
+    // Инициализация счетчика корзины
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    cartCount.innerText = totalItems;
+
+    // Генерация эффекта свечения для кнопок
+    generateGlowButtons();
 });
+
+// Функция для создания эффекта свечения на кнопках
+const generateGlowButtons = () => {
+    document.querySelectorAll(".glow-button").forEach((button) => {
+        let gradientElem = button.querySelector('.gradient');
+        
+        if (!gradientElem) {
+            gradientElem = document.createElement("div");
+            gradientElem.classList.add("gradient");
+            button.appendChild(gradientElem);
+        }
+
+        button.addEventListener("pointermove", (e) => {
+            const rect = button.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            gsap.to(button, {
+                "--pointer-x": `${x}px`,
+                "--pointer-y": `${y}px`,
+                duration: 0.6,
+            });
+
+            gsap.to(button, {
+                "--button-glow": chroma
+                    .mix(
+                        getComputedStyle(button)
+                            .getPropertyValue("--button-glow-start")
+                            .trim(),
+                        getComputedStyle(button)
+                            .getPropertyValue("--button-glow-end")
+                            .trim(),
+                        x / rect.width
+                    )
+                    .hex(),
+                duration: 0.2,
+            });
+        });
+    });
+};
+
+// Инициализация GSAP (если не подключен)
+if (typeof gsap === 'undefined') {
+    console.warn('GSAP не подключен. Эффекты свечения не будут работать.');
+}
+
+// Инициализация Chroma.js (если не подключен)
+if (typeof chroma === 'undefined') {
+    console.warn('Chroma.js не подключен. Эффекты свечения не будут работать.');
+}
