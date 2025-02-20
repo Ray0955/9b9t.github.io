@@ -34,11 +34,11 @@ body, html {
     flex-wrap: wrap;
     overflow: visible; 
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 колонки */
-    gap: 20px; /* Расстояние между товарами */
+    grid-template-columns: repeat(2, 1fr); /* 2 колонки */
+    gap: 20px; 
     padding: 20px;
-    max-width: 1200px; /* Ограничиваем ширину контейнера */
-    margin: 0 auto; /* Центрируем контейнер */
+    max-width: 1200px;
+    margin: 0 auto; 
 }
 
 .product {
