@@ -42,6 +42,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Обработчик для кнопок "Добавить в корзину"
     addToCartButtons.forEach(button => {
         button.addEventListener('click', () => {
+            // Добавляем класс для анимации
+            button.classList.add('clicked');
+
+            // Убираем класс после завершения анимации
+            setTimeout(() => {
+                button.classList.remove('clicked');
+            }, 500); // Длительность анимации (0.5 секунды)
+
+            // Логика добавления товара в корзину
             const product = button.closest('.product');
             const productId = product.getAttribute('data-id');
             const productName = product.querySelector('.card__title').innerText;
