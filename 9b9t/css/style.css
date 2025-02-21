@@ -28,29 +28,50 @@ body, html {
     text-align: center;
 }
 
+.products-container {
+    overflow: hidden; 
+    position: relative; 
+    max-width: 1200px; 
+    margin: 0 auto; 
+}
+
 .products {
-    justify-content: space-around;
-    flex-wrap: wrap;
-    overflow: visible;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 колонки */
-    gap: 2px;
-    padding: 50px;
-    max-width: 1200px;
-    margin: 0 auto;
+    display: flex; 
+    gap: 10px; 
+    padding: 10px; /
+    transform: translateX(-220px);
+    transition: transform 0.3s ease; 
 }
 
 .product {
     position: relative;
     z-index: 2;
-    padding: 20px;
+    padding: 15px; 
     background: transparent;
     border: 2px solid;
     border-radius: 10px;
-    max-width: 800px;
-    margin: 8px auto;
     text-align: center;
     animation: rgb-border 5s infinite linear;
+    box-sizing: border-box; 
+    width: 250px; 
+    flex-shrink: 0;
+}
+@media (max-width: 1200px) {
+    .products {
+        grid-template-columns: repeat(3, 1fr); 
+    }
+}
+
+@media (max-width: 768px) {
+    .products {
+        grid-template-columns: repeat(2, 1fr); 
+    }
+}
+
+@media (max-width: 480px) {
+    .products {
+        grid-template-columns: repeat(1, 1fr); 
+    }
 }
 
 @keyframes rgb-border {
