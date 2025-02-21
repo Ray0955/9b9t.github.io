@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop</title>
+    <title>Магазин с фильтрацией</title>
     <link rel="stylesheet" href="css/style.css">
     <!-- Иконка корзины из FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -33,26 +33,85 @@
         </div>
     </div>
 
-    <div class="content">
-        <h1 data-lang="ru">Магазин</h1>
-        <h1 data-lang="uk">Магазин</h1>
-        <h1 data-lang="en">Shop</h1>
+    <!-- Поиск и фильтрация (вместо заголовка "Магазин") -->
+    <div class="container">
+        <div class="radial-cont">
+            <div class="outer">
+                <div class="inner-cont">
+                    <div class="main-block">
+                        <div class="elements-cont">
+                            <svg
+                                class="svg"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="1em"
+                                height="1em"
+                                viewBox="0 0 48 48"
+                            >
+                                <path
+                                    fill="currentColor"
+                                    d="M20.5 6C12.492 6 6 12.492 6 20.5S12.492 35 20.5 35a14.44 14.44 0 0 0 9.138-3.241l9.801 9.801a1.5 1.5 0 1 0 2.121-2.121l-9.8-9.801A14.44 14.44 0 0 0 35 20.5C35 12.492 28.508 6 20.5 6M9 20.5C9 14.149 14.149 9 20.5 9S32 14.149 32 20.5S26.851 32 20.5 32S9 26.851 9 20.5"
+                                ></path>
+                            </svg>
+                            <input
+                                class="input"
+                                type="text"
+                                name="search"
+                                placeholder="Search..."
+                                id="search-input"
+                            />
+                            <div class="filter" id="filter-icon">
+                                <svg
+                                    class="funnel"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    width="1em"
+                                    height="1em"
+                                    color="#000000"
+                                    fill="none"
+                                >
+                                    <path
+                                        d="M8.85746 12.5061C6.36901 10.6456 4.59564 8.59915 3.62734 7.44867C3.3276 7.09253 3.22938 6.8319 3.17033 6.3728C2.96811 4.8008 2.86701 4.0148 3.32795 3.5074C3.7889 3 4.60404 3 6.23433 3H17.7657C19.396 3 20.2111 3 20.672 3.5074C21.133 4.0148 21.0319 4.8008 20.8297 6.37281C20.7706 6.83191 20.6724 7.09254 20.3726 7.44867C19.403 8.60062 17.6261 10.6507 15.1326 12.5135C14.907 12.6821 14.7583 12.9567 14.7307 13.2614C14.4837 15.992 14.2559 17.4876 14.1141 18.2442C13.8853 19.4657 12.1532 20.2006 11.226 20.8563C10.6741 21.2466 10.0043 20.782 9.93278 20.1778C9.79643 19.0261 9.53961 16.6864 9.25927 13.2614C9.23409 12.9539 9.08486 12.6761 8.85746 12.5061Z"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    ></path>
+                                </svg>
+                                <!-- Выпадающий список для фильтрации -->
+                                <div class="filter-dropdown" id="filter-dropdown">
+                                    <select id="category-filter">
+                                        <option value="all">Все категории</option>
+                                        <option value="food">Еда</option>
+                                        <option value="drinks">Напитки</option>
+                                        <!-- Добавьте другие категории по необходимости -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pink blob"></div>
+                <div class="blue blob"></div>
+            </div>
+        </div>
+    </div>
 
-        <!-- Список товаров -->
+    <!-- Список товаров -->
+    <div class="content">
         <div class="products">
-            <!-- Товар 1 -->
-            <div class="product card" data-id="1" data-price="1">
-                <img src="https://media.discordapp.net/attachments/713822045783457842/1342236974295154728/image.png?ex=67b8e718&is=67b79598&hm=ca01fd036fed0fb7591d50ca7f4c5770a2ae990769f03ced3871f6ffa8a55430&=&format=webp&quality=lossless&width=812&height=270" alt="Обсидиан" class="card__img">
+            <!-- Товар 1 (Еда) -->
+            <div class="product card" data-id="1" data-price="1" data-category="food">
+                <img src="https://example.com/food.jpg" alt="Еда" class="card__img">
                 <div class="card__data">
-                    <h1 class="card__title" data-lang="ru">Обсидиан</h1>
-                    <h1 class="card__title" data-lang="uk">Блоки обсидіану</h1>
-                    <h1 class="card__title" data-lang="en">Obsidian Blocks</h1>
-                    <span class="card__price" data-lang="ru">$1</span>
-                    <span class="card__price" data-lang="uk">$1</span>
-                    <span class="card__price" data-lang="en">$1</span>
-                    <p class="card__description" data-lang="ru">Для создания портала а незер</p>
-                    <p class="card__description" data-lang="uk">Обсидіан</p>
-                    <p class="card__description" data-lang="en">Obsidia</p>
+                    <h1 class="card__title" data-lang="ru">Еда</h1>
+                    <h1 class="card__title" data-lang="uk">Їжа</h1>
+                    <h1 class="card__title" data-lang="en">Food</h1>
+                    <span class="card__price" data-lang="ru">$10</span>
+                    <span class="card__price" data-lang="uk">$10</span>
+                    <span class="card__price" data-lang="en">$10</span>
+                    <p class="card__description" data-lang="ru">Вкусная еда</p>
+                    <p class="card__description" data-lang="uk">Смачна їжа</p>
+                    <p class="card__description" data-lang="en">Delicious food</p>
                     <button class="glow-button">
                         <span data-lang="ru">Добавить в корзину</span>
                         <span data-lang="uk">Додати до кошика</span>
@@ -60,20 +119,20 @@
                     </button>
                 </div>
             </div>
-        
-            <!-- Товар 2 -->
-            <div class="product card" data-id="2" data-price="20">
-                <img src="https://media.discordapp.net/attachments/713822045783457842/1342244925756018800/image.png?ex=67b8ee80&is=67b79d00&hm=eb3500557ca8069a9bae7bb16898284094e4a2fed1a348191b2c118b2313891f&=&format=webp&quality=lossless&width=405&height=137" alt="Золотые яблоки" class="card__img">
+
+            <!-- Товар 2 (Напитки) -->
+            <div class="product card" data-id="2" data-price="2" data-category="drinks">
+                <img src="https://example.com/drink.jpg" alt="Напиток" class="card__img">
                 <div class="card__data">
-                    <h1 class="card__title" data-lang="ru">Золотые яблоки</h1>
-                    <h1 class="card__title" data-lang="uk">Золоті яблука</h1>
-                    <h1 class="card__title" data-lang="en">Golden Apples</h1>
-                    <span class="card__price" data-lang="ru">$20</span>
-                    <span class="card__price" data-lang="uk">$20</span>
-                    <span class="card__price" data-lang="en">$20</span>
-                    <p class="card__description" data-lang="ru">Нажраться</p>
-                    <p class="card__description" data-lang="uk">Золоті яблука — </p>
-                    <p class="card__description" data-lang="en">Golden App</p>
+                    <h1 class="card__title" data-lang="ru">Напиток</h1>
+                    <h1 class="card__title" data-lang="uk">Напій</h1>
+                    <h1 class="card__title" data-lang="en">Drink</h1>
+                    <span class="card__price" data-lang="ru">$5</span>
+                    <span class="card__price" data-lang="uk">$5</span>
+                    <span class="card__price" data-lang="en">$5</span>
+                    <p class="card__description" data-lang="ru">Освежающий напиток</p>
+                    <p class="card__description" data-lang="uk">Освіжаючий напій</p>
+                    <p class="card__description" data-lang="en">Refreshing drink</p>
                     <button class="glow-button">
                         <span data-lang="ru">Добавить в корзину</span>
                         <span data-lang="uk">Додати до кошика</span>
@@ -84,7 +143,6 @@
         </div>
     </div>
 
-
     <script src="js/script.js"></script>
 </body>
-</html>
+    </html>
