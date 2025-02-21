@@ -1359,3 +1359,61 @@ body, html {
     animation: pulse 0.5s ease, clickEffect 0.5s ease;
 
     }
+
+
+/* Стили для выпадающего списка фильтров */
+.filter-dropdown {
+    display: none;
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background-color: rgba(68, 68, 68, 0.9);
+    border-radius: 10px;
+    border: 2px solid #ff6b6b;
+    box-shadow: 
+        0 0 5px #ff6b6b, /* Неоновая тень */
+        0 0 10px #ff6b6b,
+        0 0 20px #ff6b6b;
+    z-index: 1000;
+    padding: 10px;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.filter-dropdown.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.filter-dropdown .filter-option {
+    padding: 10px 15px;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 5px 0;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 14px;
+}
+
+.filter-dropdown .filter-option:hover {
+    background-color: rgba(85, 85, 85, 0.7); 
+    transform: translateX(5px); 
+}
+
+.filter-dropdown .filter-option:active {
+    transform: translateX(0); 
+}
+
+/* Иконка фильтра */
+.filter-icon {
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.filter-icon:hover {
+    transform: scale(1.1); 
+}
