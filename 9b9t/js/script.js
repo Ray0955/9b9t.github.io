@@ -2,6 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const languageSelect = document.getElementById('language-select');
     const addToCartButtons = document.querySelectorAll('.glow-button');
     const cartCount = document.querySelector('.cart-count');
+    const searchInput = document.getElementById('search-input');
+    const filterIcon = document.getElementById('filter-icon');
+    const filterDropdown = document.getElementById('filter-dropdown');
+    const categoryFilter = document.getElementById('category-filter');
+    const products = document.querySelectorAll('.product');
 
     // Загрузка выбранного языка из localStorage
     const savedLanguage = localStorage.getItem('selectedLanguage') || 'ru';
@@ -88,6 +93,47 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     cartCount.innerText = totalItems;
 
+    // Открытие/закрытие выпадающего списка фильтрации
+    filterIcon.addEventListener('click', (event) => {
+        event.stopPropagation(); // Предотвращаем закрытие при клике на иконку
+        filterDropdown.classList.toggle('active');
+    });
+
+    // Закрытие выпадающего списка при клике вне его
+    document.addEventListener('click', () => {
+        filterDropdown.classList.remove('active');
+    });
+
+    // Фильтрация товаров по категориям
+    categoryFilter.addEventListener('change', () => {
+        const selectedCategory = categoryFilter.value;
+
+        products.forEach(product => {
+            const productCategory = product.getAttribute('data-category');
+
+            if (selectedCategory === 'all' || productCategory === selectedCategory) {
+                product.style.display = 'block';
+            } else {
+                product.style.display = 'none';
+            }
+        });
+    });
+
+    // Поиск товаров по названию
+    searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value.toLowerCase();
+
+        products.forEach(product => {
+            const productName = product.querySelector('.card__title').innerText.toLowerCase();
+
+            if (productName.includes(searchTerm)) {
+                product.style.display = 'block';
+            } else {
+                product.style.display = 'none';
+            }
+        });
+    });
+
     // Генерация эффекта свечения для кнопок
     generateGlowButtons();
 });
@@ -96,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
 const generateGlowButtons = () => {
     document.querySelectorAll(".glow-button").forEach((button) => {
         let gradientElem = button.querySelector('.gradient');
-        
+
         if (!gradientElem) {
             gradientElem = document.createElement("div");
             gradientElem.classList.add("gradient");
@@ -140,4 +186,4 @@ if (typeof gsap === 'undefined') {
 // Инициализация Chroma.js (если не подключен)
 if (typeof chroma === 'undefined') {
     console.warn('Chroma.js не подключен. Эффекты свечения не будут работать.');
-}
+                          }
