@@ -29,48 +29,48 @@ body, html {
 }
 
 .products-container {
-    overflow: hidden; 
-    position: relative; 
-    max-width: 1200px; 
-    margin: 0 auto; 
+    overflow: hidden; /* Скрываем всё, что выходит за пределы контейнера */
+    position: relative; /* Для позиционирования кнопок */
+    max-width: 1200px; /* Максимальная ширина контейнера */
+    margin: 0 auto; /* Центрирование контейнера */
 }
 
 .products {
-    display: flex; 
-    gap: 10px; 
-    padding: 10px;
+    display: flex; /* Карточки в одну строку */
+    gap: 10px; /* Расстояние между карточками */
+    padding: 10px; /* Внутренний отступ контейнера */
     transform: translateX(-220px);
-    transition: transform 0.3s ease; 
+    transition: transform 0.3s ease; /* Плавное смещение */
 }
 
 .product {
     position: relative;
     z-index: 2;
-    padding: 15px; 
+    padding: 15px; /* Внутренний отступ карточки */
     background: transparent;
     border: 2px solid;
     border-radius: 10px;
     text-align: center;
     animation: rgb-border 5s infinite linear;
-    box-sizing: border-box; 
-    width: 250px; 
-    flex-shrink: 0;
+    box-sizing: border-box; /* Учитываем padding в общей ширине */
+    width: 250px; /* Фиксированная ширина карточки */
+    flex-shrink: 0; /* Карточки не сжимаются */
 }
 @media (max-width: 1200px) {
     .products {
-        grid-template-columns: repeat(3, 1fr); 
+        grid-template-columns: repeat(3, 1fr); /* 3 колонки на экранах уже 1200px */
     }
 }
 
 @media (max-width: 768px) {
     .products {
-        grid-template-columns: repeat(2, 1fr); 
+        grid-template-columns: repeat(2, 1fr); /* 2 колонки на экранах уже 768px */
     }
 }
 
 @media (max-width: 480px) {
     .products {
-        grid-template-columns: repeat(1, 1fr); 
+        grid-template-columns: repeat(1, 1fr); /* 1 колонка на экранах уже 480px */
     }
 }
 
