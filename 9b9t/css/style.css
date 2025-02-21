@@ -27,14 +27,13 @@ body, html {
     margin: 50px auto;
     text-align: center;
 }
+
 .products-container {
-    width: 100%;
-    padding: 0 15px;
-    overflow: hidden;
-    position: relative;
     max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
-    box-sizing: border-box; /* Важно! */
+    padding: 0 15px;
+    box-sizing: border-box;
 }
 
 .products {
@@ -44,41 +43,30 @@ body, html {
     padding: 10px;
 }
 
-.product {
-    position: relative;
-    z-index: 2;
-    padding: 15px;
-    background: transparent;
-    border: 2px solid;
-    border-radius: 10px;
-    text-align: center;
-    animation: rgb-border 5s infinite linear;
-    box-sizing: border-box;
-    width: 100%;
-    max-width: 100%; /* Защита от переполнения */
-}
-
-/* Медиа-запросы */
-@media (max-width: 1200px) {
+/* Исправленные медиазапросы (min-width вместо max-width) */
+@media (min-width: 1201px) {
     .products {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr); /* Десктоп: 4 колонки */
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) and (min-width: 769px) {
     .products {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr); /* Планшет: 3 колонки */
+    }
+}
+
+@media (max-width: 768px) and (min-width: 481px) {
+    .products {
+        grid-template-columns: repeat(2, 1fr); /* Горизонтальный телефон: 2 колонки */
     }
 }
 
 @media (max-width: 480px) {
     .products {
-        grid-template-columns: 1fr; /* 1 колонка */
+        grid-template-columns: 1fr; /* Вертикальный телефон: 1 колонка */
     }
-    .product {
-        padding: 10px; 
 }
-
 
 @keyframes rgb-border {
     0% {
