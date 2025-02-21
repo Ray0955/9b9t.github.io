@@ -44,6 +44,7 @@ body, html {
 }
 
 .product {
+    grid-template-columns: repeat(2, 1fr)
     position: relative;
     z-index: 2;
     padding: 15px; /* Внутренний отступ карточки */
