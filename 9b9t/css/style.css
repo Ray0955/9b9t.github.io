@@ -12,9 +12,9 @@ body, html {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/ThebesAndSound_2b2t_Layers_of_Spawn_Render_February_2020.png/800px-ThebesAndSound_2b2t_Layers_of_Spawn_Render_February_2020.png');
+    background-image: url('../images/img3.akspic.ru-zvezda-kosmicheskoe_prostranstvo-elektrik-nebo-mlechnyj_put-7836x5237.jpg');
     background-size: cover;
-    filter: blur(10px);
+    filter: blur(0px);
     z-index: -1;
 }
 
@@ -29,48 +29,78 @@ body, html {
 }
 
 .products {
-    display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
-    overflow: visible; 
+    overflow: visible;
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* 2 колонки */
-    gap: 20px; 
-    padding: 20px;
+    gap: 2px;
+    padding: 50px;
     max-width: 1200px;
-    margin: 0 auto; 
+    margin: 0 auto;
 }
 
 .product {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     padding: 20px;
     background: transparent; 
     border: 2px solid;
     border-radius: 10px;
     max-width: 800px;
-    margin: 50px auto;
+    margin: 8px auto;
     text-align: center;
     animation: rgb-border 5s infinite linear; 
 }
 
-@keyframes rgb-border {
+/*@keyframes rgb-border {
     1% {
-        border-color: rgb(255, 0, 153); 
+        border-color: rgb(255, 0, 153);
     }
     33% {
-        border-color: rgb(174, 3, 236); 
+        border-color: rgb(174, 3, 236);
     }
     66% {
-        border-color: rgb(253, 0, 34); 
+        border-color: rgb(253, 0, 34);
     }
     80% {
-        border-color: rgb(0, 230, 180); 
+        border-color: rgb(0, 230, 180);
     }
     100% {
-        border-color: rgb(56, 230, 3); 
+        border-color: rgb(56, 230, 3);
     }
 }
+*/
+@keyframes rgb-border {
+    0% {
+        border-color: var(--dark-color);
+    }
+    1% {
+        border-color: var(--dark-color);
+    }
+    16% {
+        border-color: rgba(227, 0, 255, 0.68);
+    }
+    32% {
+        border-color: var(--dark-color);
+    }
+    48% {
+        border-color: rgba(0, 255, 217, 0.91);
+    }
+    64% {
+        border-color: var(--dark-color);
+    }
+    80% {
+        border-color: rgba(227, 0, 255, 0.68);
+    }
+    96% {
+        border-color: var(--dark-color);
+    }
+    100% {
+        border-color: var(--dark-color);
+    }
+}
+
 
 
 .product img {
@@ -559,17 +589,18 @@ body, html {
 .card__title {
     font-size: var(--h2-font-size);
     color: var(--first-color);
-    margin-bottom: -1.2rem;
+    margin-bottom: -1.7rem;
     position: relative;
     transition: transform 0.3s ease;
 }
 
-.card__preci {
+.card__price {
+    color: rgb(255, 255, 255);
     font-size: var(--normal-font-size);
     font-weight: 800;
     margin-bottom: 0.9rem;
     position: absolute;
-    transition: transform 0.3s ease;
+    transition: transform 0.6s ease;
 }
 
 .card__description {
@@ -594,7 +625,7 @@ body, html {
 }
 
 .product.card:hover .card__img {
-    transform: scale(1.205);
+    transform: scale(1.16);
 }
 
 .product.card:hover .card__data {
@@ -605,7 +636,7 @@ body, html {
     transform: translateY(-135px);
 }
 
-.product.card:hover .card__preci {
+.product.card:hover .card__price {
     transform: translateY(50px); /* Двигаем вниз на 20px */
 
 }
