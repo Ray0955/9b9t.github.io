@@ -28,63 +28,57 @@ body, html {
     text-align: center;
 }
 .products-container {
-    width: 100%; /*вьте это */
-
-    padding: 0 15px; /* Чтобы контент не прилипал к краям */
-    overflow: hidden; /* Скрываем всё, что выходит за пределы контейнера */
-    position: relative; /* Для позиционирования кнопок */
-    max-width: 1200px; /* Максимальная ширина контейнера */
-    margin: 0 auto; /* Центрирование контейнера */
+    width: 100%;
+    padding: 0 15px;
+    overflow: hidden;
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    box-sizing: border-box; /* Важно! */
 }
 
 .products {
-    display: grid; /* Карточки в одну строку */
+    display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 10px; /* Расстояние между карточками */
-    padding: 10px; /* Внутренний отступ контейнера */
-
-    transition: transform 0.3s ease; /* Плавное смещение */
-
+    gap: 10px;
+    padding: 10px;
 }
 
 .product {
     position: relative;
     z-index: 2;
-    padding: 15px; /* Внутренний отступ карточки */
+    padding: 15px;
     background: transparent;
     border: 2px solid;
     border-radius: 10px;
     text-align: center;
     animation: rgb-border 5s infinite linear;
-    box-sizing: border-box; /* Учитываем padding в общей ширине */
-    width: 100%; /* Карточка занимает всю ширину ячейки */
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%; /* Защита от переполнения */
 }
-@media (max-width: 1900px) {
-    .products {
-        grid-template-columns: repeat(4, 1fr); /* 1 колонка на экранах уже 480px */
-    }
-}
+
+/* Медиа-запросы */
 @media (max-width: 1200px) {
     .products {
-        grid-template-columns: repeat(3, 1fr); /* 3 колонки на экранах уже 1200px */
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
 @media (max-width: 768px) {
     .products {
-        grid-template-columns: repeat(2, 1fr); /* 2 колонки на экранах уже 768px */
+        grid-template-columns: repeat(2, 1fr);
     }
 }
-@media (max-width: 240px) {
-    .products {
-        grid-template-columns: repeat(1, 1fr); /* 1 колонка на экранах уже 480px */
-    }
-}
+
 @media (max-width: 480px) {
     .products {
-        grid-template-columns: repeat(1, 1fr); /* 1 колонка на экранах уже 480px */
+        grid-template-columns: 1fr; /* 1 колонка */
     }
+    .product {
+        padding: 10px; 
 }
+
 
 @keyframes rgb-border {
     0% {
