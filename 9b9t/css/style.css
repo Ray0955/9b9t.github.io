@@ -38,7 +38,7 @@ body, html {
 .products {
     display: flex; 
     gap: 10px; 
-    padding: 10px; /
+    padding: 10px;
     transform: translateX(-220px);
     transition: transform 0.3s ease; 
 }
