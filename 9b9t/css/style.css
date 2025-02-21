@@ -27,7 +27,6 @@ body, html {
     margin: 50px auto;
     text-align: center;
 }
-
 .products-container {
     overflow: hidden; /* Скрываем всё, что выходит за пределы контейнера */
     position: relative; /* Для позиционирования кнопок */
@@ -44,7 +43,6 @@ body, html {
 }
 
 .product {
-    grid-template-columns: repeat(2, 1fr)
     position: relative;
     z-index: 2;
     padding: 15px; /* Внутренний отступ карточки */
@@ -759,19 +757,16 @@ body, html {
     position: absolute;
     top: 50px;
     right: 0;
-    background-color: rgba(68, 68, 68, 0.9);
+    background: rgba(10, 10, 30, 0.9); /* Темный полупрозрачный фон */
     border-radius: 10px;
-    border: 2px solid #ff6b6b;
-    box-shadow: 
-        0 0 5px #ff6b6b, /* Неоновая тень */
-        0 0 10px #ff6b6b,
-        0 0 20px #ff6b6b;
+    border: 2px solid transparent;
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
     z-index: 1000;
     padding: 10px;
     opacity: 0;
     transform: translateY(-10px);
     transition: opacity 0.3s ease, transform 0.3s ease;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px); /* Размытие фона */
 }
 
 .filter-dropdown.active {
@@ -780,23 +775,85 @@ body, html {
     transform: translateY(0);
 }
 
-.filter-dropdown .filter-option {
-    padding: 10px 15px;
-    color: white;
-    cursor: pointer;
+.filter-dropdown::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 12px;
+    background: linear-gradient(45deg, #0084ff, #be64ff, #9400d3);
+    z-index: -1;
+    animation: space-glow 2s infinite alternate;
+}
+
+@keyframes space-glow {
+    0% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Эффект для элементов внутри .filter-dropdown */
+.filter-dropdown * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Подсветка при наведении на элементы */
+.filter-dropdown *:hover::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.1); /* Полупрозрачная подсветка */
     border-radius: 5px;
-    margin: 5px 0;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    font-size: 14px;
+    z-index: -1;
+    animation: hover-glow 1.5s infinite alternate;
 }
 
-.filter-dropdown .filter-option:hover {
-    background-color: rgba(85, 85, 85, 0.7); /* Полупрозрачный фон при наведении */
-    transform: translateX(5px); /* Сдвиг вправо при наведении */
+/* Анимация для подсветки при наведении */
+@keyframes hover-glow {
+    0% {
+        box-shadow: 0 0 5px rgba(13, 241, 154, 0.178);
+    }
+    100% {
+        box-shadow: 0 0 15px rgba(251, 255, 0, 0.8), 0 0 25px rgba(0, 255, 255, 0.6);
+    }
 }
 
-.filter-dropdown .filter-option:active {
-    transform: translateX(0); /* Возврат при нажатии */
+/* Стили для кнопки фильтра */
+.filter-icon {
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.filter-icon:hover {
+    transform: scale(1.1); /* Увеличение кнопки при наведении */
+    box-shadow: 0 0 15px rgba(138, 43, 226, 0.8); /* Тень при наведении */
+}
+
+.filter-icon::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 50%;
+    background: rgba(80, 80, 80, 0.2); /* Подсветка при наведении */
+    opacity: 0;
+    transition: opacity 0.1s ease;
+}
+
+.filter-icon:hover::after {
+    opacity: 1; /* Показываем подсветку при наведении */
 }
 
 /* Иконка фильтра */
