@@ -56,6 +56,11 @@ body, html {
     box-sizing: border-box; /* Учитываем padding в общей ширине */
     width: 100%; /* Карточка занимает всю ширину ячейки */
 }
+@media (max-width: 1900px) {
+    .products {
+        grid-template-columns: repeat(4, 1fr); /* 1 колонка на экранах уже 480px */
+    }
+}
 @media (max-width: 1200px) {
     .products {
         grid-template-columns: repeat(3, 1fr); /* 3 колонки на экранах уже 1200px */
@@ -67,7 +72,11 @@ body, html {
         grid-template-columns: repeat(2, 1fr); /* 2 колонки на экранах уже 768px */
     }
 }
-
+@media (max-width: 240px) {
+    .products {
+        grid-template-columns: repeat(1, 1fr); /* 1 колонка на экранах уже 480px */
+    }
+}
 @media (max-width: 480px) {
     .products {
         grid-template-columns: repeat(1, 1fr); /* 1 колонка на экранах уже 480px */
