@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const languageSelect = document.getElementById('language-select');
     const addToCartButtons = document.querySelectorAll('.glow-button');
     const cartCount = document.querySelector('.cart-count');
+    const searchInput = document.getElementById('search-input');
+    const categoryFilter = document.getElementById('category-filter');
+    const products = document.querySelectorAll('.product');
 
     // Загрузка выбранного языка из localStorage
     const savedLanguage = localStorage.getItem('selectedLanguage') || 'ru';
@@ -88,6 +91,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     cartCount.innerText = totalItems;
 
+    // Функция для фильтрации товаров
+    const filterProducts = () => {
+        const searchTerm = searchInput.value.toLowerCase();
+        const selectedCategory = categoryFilter.value;
+
+        products.forEach(product => {
+            const productName = product.querySelector('.card__title').innerText.toLowerCase();
+            const productCategory = product.getAttribute('data-category');
+
+            const matchesSearch = productName.includes(searchTerm);
+            const matchesCategory = selectedCategory === 'all' || productCategory === selectedCategory;
+
+            if (matchesSearch && matchesCategory) {
+                product.style.display = 'block';
+            } else {
+                product.style.display = 'none';
+            }
+        });
+    };
+
+    // Слушатели событий для поиска и фильтрации
+    searchInput.addEventListener('input', filterProducts);
+    categoryFilter.addEventListener('change', filterProducts);
+
     // Генерация эффекта свечения для кнопок
     generateGlowButtons();
 });
@@ -96,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
 const generateGlowButtons = () => {
     document.querySelectorAll(".glow-button").forEach((button) => {
         let gradientElem = button.querySelector('.gradient');
-        
+
         if (!gradientElem) {
             gradientElem = document.createElement("div");
             gradientElem.classList.add("gradient");
