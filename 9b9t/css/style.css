@@ -35,10 +35,13 @@ body, html {
 }
 
 .products {
-    display: grid; /* Используем CSS Grid */
-    grid-template-columns: repeat(4, 1fr); /* 4 карточки в ряд */
+    display: grid; /* Карточки в одну строку */
+    grid-template-columns: repeat(4, 1fr);
     gap: 10px; /* Расстояние между карточками */
     padding: 10px; /* Внутренний отступ контейнера */
+    transform: translateX(-220px);
+    transition: transform 0.3s ease; /* Плавное смещение */
+
 }
 
 .product {
