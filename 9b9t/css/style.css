@@ -28,6 +28,9 @@ body, html {
     text-align: center;
 }
 .products-container {
+    width: 100%; /*вьте это */
+
+    padding: 0 15px; /* Чтобы контент не прилипал к краям */
     overflow: hidden; /* Скрываем всё, что выходит за пределы контейнера */
     position: relative; /* Для позиционирования кнопок */
     max-width: 1200px; /* Максимальная ширина контейнера */
@@ -39,7 +42,7 @@ body, html {
     grid-template-columns: repeat(4, 1fr);
     gap: 10px; /* Расстояние между карточками */
     padding: 10px; /* Внутренний отступ контейнера */
-    transform: translateX(-220px);
+
     transition: transform 0.3s ease; /* Плавное смещение */
 
 }
