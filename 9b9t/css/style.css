@@ -35,11 +35,10 @@ body, html {
 }
 
 .products {
-    display: flex; /* Карточки в одну строку */
+    display: grid; /* Используем CSS Grid */
+    grid-template-columns: repeat(4, 1fr); /* 4 карточки в ряд */
     gap: 10px; /* Расстояние между карточками */
     padding: 10px; /* Внутренний отступ контейнера */
-    transform: translateX(-220px);
-    transition: transform 0.3s ease; /* Плавное смещение */
 }
 
 .product {
@@ -52,8 +51,7 @@ body, html {
     text-align: center;
     animation: rgb-border 5s infinite linear;
     box-sizing: border-box; /* Учитываем padding в общей ширине */
-    width: 250px; /* Фиксированная ширина карточки */
-    flex-shrink: 0; /* Карточки не сжимаются */
+    width: 100%; /* Карточка занимает всю ширину ячейки */
 }
 @media (max-width: 1200px) {
     .products {
