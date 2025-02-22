@@ -1,18 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
-    const orderItemsList = document.querySelector('.order-items');
-    const orderTotal = document.getElementById('order-total');
-    const minOrderWarning = document.getElementById('min-order-warning');
-    const checkoutMain = document.getElementById('checkout-main');
-    const payButtons = document.querySelectorAll('.pay-button');
-    const contactForm = document.getElementById('contact-form');
     const languageSelect = document.getElementById('language-select');
-    const deliverySelect = document.getElementById('delivery-select');
-    const deliveryDescription = document.getElementById('delivery-description');
-    const coordinatesInput = document.getElementById('coordinates-input');
-    const xCoordInput = document.getElementById('x-coord');
-    const yCoordInput = document.getElementById('y-coord');
-    const zCoordInput = document.getElementById('z-coord');
+    const addToCartButtons = document.querySelectorAll('.glow-button');
+    const cartCount = document.querySelector('.cart-count');
+    const searchInput = document.getElementById('search-input');
+    const products = document.querySelectorAll('.product.card');
+    const filterIcon = document.getElementById('filter-icon');
+    const filterDropdown = document.getElementById('filter-dropdown');
 
     // Загрузка выбранного языка из localStorage
     const savedLanguage = localStorage.getItem('selectedLanguage') || 'ru';
@@ -26,167 +19,169 @@ document.addEventListener('DOMContentLoaded', () => {
         changeLanguage(selectedLang);
     });
 
-    // Обработчик для выбора способа доставки
-    deliverySelect.addEventListener('change', (event) => {
-        const selectedMethod = event.target.value;
-        updateDeliveryDescription(selectedMethod, languageSelect.value);
-        if (selectedMethod === 'specific') {
-            coordinatesInput.style.display = 'block';
-        } else {
-            coordinatesInput.style.display = 'none';
-        }
-    });
-
-    // Ограничение ввода координат (максимум 1 000 000)
-    [xCoordInput, yCoordInput, zCoordInput].forEach(input => {
-        input.addEventListener('input', (e) => {
-            const value = parseInt(e.target.value);
-            if (value > 1000000) {
-                e.target.value = 1000000;
-            } else if (value < -1000000) {
-                e.target.value = -1000000;
-            }
-        });
-    });
-
-    // Функция для обновления описания способа доставки
-    function updateDeliveryDescription(method, lang) {
-        const descriptions = deliveryDescription.querySelectorAll('p');
-        descriptions.forEach(desc => {
-            if (desc.getAttribute('data-delivery') === method && desc.getAttribute('data-lang') === lang) {
-                desc.style.display = 'block';
-            } else {
-                desc.style.display = 'none';
-            }
-        });
-    }
-
     // Функция для переключения языка
     function changeLanguage(lang) {
-        // Скрываем все элементы с атрибутом data-lang
-        document.querySelectorAll('[data-lang]').forEach(element => {
-            element.style.display = 'none';
-        });
-
-        // Показываем только элементы с выбранным языком
-        document.querySelectorAll(`[data-lang="${lang}"]`).forEach(element => {
-            element.style.display = 'block';
-        });
-
-        // Переключение кнопки оплаты на выбранный язык
-        payButtons.forEach(button => {
-            if (button.getAttribute('data-lang') === lang) {
-                button.style.display = 'none'; // Сначала скрываем все кнопки
-            } else {
-                button.style.display = 'none';
-            }
-        });
-
-        // Обновляем описание способа доставки для выбранного языка
-        const selectedMethod = deliverySelect.value;
-        updateDeliveryDescription(selectedMethod, lang);
-
-        // Показываем кнопку оплаты, если форма заполнена
-        const isFormValid = contactForm.checkValidity();
-        if (isFormValid) {
-            const activePayButton = document.querySelector(`.pay-button[data-lang="${lang}"]`);
-            if (activePayButton) {
-                activePayButton.style.display = 'block';
-            }
-        }
-    }
-
-    // Проверка минимальной суммы
-    const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    if (total < 2) {
-        minOrderWarning.style.display = 'block';
-        checkoutMain.style.display = 'none';
-        payButtons.forEach(button => button.style.display = 'none');
-    } else {
-        minOrderWarning.style.display = 'none';
-        checkoutMain.style.display = 'flex';
-    }
-
-    // Отображение товаров в заказе
-    function renderOrderSummary() {
-        orderItemsList.innerHTML = '';
-        cartItems.forEach(item => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <span>${item.name} - $${item.price} x ${item.quantity}</span>
-            `;
-            orderItemsList.appendChild(li);
-        });
-        orderTotal.innerText = total.toFixed(2);
-    }
-
-    // Обработчик для изменения полей формы
-    contactForm.addEventListener('input', () => {
-        const isFormValid = contactForm.checkValidity();
-        const currentLanguage = languageSelect.value;
-
-        payButtons.forEach(button => {
-            if (button.getAttribute('data-lang') === currentLanguage) {
-                button.style.display = isFormValid ? 'block' : 'none';
-            } else {
-                button.style.display = 'none';
-            }
-        });
-    });
-
-    // Обработчик для кнопки "Оплатить"
-    payButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (contactForm.checkValidity()) {
-                // Проверка способа доставки и координат
-                const deliveryMethod = deliverySelect.value;
-                let coordinates = null;
-
-                if (deliveryMethod === 'specific') {
-                    const x = parseInt(xCoordInput.value);
-                    const y = parseInt(yCoordInput.value);
-                    const z = parseInt(zCoordInput.value);
-
-                    if (isNaN(x) || isNaN(y) || isNaN(z)) {
-                        alert('Заполните все поля координат!');
-                        return;
-                    }
-
-                    coordinates = { x, y, z };
+        // Обновляем текст кнопки "Добавить в корзину"
+        addToCartButtons.forEach(button => {
+            const spans = button.querySelectorAll('span');
+            spans.forEach(span => {
+                if (span.getAttribute('data-lang') === lang) {
+                    span.style.display = 'inline';
+                } else {
+                    span.style.display = 'none';
                 }
+            });
+        });
 
-                // Сбор данных пользователя
-                const userData = {
-                    username: document.getElementById('username').value,
-                    discord: document.getElementById('discord').value,
-                    email: document.getElementById('email').value,
-                    order: cartItems,
-                    total: total,
-                    deliveryMethod: deliveryMethod,
-                    coordinates: coordinates,
-                    date: new Date().toLocaleString() // Добавляем дату заказа
-                };
-
-                // Получаем текущие заказы из localStorage
-                const orders = JSON.parse(localStorage.getItem('orders')) || [];
-
-                // Добавляем новый заказ
-                orders.push(userData);
-
-                // Сохраняем обновлённый список заказов
-                localStorage.setItem('orders', JSON.stringify(orders));
-
-                // Очистка корзины
-                localStorage.removeItem('cart');
-
-                alert('Оплата прошла успешно! Данные сохранены.');
-                window.location.href = 'index.html'; // Перенаправление на главную страницу
+        // Обновляем текст других элементов
+        document.querySelectorAll('[data-lang]').forEach(element => {
+            if (element.getAttribute('data-lang') === lang) {
+                element.style.display = 'block';
             } else {
-                alert('Заполните все поля контактной информации!');
+                element.style.display = 'none';
             }
+        });
+    }
+
+    // Обработчик для кнопок "Добавить в корзину"
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Добавляем класс для анимации
+            button.classList.add('clicked');
+
+            // Убираем класс после завершения анимации
+            setTimeout(() => {
+                button.classList.remove('clicked');
+            }, 500); // Длительность анимации (0.5 секунды)
+
+            // Логика добавления товара в корзину
+            const product = button.closest('.product');
+            const productId = product.getAttribute('data-id');
+            const productName = product.querySelector('.card__title').innerText;
+            const productPrice = parseFloat(product.getAttribute('data-price'));
+            const productImage = product.querySelector('.card__img').src;
+
+            // Загрузка корзины из localStorage
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Проверяем, есть ли товар уже в корзине
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: productId,
+                    name: productName,
+                    price: productPrice,
+                    image: productImage,
+                    quantity: 1
+                });
+            }
+
+            // Сохраняем корзину в localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            // Обновляем счетчик корзины
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.innerText = totalItems;
         });
     });
 
-    renderOrderSummary();
+    // Инициализация счетчика корзины
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    cartCount.innerText = totalItems;
+
+    // Обработчик для поиска
+    searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value.toLowerCase();
+        products.forEach(product => {
+            const title = product.querySelector('.card__title').innerText.toLowerCase();
+            product.style.display = title.includes(searchTerm) ? 'block' : 'none';
+        });
+    });
+
+    // Показ/скрытие выпадающего списка фильтров
+    filterIcon.addEventListener('click', (e) => {
+        e.stopPropagation(); // Предотвращаем всплытие события
+        filterDropdown.classList.toggle('active');
+    });
+
+    // Закрытие выпадающего списка при клике вне его области
+    document.addEventListener('click', (e) => {
+        if (!filterDropdown.contains(e.target) && !filterIcon.contains(e.target)) {
+            filterDropdown.classList.remove('active');
+        }
+    });
+
+    // Обработчик для выбора фильтра
+    filterDropdown.querySelectorAll('.filter-option').forEach(option => {
+        option.addEventListener('click', () => {
+            const filter = option.getAttribute('data-filter');
+            filterDropdown.classList.remove('active'); // Скрываем выпадающий список
+
+            // Фильтрация товаров
+            products.forEach(product => {
+                const category = product.getAttribute('data-category');
+                if (filter === 'all' || category === filter) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // Генерация эффекта свечения для кнопок
+    generateGlowButtons();
 });
+
+// Функция для создания эффекта свечения на кнопках
+const generateGlowButtons = () => {
+    document.querySelectorAll(".glow-button").forEach((button) => {
+        let gradientElem = button.querySelector('.gradient');
+
+        if (!gradientElem) {
+            gradientElem = document.createElement("div");
+            gradientElem.classList.add("gradient");
+            button.appendChild(gradientElem);
+        }
+
+        button.addEventListener("pointermove", (e) => {
+            const rect = button.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            gsap.to(button, {
+                "--pointer-x": `${x}px`,
+                "--pointer-y": `${y}px`,
+                duration: 0.6,
+            });
+
+            gsap.to(button, {
+                "--button-glow": chroma
+                    .mix(
+                        getComputedStyle(button)
+                            .getPropertyValue("--button-glow-start")
+                            .trim(),
+                        getComputedStyle(button)
+                            .getPropertyValue("--button-glow-end")
+                            .trim(),
+                        x / rect.width
+                    )
+                    .hex(),
+                duration: 0.2,
+            });
+        });
+    });
+};
+
+// Инициализация GSAP (если не подключен)
+if (typeof gsap === 'undefined') {
+    console.warn('GSAP не подключен. Эффекты свечения не будут работать.');
+}
+
+// Инициализация Chroma.js (если не подключен)
+if (typeof chroma === 'undefined') {
+    console.warn('Chroma.js не подключен. Эффекты свечения не будут работать.');
+}
