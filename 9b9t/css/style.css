@@ -483,16 +483,19 @@ body, html {
 }
 
 .pay-button {
-    background: #28a745;
+    background: linear-gradient(90deg, #28a745, #17a2b8, #28a745);
     color: #fff;
     border: none;
-    padding: 15px 30px;
+    padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
     margin-top: 20px;
-    font-size: 18px;
-    width: 100%;
-    transition: background 0.3s ease;
+    font-size: 16px;
+    display: none;
+    background-size: 200% 100%;
+    transition: background-position 0.5sease, transform 0.2sease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
 }
 
 .pay-button:hover {
