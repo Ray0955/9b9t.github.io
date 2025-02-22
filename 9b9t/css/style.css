@@ -40,42 +40,65 @@ body, html {
 }
 
 .products-container {
-    max-width: 1200px;
+    display: flex;
+    flex-wrap: wrap; /* Разрешаем перенос элементов на новую строку */
+    justify-content: center; /* Центрируем карточки по горизонтали */
+    gap: 10px; /* Отступы между карточками */
     width: 100%;
-    margin: 0 auto;
-    padding: 0 15px;
-    box-sizing: border-box;
+    padding: 20px; /* Отступы внутри контейнера */
+    box-sizing: border-box; /* Чтобы отступы не выходили за пределы */
 }
 
 .products {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    flex-wrap: wrap; /* Карточки переносятся на новую строку при нехватке места */
+    justify-content: center; /* Центрируем карточки */
     gap: 10px;
-    padding: 10px;
+    width: 100%;
 }
 
 /* Исправленные медиазапросы (min-width вместо max-width) */
+/* Медиазапросы */
 @media (min-width: 1201px) {
     .products {
-        grid-template-columns: repeat(4, 1fr); /* Десктоп: 4 колонки */
+        grid-template-columns: repeat(4, 1fr); /* 4 колонки для десктопа */
     }
 }
 
 @media (max-width: 1200px) and (min-width: 769px) {
     .products {
-        grid-template-columns: repeat(3, 1fr); /* Планшет: 3 колонки */
+        grid-template-columns: repeat(3, 1fr); /* 3 колонки для планшетов */
     }
 }
 
 @media (max-width: 768px) and (min-width: 481px) {
     .products {
-        grid-template-columns: repeat(2, 1fr); /* Горизонтальный телефон: 2 колонки */
+        grid-template-columns: repeat(2, 1fr); /* 2 колонки для мобильных в горизонтальном положении */
     }
 }
 
 @media (max-width: 480px) {
     .products {
-        grid-template-columns: 1fr; /* Вертикальный телефон: 1 колонка */
+        grid-template-columns: 1fr; /* 1 колонка для вертикальных телефонов */
+    }
+}
+
+/* Медиазапросы для адаптивности */
+@media (max-width: 1200px) {
+    .product.card {
+        width: 33%; /* 3 карточки в строке на экранах до 1200px */
+    }
+}
+
+@media (max-width: 768px) {
+    .product.card {
+        width: 48%; /* 2 карточки в строке на экранах до 768px */
+    }
+}
+
+@media (max-width: 480px) {
+    .product.card {
+        width: 100%; /* 1 карточка на экранах до 480px */
     }
 }
 
@@ -627,8 +650,8 @@ body, html {
 
 /* Стили для карточек товаров */
 .product.card {
-    width: 300px;
-    height: 210px;
+    width: 250px; /* Ширина каждой карточки */
+    min-height: 180px; /* Минимальная высота карточки */
     background-color: var(--dark-color);
     border-radius: 1rem;
     padding: 1rem;
@@ -636,18 +659,25 @@ body, html {
     overflow: hidden;
     position: relative;
     transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
 }
 
 .card__img {
     z-index: 1;
-    position: absolute;
-    width: 80%;
-    height: auto;
-    top: 45px;
-    left: 34px;
-    filter: drop-shadow(5px 10px 15px rgba(140, 0, 255, 0.4));
-    transition: transform 0.5s ease;
+    position: relative; /* Сохраняем позиционирование внутри карточки */
+    width: 90%; /* Растягиваем изображение по всей ширине карточки */
+    height: auto; /* Сохраняем пропорции изображения */
+    max-width: 100%; /* Ограничиваем изображение по максимальной ширине */
+    object-fit: cover; /* Чтобы картинка не искажалась */
+    filter: drop-shadow(5px 10px 15px rgba(140, 0, 255, 0.4)); /* Тень */
+    transition: transform 0.5s ease; /* Плавный переход */
+    display: block; /* Убираем возможные лишние отступы */
+    margin: 0 auto; /* Центрируем изображение */
+    top: 15px; /* Сдвигаем изображение вниз на 10px (можно увеличить значение) */
 }
+
+
 
 .card__data {
     position: absolute;
@@ -705,7 +735,7 @@ body, html {
 }
 
 .product.card:hover .card__title {
-    transform: translateY(-135px);
+    transform: translateY(-115px);
 }
 
 .product.card:hover .card__price {
