@@ -4,7 +4,18 @@ body, html {
     padding: 0;
     height: 100%;
     overflow: auto;
+    font-family: 'Klukva', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
 }
+
+@font-face {
+    font-family: 'Klukva';
+    src: url('fonts/klukva.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 
 .background {
     position: fixed;
