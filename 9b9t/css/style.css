@@ -229,7 +229,6 @@ body, html {
 }
 
 .cart-content, .checkout-content {
-    background: rgba(0, 0, 0, 0.6); /* Полупрозрачный черный фон */
     border-radius: 10px;
     padding: 20px;
     width: 90%;
@@ -405,7 +404,7 @@ body, html {
 
 .contact-info {
     flex: 1;
-    background: #f9f9f9;
+
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -441,6 +440,10 @@ body, html {
 
 .order-summary {
     flex: 1;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
     padding: 20px;
     border-radius: 10px;
