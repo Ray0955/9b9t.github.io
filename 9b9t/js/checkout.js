@@ -134,11 +134,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Обработчик для кнопки "Оплатить"
-    payButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (contactForm.checkValidity()) {
+    // Инициализация PayPal
+    paypal.Buttons({
+        createOrder: function (data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: total.toFixed(2) // Сумма заказа
+                    }
+                }]
+            });
+        },
+        onApprove: function (data, actions) {
+            return actions.order.capture().then(function (details) {
                 // Проверка способа доставки и координат
                 const deliveryMethod = deliverySelect.value;
                 let coordinates = null;
@@ -181,12 +189,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.removeItem('cart');
 
                 alert('Оплата прошла успешно! Данные сохранены.');
-                window.location.href = 'index.html'; // Перенаправление на главную страницу
-            } else {
-                alert('Заполните все поля контактной информации!');
-            }
-        });
-    });
+                window.location.href = 'https://ray0955.github.io/9b9t.github.io/9b9t/checkout/success.html'; // Перенаправление на страницу успеха
+            });
+        },
+        onError: function (err) {
+            console.error(err);
+            alert('Ошибка при оплате. Пожалуйста, попробуйте еще раз.');
+            window.location.href = 'https://ray0955.github.io/9b9t.github.io/9b9t/checkout/failure.html'; // Перенаправление на страницу ошибки
+        }
+    }).render('#paypal-button-container'); // Отображение кнопки PayPal
 
     renderOrderSummary();
 });
