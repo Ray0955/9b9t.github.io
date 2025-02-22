@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const xCoordInput = document.getElementById('x-coord');
     const yCoordInput = document.getElementById('y-coord');
     const zCoordInput = document.getElementById('z-coord');
+    const paypalButtonContainer = document.getElementById('paypal-button-container');
 
     // Загрузка выбранного языка из localStorage
     const savedLanguage = localStorage.getItem('selectedLanguage') || 'ru';
@@ -73,27 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
             element.style.display = 'block';
         });
 
-        // Переключение кнопки оплаты на выбранный язык
-        payButtons.forEach(button => {
-            if (button.getAttribute('data-lang') === lang) {
-                button.style.display = 'none'; // Сначала скрываем все кнопки
-            } else {
-                button.style.display = 'none';
-            }
-        });
-
         // Обновляем описание способа доставки для выбранного языка
         const selectedMethod = deliverySelect.value;
         updateDeliveryDescription(selectedMethod, lang);
 
-        // Показываем кнопку оплаты, если форма заполнена
-        const isFormValid = contactForm.checkValidity();
-        if (isFormValid) {
-            const activePayButton = document.querySelector(`.pay-button[data-lang="${lang}"]`);
-            if (activePayButton) {
-                activePayButton.style.display = 'block';
-            }
-        }
+        // Показываем кнопку PayPal, если форма заполнена
+        checkFormValidity();
     }
 
     // Проверка минимальной суммы
@@ -102,6 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         minOrderWarning.style.display = 'block';
         checkoutMain.style.display = 'none';
         payButtons.forEach(button => button.style.display = 'none');
+        paypalButtonContainer.style.display = 'none'; // Скрываем PayPal, если сумма меньше $2
     } else {
         minOrderWarning.style.display = 'none';
         checkoutMain.style.display = 'flex';
@@ -120,19 +107,29 @@ document.addEventListener('DOMContentLoaded', () => {
         orderTotal.innerText = total.toFixed(2);
     }
 
-    // Обработчик для изменения полей формы
-    contactForm.addEventListener('input', () => {
+    // Функция для проверки валидности формы
+    function checkFormValidity() {
         const isFormValid = contactForm.checkValidity();
-        const currentLanguage = languageSelect.value;
+        const deliveryMethod = deliverySelect.value;
+        const areCoordinatesValid = deliveryMethod !== 'specific' || (
+            !isNaN(parseInt(xCoordInput.value)) &&
+            !isNaN(parseInt(yCoordInput.value)) &&
+            !isNaN(parseInt(zCoordInput.value))
+        );
 
-        payButtons.forEach(button => {
-            if (button.getAttribute('data-lang') === currentLanguage) {
-                button.style.display = isFormValid ? 'block' : 'none';
-            } else {
-                button.style.display = 'none';
-            }
-        });
-    });
+        if (isFormValid && areCoordinatesValid) {
+            paypalButtonContainer.style.display = 'block'; // Показываем PayPal
+        } else {
+            paypalButtonContainer.style.display = 'none'; // Скрываем PayPal
+        }
+    }
+
+    // Обработчик для изменения полей формы
+    contactForm.addEventListener('input', checkFormValidity);
+    deliverySelect.addEventListener('change', checkFormValidity);
+    xCoordInput.addEventListener('input', checkFormValidity);
+    yCoordInput.addEventListener('input', checkFormValidity);
+    zCoordInput.addEventListener('input', checkFormValidity);
 
     // Инициализация PayPal
     paypal.Buttons({
@@ -198,6 +195,9 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = 'https://ray0955.github.io/9b9t.github.io/9b9t/checkout/failure.html'; // Перенаправление на страницу ошибки
         }
     }).render('#paypal-button-container'); // Отображение кнопки PayPal
+
+    // Изначально скрываем PayPal
+    paypalButtonContainer.style.display = 'none';
 
     renderOrderSummary();
 });
