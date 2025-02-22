@@ -441,10 +441,19 @@ body, html {
 
 .order-summary {
     flex: 1;
-    background: #f9f9f9;
+
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px); /* Размытие фона */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Граница */
+    color: #fff; /* Белый текст для контраста */
+    text-align: center; /* Центрирование текста */
+    max-width: 800px; /* Максимальная ширина */
+    width: 90%; /* Ширина */
+    margin: 0 auto; /* Центрирование блока */
+    overflow-y: auto; /* Прокрутка, если контент превышает высоту */
+    max-height: 90%; /* Максимальная высота */
 }
 
 .order-summary h2 {
