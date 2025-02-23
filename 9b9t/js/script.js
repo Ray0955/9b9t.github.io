@@ -45,49 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const languageSelect = document.getElementById('language-select');
-    const productsContainer = document.getElementById('products-container');
-
-    // Проверка на существование productsContainer
-    if (!productsContainer) {
-        console.error('Элемент с id="products-container" не найден в DOM.');
-        return;
-    }
-
-    // Загрузка выбранного языка из localStorage
-    const savedLanguage = localStorage.getItem('selectedLanguage') || 'ru';
-    languageSelect.value = savedLanguage;
-    changeLanguage(savedLanguage);
-
-    // Обработчик для выбора языка
-    languageSelect.addEventListener('change', (event) => {
-        const selectedLang = event.target.value;
-        localStorage.setItem('selectedLanguage', selectedLang);
-        changeLanguage(selectedLang);
-    });
-
-    // Функция для переключения языка
-    function changeLanguage(lang) {
-        // Обновляем текст кнопки "Добавить в корзину"
-        document.querySelectorAll('.glow-button span').forEach(span => {
-            if (span.getAttribute('data-lang') === lang) {
-                span.style.display = 'inline';
-            } else {
-                span.style.display = 'none';
-            }
-        });
-
-        // Обновляем текст других элементов
-        document.querySelectorAll('[data-lang]').forEach(element => {
-            if (element.getAttribute('data-lang') === lang) {
-                element.style.display = 'block';
-            } else {
-                element.style.display = 'none';
-            }
-        });
-    }
-
     // Загрузка товаров с API
     fetch("https://9b9t.shop:8443/api/products")
         .then(response => response.json())
@@ -114,11 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Используем категорию по умолчанию, если категория отсутствует
                 productCard.setAttribute('data-category', product.category || 'Расходники');
 
-                // Проверяем, есть ли описание
-                const descriptionRu = product.descriptionRu || "Описание отсутствует";
-                const descriptionUk = product.descriptionUk || "Опис відсутній";
-                const descriptionEn = product.descriptionEn || "Description not available";
-
                 productCard.innerHTML = `
                     <img src="${product.imageUrl}" alt="${product.nameRu}" class="card__img">
                     <div class="card__data">
@@ -128,11 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span class="card__price" data-lang="ru">${product.price}$</span>
                         <span class="card__price" data-lang="uk">${product.price}$</span>
                         <span class="card__price" data-lang="en">${product.price}$</span>
-                        <div class="description">
-                            <p data-lang="ru">${descriptionRu}</p>
-                            <p data-lang="uk">${descriptionUk}</p>
-                            <p data-lang="en">${descriptionEn}</p>
-                        </div>
+                        <p class="card__description" data-lang="ru">${product.descriptionRu}</p>
+                        <p class="card__description" data-lang="uk">${product.descriptionUk}</p>
+                        <p class="card__description" data-lang="en">${product.descriptionEn}</p>
                         <button class="glow-button">
                             <span data-lang="ru">Добавить в корзину</span>
                             <span data-lang="uk">Додати до кошика</span>
@@ -146,6 +96,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Добавление фрагмента в DOM
             productsContainer.appendChild(fragment);
 
+            // Инициализация обработчиков для новых кнопок
+            initializeEventListeners();
+
             // Применяем текущий язык после загрузки товаров
             changeLanguage(savedLanguage);
         })
@@ -153,7 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Ошибка при загрузке продуктов:', error);
             productsContainer.innerHTML = '<p class="error">Не удалось загрузить продукты. Пожалуйста, попробуйте позже.</p>';
         });
-});
 
     // Инициализация обработчиков событий
     function initializeEventListeners() {
