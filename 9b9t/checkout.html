@@ -95,7 +95,7 @@
                         <label for="y-coord" data-lang="ru">Координата Y:</label>
                         <label for="y-coord" data-lang="uk">Координата Y:</label>
                         <label for="y-coord" data-lang="en">Y Coordinate:</label>
-                        <input type="number" id="y-coord" name="y-coord" min="0" max="1000000" step="1">
+                        <input type="number" id="y-coord" name="y-coord" min="10" max="250" step="1">
 
                         <label for="z-coord" data-lang="ru">Координата Z:</label>
                         <label for="z-coord" data-lang="uk">Координата Z:</label>
@@ -121,27 +121,6 @@
         </div>
     </div>
 
-    <!-- Подключение Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-    <script>
-        // Конфигурация Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyBe4kUFuZjSCJ5OXH_7dZXPpUTBkaFFD8g",
-            authDomain: "bshop-bc4c5.firebaseapp.com",
-            databaseURL: "https://bshop-bc4c5-default-rtdb.firebaseio.com",
-            projectId: "bshop-bc4c5",
-            storageBucket: "bshop-bc4c5.firebasestorage.app",
-            messagingSenderId: "281394388127",
-            appId: "1:281394388127:web:c35a2263acb694731696aa"
-        };
-
-        // Инициализация Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore(); // Инициализация Firestore
-    </script>
-
-    <!-- Подключение checkout.js -->
     <script src="js/checkout.js"></script>
 </body>
 </html>
