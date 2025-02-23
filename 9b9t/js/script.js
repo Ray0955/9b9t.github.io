@@ -66,9 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span class="card__price" data-lang="ru">${product.price}$</span>
                         <span class="card__price" data-lang="uk">${product.price}$</span>
                         <span class="card__price" data-lang="en">${product.price}$</span>
-                        <p class="card__description" data-lang="ru">Описание на русском</p>
-                        <p class="card__description" data-lang="uk">Опис на українській</p>
-                        <p class="card__description" data-lang="en">Description in English</p>
+                        <p class="card__description" data-lang="ru">${product.descriptionRu}</p>
+                        <p class="card__description" data-lang="uk">${product.descriptionUk}</p>
+                        <p class="card__description" data-lang="en">${product.descriptionEn}</p>
                         <button class="glow-button">
                             <span data-lang="ru">Добавить в корзину</span>
                             <span data-lang="uk">Додати до кошика</span>
