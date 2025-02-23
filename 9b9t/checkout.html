@@ -7,25 +7,6 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<!-- Подключение Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-<script>
-    // Конфигурация Firebase
-    const firebaseConfig = {
-        apiKey: "AIzaSyBe4kUFuZjSCJ5OXH_7dZXPpUTBkaFFD8g",
-        authDomain: "bshop-bc4c5.firebaseapp.com",
-        databaseURL: "https://bshop-bc4c5-default-rtdb.firebaseio.com",
-        projectId: "bshop-bc4c5",
-        storageBucket: "bshop-bc4c5.firebasestorage.app",
-        messagingSenderId: "281394388127",
-        appId: "1:281394388127:web:c35a2263acb694731696aa"
-    };
-
-    // Инициализация Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore(); // Инициализация Firestore
-</script>
 <body>
     <div class="background"></div>
     <div class="header">
@@ -140,6 +121,27 @@
         </div>
     </div>
 
+    <!-- Подключение Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script>
+        // Конфигурация Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBe4kUFuZjSCJ5OXH_7dZXPpUTBkaFFD8g",
+            authDomain: "bshop-bc4c5.firebaseapp.com",
+            databaseURL: "https://bshop-bc4c5-default-rtdb.firebaseio.com",
+            projectId: "bshop-bc4c5",
+            storageBucket: "bshop-bc4c5.firebasestorage.app",
+            messagingSenderId: "281394388127",
+            appId: "1:281394388127:web:c35a2263acb694731696aa"
+        };
+
+        // Инициализация Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore(); // Инициализация Firestore
+    </script>
+
+    <!-- Подключение checkout.js -->
     <script src="js/checkout.js"></script>
 </body>
 </html>
