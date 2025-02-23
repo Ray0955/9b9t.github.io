@@ -25,61 +25,40 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Загрузка товаров с API
+    // Загрузка продуктов с сервера
     fetch("https://9b9t.shop:8443/api/products")
         .then(response => response.json())
         .then(products => {
-            if (!Array.isArray(products) || products.length === 0) {
-                productsContainer.innerHTML = '<p class="error">Продукты не найдены.</p>';
-                return;
-            }
-
-            // Очистка контейнера
+            // Очистить контейнер перед добавлением новых продуктов
             productsContainer.innerHTML = '';
 
-            // Создание фрагмента для оптимизации
-            const fragment = document.createDocumentFragment();
-
-            // Добавление продуктов
+            // Добавление продуктов на страницу
             products.forEach(product => {
-                const productCard = document.createElement('div');
-                productCard.classList.add('product', 'card');
-                productCard.setAttribute('data-id', product.id);
-                productCard.setAttribute('data-price', product.price);
-                productCard.setAttribute('data-category', product.category || 'Расходники');
-
-                productCard.innerHTML = `
-                    <img src="${product.imageUrl}" alt="${product.nameRu}" class="card__img">
-                    <div class="card__data">
-                        <h1 class="card__title" data-lang="ru">${product.nameRu}</h1>
-                        <h1 class="card__title" data-lang="uk">${product.nameUk}</h1>
-                        <h1 class="card__title" data-lang="en">${product.nameEn}</h1>
-                        <span class="card__price" data-lang="ru">${product.price}$</span>
-                        <span class="card__price" data-lang="uk">${product.price}$</span>
-                        <span class="card__price" data-lang="en">${product.price}$</span>
-                        <p class="card__description" data-lang="ru">${product.descriptionRu}</p>
-                        <p class="card__description" data-lang="uk">${product.descriptionUk}</p>
-                        <p class="card__description" data-lang="en">${product.descriptionEn}</p>
-                        <button class="glow-button">
-                            <span data-lang="ru">Добавить в корзину</span>
-                            <span data-lang="uk">Додати до кошика</span>
-                            <span data-lang="en">Add to Cart</span>
-                        </button>
+                const productCard = `
+                    <div class="product card" data-id="${product.id}" data-price="${product.price}" data-category="Расходники">
+                        <img src="${product.imageUrl}" alt="${product.nameRu}" class="card__img">
+                        <div class="card__data">
+                            <h1 class="card__title" data-lang="ru">${product.nameRu}</h1>
+                            <h1 class="card__title" data-lang="uk">${product.nameUk}</h1>
+                            <h1 class="card__title" data-lang="en">${product.nameEn}</h1>
+                            <span class="card__price" data-lang="ru">${product.price}$</span>
+                            <span class="card__price" data-lang="uk">${product.price}$</span>
+                            <span class="card__price" data-lang="en">${product.price}$</span>
+                            <p class="card__description" data-lang="ru">${product.descriptionRu}</p>
+                            <p class="card__description" data-lang="uk">${product.descriptionUk}</p>
+                            <p class="card__description" data-lang="en">${product.descriptionEn}</p>
+                            <button class="glow-button">
+                                <span data-lang="ru">Добавить в корзину</span>
+                                <span data-lang="uk">Додати до кошика</span>
+                                <span data-lang="en">Add to Cart</span>
+                            </button>
+                        </div>
                     </div>
                 `;
-                fragment.appendChild(productCard);
+                productsContainer.innerHTML += productCard;
             });
-
-            // Добавление фрагмента в DOM
-            productsContainer.appendChild(fragment);
-
-            // Инициализация обработчиков для новых кнопок
-            initializeEventListeners();
         })
-        .catch(error => {
-            console.error('Ошибка при загрузке продуктов:', error);
-            productsContainer.innerHTML = '<p class="error">Не удалось загрузить продукты. Пожалуйста, попробуйте позже.</p>';
-        });
+        .catch(error => console.error('Ошибка при загрузке продуктов:', error));
 
     // Инициализация обработчиков событий
     function initializeEventListeners() {
