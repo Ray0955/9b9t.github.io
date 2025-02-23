@@ -26,8 +26,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для переключения языка
     function changeLanguage(lang) {
+        // Обновляем текст кнопки "Добавить в корзину"
+        document.querySelectorAll('.glow-button span').forEach(span => {
+            if (span.getAttribute('data-lang') === lang) {
+                span.style.display = 'inline';
+            } else {
+                span.style.display = 'none';
+            }
+        });
+
+        // Обновляем текст других элементов
         document.querySelectorAll('[data-lang]').forEach(element => {
-            element.style.display = element.getAttribute('data-lang') === lang ? 'block' : 'none';
+            if (element.getAttribute('data-lang') === lang) {
+                element.style.display = 'block';
+            } else {
+                element.style.display = 'none';
+            }
         });
     }
 
@@ -84,6 +98,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Инициализация обработчиков для новых кнопок
             initializeEventListeners();
+
+            // Применяем текущий язык после загрузки товаров
+            changeLanguage(savedLanguage);
         })
         .catch(error => {
             console.error('Ошибка при загрузке продуктов:', error);
