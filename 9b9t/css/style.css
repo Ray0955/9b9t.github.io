@@ -599,7 +599,7 @@ body, html {
     z-index: 1;
     position: relative;
     display: block;
-    padding: 10px 28px;
+    padding: 9px 8px;
     box-sizing: border-box;
     width: fit-content;
     min-width: 124px;
