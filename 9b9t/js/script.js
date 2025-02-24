@@ -102,6 +102,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Применяем текущий язык после загрузки товаров
             changeLanguage(savedLanguage);
+
+            // Генерация эффекта свечения для кнопок
+            generateGlowButtons();
         })
         .catch(error => {
             console.error('Ошибка при загрузке продуктов:', error);
@@ -121,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const product = button.closest('.product');
                 const productId = product.getAttribute('data-id');
                 const productName = product.querySelector('.card__title[data-lang="RU"]').innerText;
-                const productPrice = parseFloat(product.querySelector('.card__price').innerText);
+                const productPrice = parseFloat(product.querySelector('.card__price').innerText.replace('$', ''));
                 const productImage = product.querySelector('.card__img').src;
 
                 let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -140,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 localStorage.setItem('cart', JSON.stringify(cart));
-                cartCount.innerText = cart.reduce((sum, item) => sum + item.quantity, 0);
+                updateCartCount(cart);
             });
         });
 
@@ -176,4 +179,64 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // Обновление счетчика корзины
+    function updateCartCount(cart) {
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCount.innerText = totalItems;
+    }
+
+    // Инициализация счетчика корзины при загрузке страницы
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    updateCartCount(cart);
 });
+
+// Функция для создания эффекта свечения на кнопках
+const generateGlowButtons = () => {
+    document.querySelectorAll(".glow-button").forEach((button) => {
+        let gradientElem = button.querySelector('.gradient');
+
+        if (!gradientElem) {
+            gradientElem = document.createElement("div");
+            gradientElem.classList.add("gradient");
+            button.appendChild(gradientElem);
+        }
+
+        button.addEventListener("pointermove", (e) => {
+            const rect = button.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            gsap.to(button, {
+                "--pointer-x": `${x}px`,
+                "--pointer-y": `${y}px`,
+                duration: 0.6,
+            });
+
+            gsap.to(button, {
+                "--button-glow": chroma
+                    .mix(
+                        getComputedStyle(button)
+                            .getPropertyValue("--button-glow-start")
+                            .trim(),
+                        getComputedStyle(button)
+                            .getPropertyValue("--button-glow-end")
+                            .trim(),
+                        x / rect.width
+                    )
+                    .hex(),
+                duration: 0.2,
+            });
+        });
+    });
+};
+
+// Инициализация GSAP (если не подключен)
+if (typeof gsap === 'undefined') {
+    console.warn('GSAP не подключен. Эффекты свечения не будут работать.');
+}
+
+// Инициализация Chroma.js (если не подключен)
+if (typeof chroma === 'undefined') {
+    console.warn('Chroma.js не подключен. Эффекты свечения не будут работать.');
+}
