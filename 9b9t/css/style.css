@@ -650,8 +650,8 @@ body, html {
 
 /* Стили для карточек товаров */
 .product.card {
-    width: 250px; /* Ширина каждой карточки */
-    min-height: 180px; /* Минимальная высота карточки */
+    width: 300px;
+    height: 210px;
     background-color: var(--dark-color);
     border-radius: 1rem;
     padding: 1rem;
@@ -659,25 +659,18 @@ body, html {
     overflow: hidden;
     position: relative;
     transition: transform 0.3s ease;
-    display: flex;
-    flex-direction: column;
 }
 
 .card__img {
     z-index: 1;
-    position: relative; /* Сохраняем позиционирование внутри карточки */
-    width: 90%; /* Растягиваем изображение по всей ширине карточки */
-    height: auto; /* Сохраняем пропорции изображения */
-    max-width: 100%; /* Ограничиваем изображение по максимальной ширине */
-    object-fit: cover; /* Чтобы картинка не искажалась */
-    filter: drop-shadow(5px 10px 15px rgba(140, 0, 255, 0.4)); /* Тень */
-    transition: transform 0.5s ease; /* Плавный переход */
-    display: block; /* Убираем возможные лишние отступы */
-    margin: 0 auto; /* Центрируем изображение */
-    top: 15px; /* Сдвигаем изображение вниз на 10px (можно увеличить значение) */
+    position: absolute;
+    width: 80%;
+    height: auto;
+    top: 45px;
+    left: 34px;
+    filter: drop-shadow(5px 10px 15px rgba(140, 0, 255, 0.4));
+    transition: transform 0.5s ease;
 }
-
-
 
 .card__data {
     position: absolute;
@@ -691,26 +684,38 @@ body, html {
 .card__title {
     font-size: var(--h2-font-size);
     color: var(--first-color);
-    margin-bottom: -1.7rem;
-    position: relative;
-    transition: transform 0.3s ease;
+    position: absolute; /* Название в верхней части */
+    top: -10.5rem;         /* Отступ сверху */
+    left: 1rem;        /* Отступ слева */
+    right: 1rem;       /* Отступ справа */
+    text-align: center; /* Центрируем текст по горизонтали */
+    transition: opacity 0.5s ease; /* Плавное исчезновение */
 }
+
 
 .card__price {
     color: rgb(255, 255, 255);
     font-size: var(--normal-font-size);
     font-weight: 800;
-    margin-bottom: 0.9rem;
+    margin-bottom: 0.8rem;
     position: absolute;
-    transition: transform 0.6s ease;
+    transition: transform 0.6s ease, opacity 0.6s ease;
+    bottom: -1rem; /* Начальное положение за пределами карточки */
+    right: 0.2rem; /* Позиционируем справа */
+    opacity: 0;    /* Начальная прозрачность */
 }
 
 .card__description {
+    color: #aaaaaa;
     font-size: var(--small-font-size);
-    text-align: center;
+    text-align: center; /* Центрируем текст по горизонтали */
     margin-bottom: 0.5rem;
-    opacity: 0;
-    transition: opacity 0.5s ease;
+    opacity: 0;       /* Начальная прозрачность */
+    position: absolute;
+    top: -10.5rem;        /* Отступ сверху (там же, где и название) */
+    left: 1rem;       /* Отступ слева */
+    right: 1rem;      /* Отступ справа */
+    transition: opacity 0.5s ease; /* Плавное появление */
 }
 
 .card__button {
@@ -735,14 +740,18 @@ body, html {
 }
 
 .product.card:hover .card__title {
-    transform: translateY(-115px);
+    opacity: 0; /* Название исчезает */
 }
 
 .product.card:hover .card__price {
-    transform: translateY(70px); /* Двигаем вниз на 20px */
+    transform: translateY(-1rem); /* Поднимаем цену вверх */
+    opacity: 1;                   /* Делаем цену видимой */
 }
 
-.product.card:hover .card__description,
+.product.card:hover .card__description {
+    opacity: 1; /* Описание появляется */
+}
+
 .product.card:hover .card__button {
     transition-delay: 0.2s;
     opacity: 1;
