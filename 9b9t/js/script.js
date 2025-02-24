@@ -6,42 +6,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterDropdown = document.getElementById('filter-dropdown');
     const productsContainer = document.getElementById('products-container');
 
-    // Проверка на существование productsContainer
     if (!productsContainer) {
         console.error('Элемент с id="products-container" не найден в DOM.');
         return;
     }
 
-    // Загрузка выбранного языка из localStorage
-    const savedLanguage = localStorage.getItem('selectedLanguage') || 'ru';
+    // Загружаем язык из localStorage
+    const savedLanguage = localStorage.getItem('selectedLanguage') || 'RU';
     languageSelect.value = savedLanguage;
     changeLanguage(savedLanguage);
 
-    // Обработчик для выбора языка
+    // Обработчик смены языка
     languageSelect.addEventListener('change', (event) => {
         const selectedLang = event.target.value;
         localStorage.setItem('selectedLanguage', selectedLang);
         changeLanguage(selectedLang);
     });
 
-    // Функция для переключения языка
+    // Функция смены языка
     function changeLanguage(lang) {
-        // Обновляем текст кнопки "Добавить в корзину"
         document.querySelectorAll('.glow-button span').forEach(span => {
-            if (span.getAttribute('data-lang') === lang) {
-                span.style.display = 'inline';
-            } else {
-                span.style.display = 'none';
-            }
+            span.style.display = span.getAttribute('data-lang') === lang ? 'inline' : 'none';
         });
 
-        // Обновляем текст других элементов
         document.querySelectorAll('[data-lang]').forEach(element => {
-            if (element.getAttribute('data-lang') === lang) {
-                element.style.display = 'block';
-            } else {
-                element.style.display = 'none';
-            }
+            element.style.display = element.getAttribute('data-lang') === lang ? 'block' : 'none';
         });
     }
 
@@ -54,49 +43,61 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Очистка контейнера
+            // Очистка контейнера перед загрузкой новых данных
             productsContainer.innerHTML = '';
 
-            // Создание фрагмента для оптимизации
             const fragment = document.createDocumentFragment();
 
-            // Добавление продуктов
             products.forEach((product, index) => {
                 const productCard = document.createElement('div');
                 productCard.classList.add('product', 'card');
 
-                // Используем индекс как временный ID, если ID отсутствует
+                // ID товара
                 productCard.setAttribute('data-id', product.id || `temp-id-${index}`);
 
-                // Используем категорию по умолчанию, если категория отсутствует
-                productCard.setAttribute('data-category', product.category || 'Расходники');
+                // Категория товара (если нет, то "Разное")
+                productCard.setAttribute('data-category', product.category || 'Разное');
+
+                // Картинка товара (если нет, то заглушка)
+                const imageUrl = product.imageUrl || 'https://via.placeholder.com/150';
+
+                // Название товара (по текущему языку)
+                const titleRu = product.title?.RU || 'Без названия';
+                const titleUk = product.title?.UK || 'Без назви';
+                const titleEn = product.title?.EN || 'No name';
+
+                // Описание товара
+                const descriptionRu = product.description?.RU || 'Нет описания';
+                const descriptionUk = product.description?.UK || 'Немає опису';
+                const descriptionEn = product.description?.EN || 'No description';
+
+                // Цена (если нет, то 0)
+                const price = product.price ? `${product.price}$` : '0$';
 
                 productCard.innerHTML = `
-                    <img src="${product.imageUrl}" alt="${product.nameRu}" class="card__img">
+                    <img src="${imageUrl}" alt="${titleRu}" class="card__img">
                     <div class="card__data">
-                        <h1 class="card__title" data-lang="ru">${product.nameRu}</h1>
-                        <h1 class="card__title" data-lang="uk">${product.nameUk}</h1>
-                        <h1 class="card__title" data-lang="en">${product.nameEn}</h1>
-                        <span class="card__price" data-lang="ru">${product.price}$</span>
-                        <span class="card__price" data-lang="uk">${product.price}$</span>
-                        <span class="card__price" data-lang="en">${product.price}$</span>
-                        <p class="card__description" data-lang="ru">${product.descriptionRu}</p>
-                        <p class="card__description" data-lang="uk">${product.descriptionUk}</p>
-                        <p class="card__description" data-lang="en">${product.descriptionEn}</p>
+                        <h1 class="card__title" data-lang="RU">${titleRu}</h1>
+                        <h1 class="card__title" data-lang="UK">${titleUk}</h1>
+                        <h1 class="card__title" data-lang="EN">${titleEn}</h1>
+                        <span class="card__price">${price}</span>
+                        <p class="card__description" data-lang="RU">${descriptionRu}</p>
+                        <p class="card__description" data-lang="UK">${descriptionUk}</p>
+                        <p class="card__description" data-lang="EN">${descriptionEn}</p>
                         <button class="glow-button">
-                            <span data-lang="ru">Добавить в корзину</span>
-                            <span data-lang="uk">Додати до кошика</span>
-                            <span data-lang="en">Add to Cart</span>
+                            <span data-lang="RU">Добавить в корзину</span>
+                            <span data-lang="UK">Додати до кошика</span>
+                            <span data-lang="EN">Add to Cart</span>
                         </button>
                     </div>
                 `;
+
                 fragment.appendChild(productCard);
             });
 
-            // Добавление фрагмента в DOM
             productsContainer.appendChild(fragment);
 
-            // Инициализация обработчиков для новых кнопок
+            // Инициализация обработчиков кнопок
             initializeEventListeners();
 
             // Применяем текущий язык после загрузки товаров
@@ -107,12 +108,11 @@ document.addEventListener('DOMContentLoaded', () => {
             productsContainer.innerHTML = '<p class="error">Не удалось загрузить продукты. Пожалуйста, попробуйте позже.</p>';
         });
 
-    // Инициализация обработчиков событий
+    // Обработчики событий
     function initializeEventListeners() {
         const addToCartButtons = document.querySelectorAll('.glow-button');
         const products = document.querySelectorAll('.product.card');
 
-        // Обработчик для кнопок "Добавить в корзину"
         addToCartButtons.forEach(button => {
             button.addEventListener('click', () => {
                 button.classList.add('clicked');
@@ -120,8 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const product = button.closest('.product');
                 const productId = product.getAttribute('data-id');
-                const productName = product.querySelector('.card__title').innerText;
-                const productPrice = parseFloat(product.getAttribute('data-price'));
+                const productName = product.querySelector('.card__title[data-lang="RU"]').innerText;
+                const productPrice = parseFloat(product.querySelector('.card__price').innerText);
                 const productImage = product.querySelector('.card__img').src;
 
                 let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -135,7 +135,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         name: productName,
                         price: productPrice,
                         image: productImage,
-                        
                         quantity: 1
                     });
                 }
@@ -145,16 +144,16 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Обработчик для поиска
+        // Фильтр товаров по поиску
         searchInput.addEventListener('input', () => {
             const searchTerm = searchInput.value.toLowerCase();
             products.forEach(product => {
-                const title = product.querySelector('.card__title').innerText.toLowerCase();
+                const title = product.querySelector('.card__title[data-lang="RU"]').innerText.toLowerCase();
                 product.style.display = title.includes(searchTerm) ? 'block' : 'none';
             });
         });
 
-        // Показ/скрытие выпадающего списка фильтров
+        // Фильтр по категориям
         filterIcon.addEventListener('click', (e) => {
             e.stopPropagation();
             filterDropdown.classList.toggle('active');
@@ -166,7 +165,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Обработчик для выбора фильтра
         filterDropdown.querySelectorAll('.filter-option').forEach(option => {
             option.addEventListener('click', () => {
                 const filter = option.getAttribute('data-filter');
@@ -177,58 +175,5 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
         });
-
-        // Генерация эффекта свечения для кнопок
-        generateGlowButtons();
-    }
-
-    // Функция для создания эффекта свечения на кнопках
-    const generateGlowButtons = () => {
-        document.querySelectorAll(".glow-button").forEach((button) => {
-            let gradientElem = button.querySelector('.gradient');
-
-            if (!gradientElem) {
-                gradientElem = document.createElement("div");
-                gradientElem.classList.add("gradient");
-                button.appendChild(gradientElem);
-            }
-
-            button.addEventListener("pointermove", (e) => {
-                const rect = button.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-
-                gsap.to(button, {
-                    "--pointer-x": `${x}px`,
-                    "--pointer-y": `${y}px`,
-                    duration: 0.6,
-                });
-
-                gsap.to(button, {
-                    "--button-glow": chroma
-                        .mix(
-                            getComputedStyle(button)
-                                .getPropertyValue("--button-glow-start")
-                                .trim(),
-                            getComputedStyle(button)
-                                .getPropertyValue("--button-glow-end")
-                                .trim(),
-                            x / rect.width
-                        )
-                        .hex(),
-                    duration: 0.2,
-                });
-            });
-        });
-    };
-
-    // Инициализация GSAP (если не подключен)
-    if (typeof gsap === 'undefined') {
-        console.warn('GSAP не подключен. Эффекты свечения не будут работать.');
-    }
-
-    // Инициализация Chroma.js (если не подключен)
-    if (typeof chroma === 'undefined') {
-        console.warn('Chroma.js не подключен. Эффекты свечения не будут работать.');
     }
 });
