@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterDropdown = document.getElementById('filter-dropdown');
     const productsContainer = document.getElementById('products-container');
 
-    // Проверка на существование productsContainer
     if (!productsContainer) {
         console.error('Элемент с id="products-container" не найден в DOM.');
         return;
@@ -37,12 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Загрузка товаров с API
     fetch("https://9b9t.shop:8443/api/products")
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Ошибка сети: ' + response.statusText);
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(products => {
             if (!Array.isArray(products) || products.length === 0) {
                 productsContainer.innerHTML = '<p class="error">Продукты не найдены.</p>';
@@ -127,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const product = button.closest('.product');
                 const productId = product.getAttribute('data-id');
                 const productName = product.querySelector('.card__title[data-lang="RU"]').innerText;
-                const productPrice = parseFloat(product.querySelector('.card__price').innerText.replace('$', ''));
+                const productPrice = parseFloat(product.querySelector('.card__price').innerText);
                 const productImage = product.querySelector('.card__img').src;
 
                 let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -146,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 localStorage.setItem('cart', JSON.stringify(cart));
-                updateCartCount(cart);
+                cartCount.innerText = cart.reduce((sum, item) => sum + item.quantity, 0);
             });
         });
 
@@ -182,14 +176,4 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-
-    // Обновление счетчика корзины
-    function updateCartCount(cart) {
-        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-        cartCount.innerText = totalItems;
-    }
-
-    // Инициализация счетчика корзины при загрузке страницы
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    updateCartCount(cart);
 });
