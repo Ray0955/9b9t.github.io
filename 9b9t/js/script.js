@@ -105,6 +105,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Генерация эффекта свечения для кнопок
             generateGlowButtons();
+
+            // Динамическое изменение размера шрифта для цены
+            const priceElements = document.querySelectorAll('.card__price');
+            priceElements.forEach(priceElement => {
+                const priceText = priceElement.innerText;
+                const priceLength = priceText.length;
+
+                if (priceLength > 5) { // Если число больше 5 символов
+                    priceElement.style.fontSize = '0.8rem'; // Уменьшаем размер шрифта
+                } else {
+                    priceElement.style.fontSize = 'var(--normal-font-size)'; // Возвращаем стандартный размер
+                }
+            });
         })
         .catch(error => {
             console.error('Ошибка при загрузке продуктов:', error);
