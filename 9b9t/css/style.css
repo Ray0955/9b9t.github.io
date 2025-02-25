@@ -4,14 +4,14 @@ body, html {
     padding: 0;
     height: 100%;
     overflow: auto;
-    font-family: 'Klukva', sans-serif;
-    font-size: 18px;
+    font-family: 'Minecraft', sans-serif;
+    font-size: 1rem;
     font-weight: bold;
 }
 
 @font-face {
-    font-family: 'Klukva';
-    src: url('fonts/klukva.otf') format('opentype');
+    font-family: 'Minecraft';
+    src: url('fonts/Lilita One Regular.ttf') format('truetype'); /* Укажите реальный путь */
     font-weight: normal;
     font-style: normal;
 }
@@ -48,10 +48,12 @@ body, html {
 }
 
 .products {
-    display: grid;
     grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    flex-wrap: wrap; /* Карточки переносятся на новую строку при нехватке места */
+    justify-content: center; /* Центрируем карточки */
     gap: 10px;
-    padding: 10px;
+    width: 100%;
 }
 
 /* Исправленные медиазапросы (min-width вместо max-width) */
@@ -575,7 +577,7 @@ body, html {
 
 /* Дополнительные стили */
 :root {
-    --first-color: rgba(161, 5, 199, 0.96);
+    --first-color: rgb(161, 5, 199);
     --white-color: #E9EAEC;
     --dark-color: rgba(0, 0, 0, 0.68);
     --dark-color-lighten: #F2F5FF;
@@ -621,20 +623,33 @@ body, html {
 }
 
 .card__title {
-    font-size: var(--h2-font-size);
+    font-size: 24px;
     color: var(--first-color);
     position: absolute;
-    top: -9.5rem;
-    left: 1rem;
-    right: 1rem;
+    left: 0;
+    right: 0;
     text-align: center;
+    transition: opacity 0.5s ease;
+    bottom: 9.6rem; /* Статичное положение */
+}
+
+.card__description {
+    font-size: 16px;
+    color: rgb(255, 255, 255);
+    text-align: center;
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    bottom: 10.5rem; /* Статичное положение */
     transition: opacity 0.5s ease;
 }
 
-
 .card__price {
+
     color: rgb(255, 255, 255);
-    font-size: clamp(0.8rem, 3vw, 1.2rem); /* Минимум 0.8rem, максимум 1.2rem */
+    font-size: clamp(5rem, 12px, 1.2rem); /* Минимум 0.8rem, максимум 1.2rem */
     white-space: nowrap; /* Запрещаем перенос текста */
     overflow: hidden; /* Скрываем текст, если он выходит за пределы */
     text-overflow: ellipsis; /* Добавляем многоточие, если текст обрезается */
@@ -642,22 +657,9 @@ body, html {
     font-weight: 800;
     margin-bottom: 0.8rem;
     position: absolute;
-    bottom: 0rem; /* Статичное положение */
-    right: 0.3rem;  /* Статичное положение */
+    bottom: -0.2rem; /* Статичное положение */
+    right: 0.8rem;  /* Статичное положение */
     transition: transform 0.3s ease; /* Анимация увеличения */
-}
-
-.card__description {
-    color: #aaaaaa;
-    font-size: var(--small-font-size);
-    text-align: center;
-    margin-bottom: 0.5rem;
-    opacity: 0;
-    position: absolute;
-    top: -9.3rem;
-    left: 1rem;
-    right: 1rem;
-    transition: opacity 0.5s ease;
 }
 
 .card__button {
