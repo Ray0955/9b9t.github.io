@@ -643,7 +643,7 @@ body, html {
     margin-bottom: 0.8rem;
     position: absolute;
     bottom: 0rem; /* Статичное положение */
-    right: 0.3rem;  /* Статичное положение */
+    right: 0.5rem;  /* Статичное положение */
     transition: transform 0.3s ease; /* Анимация увеличения */
 }
 
