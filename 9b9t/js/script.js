@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const priceText = priceElement.innerText;
                 const priceLength = priceText.length;
 
-                if (priceLength > 5) { // Если число больше 5 символов
+                if (priceLength > 4) { // Если число больше 5 символов
                     priceElement.style.fontSize = '0.8rem'; // Уменьшаем размер шрифта
                 } else {
                     priceElement.style.fontSize = 'var(--normal-font-size)'; // Возвращаем стандартный размер
