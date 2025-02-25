@@ -25,7 +25,12 @@
     </div>
 
     <div class="admin-container" id="admin-container" style="display: none;">
-        <h1>Заказы</h1>
+        <div class="admin-header">
+            <h1>Заказы</h1>
+            <button id="refresh-button" class="refresh-button">
+                <span class="refresh-icon">🔄</span> Обновить
+            </button>
+        </div>
         <div class="table-wrapper">
             <table id="orders-table">
                 <thead>
@@ -35,6 +40,8 @@
                         <th>Email</th>
                         <th>Заказ</th>
                         <th>Сумма</th>
+                        <th>Способ доставки</th>
+                        <th>Координаты</th>
                         <th>Дата</th>
                     </tr>
                 </thead>
@@ -45,18 +52,25 @@
         </div>
     </div>
 
+    <!-- Лоадер -->
+    <div class="loader" id="loader">
+        <div class="loader-spinner"></div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const loginContainer = document.getElementById('login-container');
             const adminContainer = document.getElementById('admin-container');
             const loginForm = document.getElementById('login-form');
             const errorMessage = document.getElementById('error-message');
+            const loader = document.getElementById('loader');
+            const refreshButton = document.getElementById('refresh-button');
 
-            // Сохранённые хеши логина и пароля (логин: "***", пароль: "***")
+            // Сохранённые хеши логина и пароля
             const ADMIN_USERNAME_HASH = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918";
             const ADMIN_PASSWORD_HASH = "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9";
 
-            // Функция для хеширования строки (SHA-256)
+            // Функция для хеширования SHA-256
             async function hashSHA256(text) {
                 const encoder = new TextEncoder();
                 const data = encoder.encode(text);
@@ -65,45 +79,79 @@
                 return hashArray.map(byte => byte.toString(16).padStart(2, "0")).join("");
             }
 
-            // Проверка логина и пароля
+            // Авторизация
             loginForm.addEventListener("submit", async (e) => {
                 e.preventDefault();
+                loader.style.display = "flex";
 
                 const username = document.getElementById("username").value;
                 const password = document.getElementById("password").value;
 
-                const hashedUsername = await hashSHA256(username);
-                const hashedPassword = await hashSHA256(password);
+                try {
+                    const hashedUsername = await hashSHA256(username);
+                    const hashedPassword = await hashSHA256(password);
 
-                if (hashedUsername === ADMIN_USERNAME_HASH && hashedPassword === ADMIN_PASSWORD_HASH) {
-                    loginContainer.style.display = "none";
-                    adminContainer.style.display = "block";
-                    loadOrders();
-                } else {
-                    errorMessage.style.display = "block";
+                    if (hashedUsername === ADMIN_USERNAME_HASH && hashedPassword === ADMIN_PASSWORD_HASH) {
+                        loginContainer.style.display = "none";
+                        adminContainer.style.display = "block";
+                        await loadOrders();
+                    } else {
+                        errorMessage.style.display = "block";
+                    }
+                } catch (error) {
+                    console.error("Ошибка авторизации:", error);
+                    alert("Ошибка авторизации");
+                } finally {
+                    loader.style.display = "none";
                 }
             });
 
-            // Функция загрузки заказов
-            function loadOrders() {
-                const orders = JSON.parse(localStorage.getItem("orders")) || [];
-                const ordersTable = document.querySelector("#orders-table tbody");
+            // Загрузка заказов с сервера
+            async function loadOrders() {
+                loader.style.display = "flex";
+                try {
+                    const response = await fetch('https://9b9t.shop:8443/api/orders');
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-                ordersTable.innerHTML = ""; // Очищаем таблицу перед загрузкой
+                    const orders = await response.json();
+                    renderOrders(orders);
+                } catch (error) {
+                    console.error("Ошибка загрузки заказов:", error);
+                    alert("Не удалось загрузить заказы");
+                } finally {
+                    loader.style.display = "none";
+                }
+            }
+
+            // Отображение заказов в таблице
+            function renderOrders(orders) {
+                const tbody = document.querySelector('#orders-table tbody');
+                tbody.innerHTML = '';
 
                 orders.forEach(order => {
-                    const row = document.createElement("tr");
+                    const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${order.username}</td>
                         <td>${order.discord}</td>
                         <td>${order.email}</td>
-                        <td>${order.order.map(item => `${item.name} x ${item.quantity}`).join(", ")}</td>
+                        <td>${order.order.map(item => `
+                            ${item.name} x${item.quantity} ($${item.price})
+                        `).join('<br>')}</td>
                         <td>$${order.total.toFixed(2)}</td>
+                        <td>${order.deliveryMethod === 'specific' ? 'По координатам' : 'Рандомная'}</td>
+                        <td>${order.coordinates ? 
+                            `X: ${order.coordinates.x}<br>Y: ${order.coordinates.y}<br>Z: ${order.coordinates.z}` 
+                            : 'Нет данных'}</td>
                         <td>${order.date}</td>
                     `;
-                    ordersTable.appendChild(row);
+                    tbody.appendChild(row);
                 });
             }
+
+            // Обновление по кнопке
+            refreshButton.addEventListener('click', async () => {
+                await loadOrders();
+            });
         });
     </script>
 </body>
