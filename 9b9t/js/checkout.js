@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Проверка минимальной суммы
     const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    if (total < 2) {
+    if (total < 0) {
         minOrderWarning.style.display = 'block';
         checkoutMain.style.display = 'none';
         payButtons.forEach(button => button.style.display = 'none');
