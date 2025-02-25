@@ -511,6 +511,13 @@ body, html {
     box-shadow: 0 8px 20px var(--button-shadow);
 }
 
+@media (max-width: 480px) {
+    .glow-button {
+        display: block; /* Убедитесь, что кнопка отображается на мобильных устройствах */
+        opacity: 1; /* Убедитесь, что кнопка видима */
+        visibility: visible; /* Убедитесь, что кнопка видима */
+    }
+}
 .glow-button .gradient {
     position: absolute;
     inset: 0;
