@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Обработчик для кнопки "Оплатить"
     payButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
+        button.addEventListener('click', async (e) => {
             e.preventDefault();
             if (contactForm.checkValidity()) {
                 // Проверка способа доставки и координат
@@ -168,20 +168,27 @@ document.addEventListener('DOMContentLoaded', () => {
                     date: new Date().toLocaleString() // Добавляем дату заказа
                 };
 
-                // Получаем текущие заказы из localStorage
-                const orders = JSON.parse(localStorage.getItem('orders')) || [];
+                try {
+                    // Отправка данных на сервер
+                    const response = await fetch('https://9b9t.shop:8443/api/orders', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(userData),
+                    });
 
-                // Добавляем новый заказ
-                orders.push(userData);
-
-                // Сохраняем обновлённый список заказов
-                localStorage.setItem('orders', JSON.stringify(orders));
-
-                // Очистка корзины
-                localStorage.removeItem('cart');
-
-                alert('Оплата прошла успешно! Данные сохранены.');
-                window.location.href = 'index.html'; // Перенаправление на главную страницу
+                    if (response.ok) {
+                        alert('Оплата прошла успешно! Данные отправлены на сервер.');
+                        localStorage.removeItem('cart'); // Очистка корзины
+                        window.location.href = 'index.html'; // Перенаправление на главную страницу
+                    } else {
+                        alert('Ошибка при отправке данных на сервер.');
+                    }
+                } catch (error) {
+                    console.error('Ошибка:', error);
+                    alert('Произошла ошибка при отправке данных.');
+                }
             } else {
                 alert('Заполните все поля контактной информации!');
             }
