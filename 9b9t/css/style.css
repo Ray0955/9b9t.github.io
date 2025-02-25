@@ -491,7 +491,6 @@ body, html {
     --button-glow-start: #B000E8;
     --button-glow-end: #009FFD;
 
-    display: block;
     appearance: none;
     outline: none;
     border: none;
