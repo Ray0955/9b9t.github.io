@@ -135,65 +135,49 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Обработчик для кнопки "Оплатить"
-    payButtons.forEach(button => {
-        button.addEventListener('click', async (e) => {
-            e.preventDefault();
-            if (contactForm.checkValidity()) {
-                // Проверка способа доставки и координат
-                const deliveryMethod = deliverySelect.value;
-                let coordinates = null;
+payButtons.forEach(button => {
+    button.addEventListener('click', async (e) => {
+        e.preventDefault();
+        if (contactForm.checkValidity()) {
+            // Сбор данных пользователя
+            const userData = {
+                username: document.getElementById('username').value,
+                discord: document.getElementById('discord').value,
+                email: document.getElementById('email').value,
+                products: cartItems,
+                totalPrice: total,
+                deliveryMethod: deliverySelect.value,
+                coordinates: coordinates,
+                date: new Date().toLocaleString()
+            };
 
-                if (deliveryMethod === 'specific') {
-                    const x = parseInt(xCoordInput.value);
-                    const y = parseInt(yCoordInput.value);
-                    const z = parseInt(zCoordInput.value);
+            try {
+                const response = await fetch('https://9b9t.shop:8443/api/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData),
+                });
 
-                    if (isNaN(x) || isNaN(y) || isNaN(z)) {
-                        alert('Заполните все поля координат!');
-                        return;
-                    }
-
-                    coordinates = { x, y, z };
+                if (response.ok) {
+                    const responseData = await response.json();
+                    console.log('Ответ сервера:', responseData); // Логирование ответа
+                    alert('Оплата прошла успешно! Данные отправлены на сервер.');
+                    localStorage.removeItem('cart');
+                    window.location.href = 'index.html';
+                } else {
+                    alert('Ошибка при отправке данных на сервер.');
                 }
-
-                // Сбор данных пользователя
-                const userData = {
-                    username: document.getElementById('username').value,
-                    discord: document.getElementById('discord').value,
-                    email: document.getElementById('email').value,
-                    order: cartItems,
-                    total: total,
-                    deliveryMethod: deliveryMethod,
-                    coordinates: coordinates,
-                    date: new Date().toLocaleString() // Добавляем дату заказа
-                };
-
-                try {
-                    // Отправка данных на сервер
-                    const response = await fetch('https://9b9t.shop:8443/api/orders', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(userData),
-                    });
-
-                    if (response.ok) {
-                        alert('Оплата прошла успешно! Данные отправлены на сервер.');
-                        localStorage.removeItem('cart'); // Очистка корзины
-                        window.location.href = 'index.html'; // Перенаправление на главную страницу
-                    } else {
-                        alert('Ошибка при отправке данных на сервер.');
-                    }
-                } catch (error) {
-                    console.error('Ошибка:', error);
-                    alert('Произошла ошибка при отправке данных.');
-                }
-            } else {
-                alert('Заполните все поля контактной информации!');
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при отправке данных.');
             }
-        });
+        } else {
+            alert('Заполните все поля контактной информации!');
+        }
     });
+});
 
     renderOrderSummary();
 });
