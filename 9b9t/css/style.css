@@ -61,6 +61,7 @@ body, html {
     }
 }
 
+
 @media (max-width: 1200px) and (min-width: 769px) {
     .products {
         grid-template-columns: repeat(3, 1fr); /* Планшет: 3 колонки */
@@ -151,7 +152,6 @@ body, html {
 }
 
 .cart-content {
-    background: #fff;
     padding: 20px;
     border-radius: 10px;
     max-width: 400px;
@@ -229,7 +229,6 @@ body, html {
 }
 
 .cart-content, .checkout-content {
-    background: rgba(0, 0, 0, 0.6); /* Полупрозрачный черный фон */
     border-radius: 10px;
     padding: 20px;
     width: 90%;
@@ -303,6 +302,7 @@ body, html {
     cursor: pointer;
     margin-top: 20px;
     font-size: 16px;
+    display: none; /* Скрыта по умолчанию */
     background-size: 200% 100%; /* Увеличиваем размер фона для анимации */
     transition: background-position 0.5s ease, transform 0.2s ease;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень для объема */
@@ -379,7 +379,6 @@ body, html {
 
 .contact-info {
     flex: 1;
-    background: #f9f9f9;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -415,7 +414,6 @@ body, html {
 
 .order-summary {
     flex: 1;
-    background: #f9f9f9;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -511,13 +509,8 @@ body, html {
     box-shadow: 0 8px 20px var(--button-shadow);
 }
 
-@media (max-width: 480px) {
-    .glow-button {
-        display: block; /* Убедитесь, что кнопка отображается на мобильных устройствах */
-        opacity: 1; /* Убедитесь, что кнопка видима */
-        visibility: visible; /* Убедитесь, что кнопка видима */
-    }
-}
+
+
 .glow-button .gradient {
     position: absolute;
     inset: 0;
@@ -650,7 +643,7 @@ body, html {
     margin-bottom: 0.8rem;
     position: absolute;
     bottom: 0rem; /* Статичное положение */
-    right: 0.5rem;  /* Статичное положение */
+    right: 0.3rem;  /* Статичное положение */
     transition: transform 0.3s ease; /* Анимация увеличения */
 }
 
@@ -676,6 +669,7 @@ body, html {
     border-radius: 0.5rem;
     font-weight: 600;
     transition: 0.2s;
+
     margin: 0 auto;
 }
 
