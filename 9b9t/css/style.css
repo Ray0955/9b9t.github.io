@@ -40,65 +40,42 @@ body, html {
 }
 
 .products-container {
-    display: flex;
-    flex-wrap: wrap; /* Разрешаем перенос элементов на новую строку */
-    justify-content: center; /* Центрируем карточки по горизонтали */
-    gap: 10px; /* Отступы между карточками */
+    max-width: 1200px;
     width: 100%;
-    padding: 20px; /* Отступы внутри контейнера */
-    box-sizing: border-box; /* Чтобы отступы не выходили за пределы */
+    margin: 0 auto;
+    padding: 0 15px;
+    box-sizing: border-box;
 }
 
 .products {
-    display: flex;
-    flex-wrap: wrap; /* Карточки переносятся на новую строку при нехватке места */
-    justify-content: center; /* Центрируем карточки */
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 10px;
-    width: 100%;
+    padding: 10px;
 }
 
 /* Исправленные медиазапросы (min-width вместо max-width) */
-/* Медиазапросы */
 @media (min-width: 1201px) {
     .products {
-        grid-template-columns: repeat(4, 1fr); /* 4 колонки для десктопа */
+        grid-template-columns: repeat(4, 1fr); /* Десктоп: 4 колонки */
     }
 }
 
 @media (max-width: 1200px) and (min-width: 769px) {
     .products {
-        grid-template-columns: repeat(3, 1fr); /* 3 колонки для планшетов */
+        grid-template-columns: repeat(3, 1fr); /* Планшет: 3 колонки */
     }
 }
 
 @media (max-width: 768px) and (min-width: 481px) {
     .products {
-        grid-template-columns: repeat(2, 1fr); /* 2 колонки для мобильных в горизонтальном положении */
+        grid-template-columns: repeat(2, 1fr); /* Горизонтальный телефон: 2 колонки */
     }
 }
 
 @media (max-width: 480px) {
     .products {
-        grid-template-columns: 1fr; /* 1 колонка для вертикальных телефонов */
-    }
-}
-
-/* Медиазапросы для адаптивности */
-@media (max-width: 1200px) {
-    .product.card {
-        width: 33%; /* 3 карточки в строке на экранах до 1200px */
-    }
-}
-
-@media (max-width: 768px) {
-    .product.card {
-        width: 48%; /* 2 карточки в строке на экранах до 768px */
-    }
-}
-
-@media (max-width: 480px) {
-    .product.card {
-        width: 100%; /* 1 карточка на экранах до 480px */
+        grid-template-columns: 1fr; /* Вертикальный телефон: 1 колонка */
     }
 }
 
@@ -133,7 +110,7 @@ body, html {
 }
 
 .product img {
-    max-width: 100%;
+    max-width: 80%;
     height: auto;
     border-radius: 5px;
     display: block;
@@ -174,6 +151,7 @@ body, html {
 }
 
 .cart-content {
+    background: #fff;
     padding: 20px;
     border-radius: 10px;
     max-width: 400px;
@@ -251,6 +229,7 @@ body, html {
 }
 
 .cart-content, .checkout-content {
+    background: rgba(0, 0, 0, 0.6); /* Полупрозрачный черный фон */
     border-radius: 10px;
     padding: 20px;
     width: 90%;
@@ -289,44 +268,19 @@ body, html {
 }
 
 .cart-items .quantity-controls button {
-    background: linear-gradient(90deg, #28a745, #17a2b8, #28a745); /* Градиентный фон */
+    background: #28a745;
     color: #fff;
     border: none;
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
     margin: 0 5px;
-    background-size: 200% 100%; /* Увеличиваем размер фона для анимации */
-    transition: background-position 0.5s ease, transform 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Тень для объема */
 }
 
 .cart-items .quantity-controls button:hover {
-    background-position: -100% 0; /* Анимация градиента */
-    transform: scale(1.05); /* Увеличение кнопки при наведении */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15); /* Увеличенная тень при наведении */
+    background: #218838;
 }
 
-.cart-items .quantity-controls button:active {
-    transform: scale(0.95); /* Эффект нажатия */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Уменьшенная тень при нажатии */
-}
-
-@keyframes gradientShift {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-.cart-items .quantity-controls button {
-    animation: gradientShift 3s infinite ease-in-out; /* Бесконечная анимация градиента */
-}
 .empty-cart-message {
     display: none;
     color: #888;
@@ -384,6 +338,7 @@ body, html {
 
 .min-order-warning {
     display: none;
+    background: #fff3cd;
     color: #666666c5;
     padding: 10px;
     border-radius: 5px;
@@ -425,7 +380,7 @@ body, html {
 
 .contact-info {
     flex: 1;
-
+    background: #f9f9f9;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -461,23 +416,10 @@ body, html {
 
 .order-summary {
     flex: 1;
+    background: #f9f9f9;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(5px); /* Размытие фона */
-    border: 1px solid rgba(255, 255, 255, 0.1); /* Граница */
-    color: #fff; /* Белый текст для контраста */
-    text-align: center; /* Центрирование текста */
-    max-width: 800px; /* Максимальная ширина */
-    width: 90%; /* Ширина */
-    margin: 0 auto; /* Центрирование блока */
-    overflow-y: auto; /* Прокрутка, если контент превышает высоту */
-    max-height: 90%; /* Максимальная высота */
 }
 
 .order-summary h2 {
@@ -506,19 +448,16 @@ body, html {
 }
 
 .pay-button {
-    background: linear-gradient(90deg, #28a745, #17a2b8, #28a745);
+    background: #28a745;
     color: #fff;
     border: none;
-    padding: 10px 20px;
+    padding: 15px 30px;
     border-radius: 5px;
     cursor: pointer;
     margin-top: 20px;
-    font-size: 16px;
-    display: none;
-    background-size: 200% 100%;
-    transition: background-position 0.5sease, transform 0.2sease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
+    font-size: 18px;
+    width: 100%;
+    transition: background 0.3s ease;
 }
 
 .pay-button:hover {
@@ -599,7 +538,7 @@ body, html {
     z-index: 1;
     position: relative;
     display: block;
-    padding: 9px 8px;
+    padding: 9px 9px;
     box-sizing: border-box;
     width: fit-content;
     min-width: 124px;
@@ -650,8 +589,8 @@ body, html {
 
 /* Стили для карточек товаров */
 .product.card {
-    width: 300px;
-    height: 210px;
+    width: 280px;
+    height: 190px;
     background-color: var(--dark-color);
     border-radius: 1rem;
     padding: 1rem;
@@ -675,47 +614,51 @@ body, html {
 .card__data {
     position: absolute;
     bottom: 1rem;
-    left: 0;
+    left: 0px;
     right: 0;
     text-align: center;
     padding: 0 1rem;
+
 }
 
 .card__title {
     font-size: var(--h2-font-size);
     color: var(--first-color);
-    position: absolute; /* Название в верхней части */
-    top: -10.5rem;         /* Отступ сверху */
-    left: 1rem;        /* Отступ слева */
-    right: 1rem;       /* Отступ справа */
-    text-align: center; /* Центрируем текст по горизонтали */
-    transition: opacity 0.5s ease; /* Плавное исчезновение */
+    position: absolute;
+    top: -9.5rem;
+    left: 1rem;
+    right: 1rem;
+    text-align: center;
+    transition: opacity 0.5s ease;
 }
 
 
 .card__price {
     color: rgb(255, 255, 255);
-    font-size: var(--normal-font-size);
+    font-size: clamp(0.8rem, 3vw, 1.2rem); /* Минимум 0.8rem, максимум 1.2rem */
+    white-space: nowrap; /* Запрещаем перенос текста */
+    overflow: hidden; /* Скрываем текст, если он выходит за пределы */
+    text-overflow: ellipsis; /* Добавляем многоточие, если текст обрезается */
+
     font-weight: 800;
     margin-bottom: 0.8rem;
     position: absolute;
-    transition: transform 0.6s ease, opacity 0.6s ease;
-    bottom: -1rem; /* Начальное положение за пределами карточки */
-    right: 0.2rem; /* Позиционируем справа */
-    opacity: 0;    /* Начальная прозрачность */
+    bottom: 0rem; /* Статичное положение */
+    right: 0.3rem;  /* Статичное положение */
+    transition: transform 0.3s ease; /* Анимация увеличения */
 }
 
 .card__description {
     color: #aaaaaa;
     font-size: var(--small-font-size);
-    text-align: center; /* Центрируем текст по горизонтали */
+    text-align: center;
     margin-bottom: 0.5rem;
-    opacity: 0;       /* Начальная прозрачность */
+    opacity: 0;
     position: absolute;
-    top: -10.5rem;        /* Отступ сверху (там же, где и название) */
-    left: 1rem;       /* Отступ слева */
-    right: 1rem;      /* Отступ справа */
-    transition: opacity 0.5s ease; /* Плавное появление */
+    top: -9.3rem;
+    left: 1rem;
+    right: 1rem;
+    transition: opacity 0.5s ease;
 }
 
 .card__button {
@@ -744,8 +687,7 @@ body, html {
 }
 
 .product.card:hover .card__price {
-    transform: translateY(-1rem); /* Поднимаем цену вверх */
-    opacity: 1;                   /* Делаем цену видимой */
+    transform: scale(1.5); /* Увеличиваем цену при наведении */
 }
 
 .product.card:hover .card__description {
