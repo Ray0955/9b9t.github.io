@@ -134,59 +134,93 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Обработчик для кнопки "Оплатить"
     payButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
+        button.addEventListener('click', async (e) => {
             e.preventDefault();
             if (contactForm.checkValidity()) {
-                // Проверка способа доставки и координат
-                const deliveryMethod = deliverySelect.value;
-                let coordinates = null;
-
-                if (deliveryMethod === 'specific') {
-                    const x = parseInt(xCoordInput.value);
-                    const y = parseInt(yCoordInput.value);
-                    const z = parseInt(zCoordInput.value);
-
-                    if (isNaN(x) || isNaN(y) || isNaN(z)) {
-                        alert('Заполните все поля координат!');
-                        return;
-                    }
-
-                    coordinates = { x, y, z };
-                }
-
-                // Сбор данных пользователя
-                const userData = {
-                    username: document.getElementById('username').value,
-                    discord: document.getElementById('discord').value,
-                    email: document.getElementById('email').value,
-                    order: cartItems,
-                    total: total,
-                    deliveryMethod: deliveryMethod,
-                    coordinates: coordinates,
-                    date: new Date().toLocaleString() // Добавляем дату заказа
-                };
-
-                // Получаем текущие заказы из localStorage
-                const orders = JSON.parse(localStorage.getItem('orders')) || [];
-
-                // Добавляем новый заказ
-                orders.push(userData);
-
-                // Сохраняем обновлённый список заказов
-                localStorage.setItem('orders', JSON.stringify(orders));
-
-                // Очистка корзины
-                localStorage.removeItem('cart');
-
-                alert('Оплата прошла успешно! Данные сохранены.');
-                window.location.href = 'index.html'; // Перенаправление на главную страницу
+                await sendOrder();
             } else {
                 alert('Заполните все поля контактной информации!');
             }
         });
     });
+
+    async function sendOrder() {
+        const orderId = Date.now(); // Генерируем уникальный ID заказа
+
+        // Проверяем существование элементов перед доступом к их значению
+        const getValue = (id) => {
+            const element = document.getElementById(id);
+            if (!element) {
+                console.error(`Ошибка: элемент #${id} не найден!`);
+                return null;
+            }
+            return element.value;
+        };
+
+        const username = getValue('username');
+        const discord = getValue('discord');
+        const email = getValue('email');
+        const deliveryMethod = 'Random discover-method';
+
+        if (!username || !discord || !email || !deliveryMethod) {
+            alert('Пожалуйста, заполните все обязательные поля!');
+            console.log({ username, discord, email, deliveryMethod });
+            console.log(contactForm.checkValidity());
+            return;
+        }
+
+        let coordinates = null;
+        if (deliveryMethod === 'specific') {
+            coordinates = {
+                x: parseInt(getValue('xCoord')) || 0,
+                y: parseInt(getValue('yCoord')) || 0,
+                z: parseInt(getValue('zCoord')) || 0
+            };
+        }
+
+        const totalPriceElement = orderTotal;
+        const totalPrice = totalPriceElement ? parseFloat(totalPriceElement.textContent) || 0 : 0;
+
+        const products = getCartItems ? getCartItems() : []; // Проверяем, существует ли функция getCartItems
+
+        const orderData = {
+            orders: {
+                [orderId]: {
+                    info: { username, discord, email, deliveryMethod },
+                    coordinates,
+                    totalPrice,
+                    products
+                }
+            }
+        };
+
+        try {
+            const response = await fetch('https://9b9t.shop:8443/api/orders', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderData)
+            });
+
+            if (response.ok) {
+                alert(`Заказ успешно оформлен! ID: ${orderId}`);
+                localStorage.removeItem('cart'); // Очищаем корзину
+                window.location.href = 'index.html'; // Перенаправляем пользователя
+            } else {
+                alert('Ошибка при оформлении заказа.');
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
+            alert('Ошибка соединения с сервером.');
+        }
+    }
+
+
+    // Функция получения товаров из корзины
+    function getCartItems() {
+        return JSON.parse(localStorage.getItem('cart')) || [];
+    }
+
 
     renderOrderSummary();
 });
