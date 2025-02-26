@@ -141,7 +141,7 @@ body, html {
 }
 
 .cart-modal {
-    display: none;
+    display: block;
     position: fixed;
     top: 0;
     left: 0;
@@ -151,6 +151,21 @@ body, html {
     justify-content: center;
     align-items: center;
     z-index: 1000;
+}
+[data-lang] {
+    display: block; /* По умолчанию скрываем все элементы с атрибутом data-lang */
+}
+
+[data-lang="RU"] {
+    display: block; /* Показываем элементы для русского языка */
+}
+
+[data-lang="UK"] {
+    display: block; /* Показываем элементы для украинского языка */
+}
+
+[data-lang="EN"] {
+    display: block; /* Показываем элементы для английского языка */
 }
 
 .cart-content {
