@@ -647,7 +647,6 @@ body, html {
 }
 
 .card__price {
-
     color: rgb(255, 255, 255);
     font-size: clamp(5rem, 12px, 1.2rem); /* Минимум 0.8rem, максимум 1.2rem */
     white-space: nowrap; /* Запрещаем перенос текста */
