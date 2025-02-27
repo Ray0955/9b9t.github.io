@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     async function sendOrder() {
-        const orderId = Date.now(); // Генерируем уникальный ID заказа
+        const orderId = crypto.randomUUID(); // Генерация UUID
 
         // Проверяем существование элементов перед доступом к их значению
         const getValue = (id) => {
