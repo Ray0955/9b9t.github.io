@@ -146,8 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     async function sendOrder() {
-        const orderId = Date.now(); // Генерируем уникальный ID заказа
-
+        const orderId = crypto.randomUUID(); // Генерация UUID
+    
         // Проверяем существование элементов перед доступом к их значению
         const getValue = (id) => {
             const element = document.getElementById(id);
@@ -157,19 +157,19 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             return element.value;
         };
-
+    
         const username = getValue('username');
         const discord = getValue('discord');
         const email = getValue('email');
         const deliveryMethod = 'Random discover-method';
-
+    
         if (!username || !discord || !email || !deliveryMethod) {
             alert('Пожалуйста, заполните все обязательные поля!');
             console.log({ username, discord, email, deliveryMethod });
             console.log(contactForm.checkValidity());
             return;
         }
-
+    
         let coordinates = null;
         if (deliveryMethod === 'specific') {
             coordinates = {
@@ -178,49 +178,54 @@ document.addEventListener('DOMContentLoaded', () => {
                 z: parseInt(getValue('zCoord')) || 0
             };
         }
-
+    
         const totalPriceElement = orderTotal;
         const totalPrice = totalPriceElement ? parseFloat(totalPriceElement.textContent) || 0 : 0;
-
-        const products = getCartItems ? getCartItems() : []; // Проверяем, существует ли функция getCartItems
-
+    
+        const products = getCartItems(); // Получаем товары из корзины
+    
         const orderData = {
             orders: {
                 [orderId]: {
                     info: { username, discord, email, deliveryMethod },
                     coordinates,
                     totalPrice,
-                    products
+                    products,
+                    messages: {} // Инициализируем пустой массив для сообщений
                 }
             }
         };
-
+    
+        console.log("Sending order data:", JSON.stringify(orderData, null, 2)); // Логируем данные
+    
         try {
             const response = await fetch('https://9b9t.shop:8443/api/orders', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(orderData)
             });
-
-            if (response.ok) {
-                alert(`Заказ успешно оформлен! ID: ${orderId}`);
-                localStorage.removeItem('cart'); // Очищаем корзину
-                window.location.href = 'index.html'; // Перенаправляем пользователя
-            } else {
-                alert('Ошибка при оформлении заказа.');
+    
+            if (!response.ok) {
+                const errorResponse = await response.json();
+                console.error("Server error:", errorResponse);
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
+    
+            const responseData = await response.json();
+            console.log("Server response:", responseData);
+    
+            // Перенаправляем пользователя на страницу чата
+            const chatUrl = `https://ray0955.github.io/9b9t.github.io/9b9t/chat.html?orderId=${orderId}`;
+            window.location.href = chatUrl;
         } catch (error) {
             console.error('Ошибка:', error);
             alert('Ошибка соединения с сервером.');
         }
     }
-
-
     // Функция получения товаров из корзины
     function getCartItems() {
         return JSON.parse(localStorage.getItem('cart')) || [];
     }
-
 
     renderOrderSummary();
 });
