@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Чат с поддержкой</title>
+    <link rel="stylesheet" href="/9b9t/style.css"> <!-- Подключаем общие стили -->
+</head>
+<body>
+    <div class="chat-container">
+        <h2>Чат с поддержкой</h2>
+        <div id="chat-messages"></div>
+        <input type="text" id="chat-input" placeholder="Введите сообщение...">
+        <button id="send-button">Отправить</button>
+    </div>
+
+    <script>
+        // Получаем UUID из параметра запроса orderId
+        const urlParams = new URLSearchParams(window.location.search);
+        const uuid = urlParams.get('orderId');
+    
+        // Проверяем, что UUID извлечен и имеет правильный формат
+        const uuidPattern = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+        if (!uuid || !uuidPattern.test(uuid)) {
+            console.error('Некорректный UUID:', uuid);
+            alert('Некорректный UUID. Проверьте URL.');
+        } else {
+            // Элементы страницы
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInput = document.getElementById('chat-input');
+            const sendButton = document.getElementById('send-button');
+    
+            // Функция для загрузки сообщений
+            async function loadMessages() {
+                try {
+                    const response = await fetch(`https://9b9t.shop:8443/api/orders/${uuid}`);
+                    if (!response.ok) {
+                        throw new Error('Ошибка загрузки сообщений');
+                    }
+                    const messages = await response.json();
+                    chatMessages.innerHTML = Object.entries(messages)
+                        .map(([timestamp, text]) => `
+                            <div class="message user">${text}</div>
+                        `)
+                        .join('');
+                    chatMessages.scrollTop = chatMessages.scrollHeight; // Автопрокрутка
+                } catch (error) {
+                    console.error('Ошибка:', error);
+                }
+            }
+    
+            // Функция для отправки сообщения
+            async function sendMessage() {
+                const text = chatInput.value.trim();
+                if (text) {
+                    try {
+                        const response = await fetch(`https://9b9t.shop:8443/api/orders/${uuid}/messages`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ text })
+                        });
+                        if (!response.ok) {
+                            throw new Error('Ошибка отправки сообщения');
+                        }
+                        chatInput.value = '';
+                        loadMessages();
+                    } catch (error) {
+                        console.error('Ошибка:', error);
+                    }
+                }
+            }
+    
+            // Загружаем сообщения при загрузке страницы
+            loadMessages();
+    
+            // Обновляем сообщения каждые 2 секунды
+            setInterval(loadMessages, 2000);
+    
+            // Отправка сообщения по нажатию кнопки
+            sendButton.addEventListener('click', sendMessage);
+    
+            // Отправка сообщения по нажатию Enter
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+        }
+    </script>
