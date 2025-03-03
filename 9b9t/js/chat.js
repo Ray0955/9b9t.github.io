@@ -22,12 +22,14 @@ if (!uuid || !uuidPattern.test(uuid)) {
             }
             const data = await response.json();
             const messages = data.messages || {}; // Получаем сообщения из ответа
-
+    
             // Очищаем и обновляем чат
             chatMessages.innerHTML = Object.entries(messages)
                 .map(([timestamp, message]) => `
-                            <div class="message"><strong>${message.author}</strong>: ${message.message}</div>
-                        `)
+                    <div class="message ${message.author === 'Admin' ? 'admin' : 'user'}">
+                        <strong>${message.author}</strong>: ${message.message}
+                    </div>
+                `)
                 .join('');
             chatMessages.scrollTop = chatMessages.scrollHeight; // Автопрокрутка
         } catch (error) {
@@ -46,16 +48,14 @@ if (!uuid || !uuidPattern.test(uuid)) {
                     throw new Error('Ошибка загрузки заказа');
                 }
                 const currentOrder = await responseGet.json();
-
-                const username = currentOrder.info.username;
-
+    
                 // Добавляем новое сообщение
                 currentOrder.messages = currentOrder.messages || {}; // Инициализируем, если messages отсутствует
                 currentOrder.messages[Date.now()] = {
-                    author: username, // Имя автора (можно заменить на динамическое)
+                    author: localStorage.getItem('role') === 'Admin' ? 'Admin' : 'User', // Имя автора
                     message: text
                 };
-
+    
                 // Отправляем обновленный заказ
                 const responsePut = await fetch(`https://9b9t.shop:8443/api/orders/${uuid}`, {
                     method: "PUT",
@@ -64,11 +64,11 @@ if (!uuid || !uuidPattern.test(uuid)) {
                     },
                     body: JSON.stringify(currentOrder)
                 });
-
+    
                 if (!responsePut.ok) {
                     throw new Error('Ошибка отправки сообщения');
                 }
-
+    
                 chatInput.value = ''; // Очищаем поле ввода
                 loadMessages(); // Обновляем сообщения
             } catch (error) {
