@@ -181,20 +181,27 @@ document.addEventListener('DOMContentLoaded', () => {
     
         const totalPriceElement = orderTotal;
         const totalPrice = totalPriceElement ? parseFloat(totalPriceElement.textContent) || 0 : 0;
-    
-        const products = getCartItems(); // Получаем товары из корзины
-    
+
+        const productsArray = getCartItems(); // Получаем товары в виде массива
+
+        // Преобразуем массив в объект (UUID -> Количество)
+        const products = productsArray.reduce((acc, product) => {
+            acc[crypto.randomUUID()] = product.quantity || 1; // Используем UUID как ключ, значение — количество товара
+            return acc;
+        }, {});
+
         const orderData = {
             orders: {
                 [orderId]: {
                     info: { username, discord, email, deliveryMethod },
                     coordinates,
                     totalPrice,
-                    products,
-                    messages: {} // Инициализируем пустой массив для сообщений
+                    products, // Теперь `products` — это объект, а не массив
+                    messages: {}
                 }
             }
         };
+
     
         console.log("Sending order data:", JSON.stringify(orderData, null, 2)); // Логируем данные
     
