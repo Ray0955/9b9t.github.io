@@ -23,15 +23,16 @@ document.addEventListener('DOMContentLoaded', () => {
     loginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         loader.style.display = "flex";
-
+    
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
-
+    
         try {
             const hashedUsername = await hashSHA256(username);
             const hashedPassword = await hashSHA256(password);
-
+    
             if (hashedUsername === ADMIN_USERNAME_HASH && hashedPassword === ADMIN_PASSWORD_HASH) {
+                localStorage.setItem('role', 'Admin'); // Сохраняем роль "Admin"
                 loginContainer.style.display = "none";
                 adminContainer.style.display = "block";
                 await loadOrders();
@@ -67,22 +68,26 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderOrders(orders) {
         const tbody = document.querySelector('#orders-table tbody');
         tbody.innerHTML = '';
-
-        // Проходим по каждому заказу
+    
         for (const orderId in orders) {
-            const order = orders[orderId];  // Получаем заказ по ID
-
+            const order = orders[orderId];
+            const products = order.products ? Object.values(order.products) : [];
+    
             const row = document.createElement('tr');
             row.innerHTML = `
-            <td>${order.info.username}</td>
-            <td>${order.info.discord}</td>
-            <td>${order.info.email}</td>
-            <td>${order.products.map(product => `
-                ${product.name} x${product.quantity} ($${product.price})
-            `).join('<br>')}</td>
-            <td>$${order.totalPrice.toFixed(2)}</td>
-            <td>${order.info.deliveryMethod}</td>
-            <td>${order.coordinates ? `X: ${order.coordinates.x}<br>Y: ${order.coordinates.y}<br>Z: ${order.coordinates.z}` : 'Нет данных'}</td>
+                <td>${order.info.username}</td>
+                <td>${order.info.discord}</td>
+                <td>${order.info.email}</td>
+                <td>${products.map(product => `
+                    ${product.title ? product.title['ru'] || product.title['en'] || 'Нет названия' : 'Нет названия'} x${product.quantity || 1} ($${product.price || 0})
+                `).join('<br>')}</td>
+                <td>$${order.totalPrice.toFixed(2)}</td>
+                <td>${order.info.deliveryMethod}</td>
+                <td>${order.coordinates ? `X: ${order.coordinates.x}<br>Y: ${order.coordinates.y}<br>Z: ${order.coordinates.z}` : 'Нет данных'}</td>
+                <td>${order.date || 'Нет данных'}</td> <!-- Дата -->
+            <td>
+                <a href="/9b9t/chat.html?orderId=${orderId}" class="chat-button">Чат</a> <!-- Исправленный путь -->
+            </td>
         `;
             tbody.appendChild(row);
         }
