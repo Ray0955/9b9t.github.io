@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${order.coordinates ? `X: ${order.coordinates.x}<br>Y: ${order.coordinates.y}<br>Z: ${order.coordinates.z}` : 'Нет данных'}</td>
                 <td>${order.date || 'Нет данных'}</td> <!-- Дата -->
             <td>
-                <a href="/9b9t/chat.html?orderId=${orderId}" class="chat-button">Чат</a> <!-- Исправленный путь -->
+                <a href="/9b9t/chat.html?orderId=${orderId}" class="chat-button" onclick="localStorage.setItem('role', 'Admin')">Чат</a>
             </td>
         `;
             tbody.appendChild(row);
