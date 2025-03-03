@@ -18,7 +18,13 @@
 
     <script>
         // Проверяем роль пользователя
-        const role = localStorage.getItem('role');
+        let role = localStorage.getItem('role');
+        if (!role) {
+            role = 'User'; // Если роль не установлена, по умолчанию "User"
+            localStorage.setItem('role', role);
+        }
+
+        // Отображаем имя "Admin", если роль "Admin"
         if (role === 'Admin') {
             const adminTag = document.createElement('span');
             adminTag.textContent = 'Admin';
@@ -26,10 +32,6 @@
             adminTag.style.fontWeight = 'bold';
             adminTag.style.marginLeft = '10px';
             document.getElementById('admin-tag').appendChild(adminTag);
-        } else {
-            // Если роль не "Admin", перенаправляем на страницу авторизации
-            alert('Доступ запрещён');
-            window.location.href = '/9b9t/admin.html';
         }
     </script>
     <script src="js/chat.js"></script>
