@@ -47,10 +47,12 @@ if (!uuid || !uuidPattern.test(uuid)) {
                 }
                 const currentOrder = await responseGet.json();
 
+                const username = currentOrder.info.username;
+
                 // Добавляем новое сообщение
                 currentOrder.messages = currentOrder.messages || {}; // Инициализируем, если messages отсутствует
                 currentOrder.messages[Date.now()] = {
-                    author: "User", // Имя автора (можно заменить на динамическое)
+                    author: username, // Имя автора (можно заменить на динамическое)
                     message: text
                 };
 

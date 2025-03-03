@@ -222,8 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Server response:", responseData);
     
             // Перенаправляем пользователя на страницу чата
-            const chatUrl = `https://ray0955.github.io/9b9t.github.io/9b9t/chat.html?orderId=${orderId}`;
-            window.location.href = chatUrl;
+            window.location.href = `https://ray0955.github.io/9b9t.github.io/9b9t/chat.html?orderId=${orderId}`;
         } catch (error) {
             console.error('Ошибка:', error);
             alert('Ошибка соединения с сервером.');
