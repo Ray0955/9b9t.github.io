@@ -10,11 +10,28 @@
 <body>
     <div class="chat-container">
         <h2>Чат с поддержкой</h2>
+        <div id="admin-tag"></div> <!-- Место для отображения имени "Admin" -->
         <div id="chat-messages"></div>
         <input type="text" id="chat-input" placeholder="Введите сообщение...">
         <button id="send-button">Отправить</button>
     </div>
 
+    <script>
+        // Проверяем роль пользователя
+        const role = localStorage.getItem('role');
+        if (role === 'Admin') {
+            const adminTag = document.createElement('span');
+            adminTag.textContent = 'Admin';
+            adminTag.style.color = 'red'; // Красный цвет для имени "Admin"
+            adminTag.style.fontWeight = 'bold';
+            adminTag.style.marginLeft = '10px';
+            document.getElementById('admin-tag').appendChild(adminTag);
+        } else {
+            // Если роль не "Admin", перенаправляем на страницу авторизации
+            alert('Доступ запрещён');
+            window.location.href = '/9b9t/admin.html';
+        }
+    </script>
     <script src="js/chat.js"></script>
 </body>
 </html>
