@@ -28,9 +28,7 @@ body {
     padding: 8px;
     border-radius: 4px;
 }
-.message.user {
-    background-color: #4caf50;
-}
+
 .message.admin {
     background-color: #2196f3;
 }
@@ -53,4 +51,28 @@ body {
 }
 #send-button:hover {
     background-color: #45a049;
+}
+#admin-tag {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+#admin-tag span {
+    color: red;
+    font-weight: bold;
+}
+/* Стили для сообщений */
+.message {
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.message.admin {
+    background-color: #2196f3; /* Синий для сообщений администратора */
+}
+
+/* Стили для имени "Admin" */
+.message.admin strong {
+    color: red; /* Красный цвет для имени "Admin" */
 }
