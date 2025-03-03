@@ -38,74 +38,56 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch("https://9b9t.shop:8443/api/products")
         .then(response => response.json())
         .then(products => {
-            if (!Array.isArray(products) || products.length === 0) {
+            if (!products || Object.keys(products).length === 0) {
                 productsContainer.innerHTML = '<p class="error">Продукты не найдены.</p>';
                 return;
             }
 
-            // Очистка контейнера перед загрузкой новых данных
             productsContainer.innerHTML = '';
 
             const fragment = document.createDocumentFragment();
 
-            products.forEach((product, index) => {
+            Object.entries(products).forEach(([id, product]) => {
                 const productCard = document.createElement('div');
                 productCard.classList.add('product', 'card');
-
-                // ID товара
-                productCard.setAttribute('data-id', product.id || `temp-id-${index}`);
-
-                // Категория товара (если нет, то "Разное")
+                productCard.setAttribute('data-id', id);
                 productCard.setAttribute('data-category', product.category || 'Разное');
 
-                // Картинка товара (если нет, то заглушка)
                 const imageUrl = product.imageUrl || 'https://via.placeholder.com/150';
-
-                // Название товара (по текущему языку)
                 const titleRu = product.title?.RU || 'Без названия';
                 const titleUk = product.title?.UK || 'Без назви';
                 const titleEn = product.title?.EN || 'No name';
-
-                // Описание товара
                 const descriptionRu = product.description?.RU || 'Нет описания';
                 const descriptionUk = product.description?.UK || 'Немає опису';
                 const descriptionEn = product.description?.EN || 'No description';
-
-                // Цена (если нет, то 0)
                 const price = product.price ? `${product.price}$` : '0$';
 
                 productCard.innerHTML = `
-                    <img src="${imageUrl}" alt="${titleRu}" class="card__img">
-                    <div class="card__data">
-                        <h1 class="card__title" data-lang="RU">${titleRu}</h1>
-                        <h1 class="card__title" data-lang="UK">${titleUk}</h1>
-                        <h1 class="card__title" data-lang="EN">${titleEn}</h1>
-                        <span class="card__price">${price}</span>
-                        <p class="card__description" data-lang="RU">${descriptionRu}</p>
-                        <p class="card__description" data-lang="UK">${descriptionUk}</p>
-                        <p class="card__description" data-lang="EN">${descriptionEn}</p>
-                        <button class="glow-button">
-                            <span data-lang="RU">Добавить в корзину</span>
-                            <span data-lang="UK">Додати до кошика</span>
-                            <span data-lang="EN">Add to Cart</span>
-                        </button>
-                    </div>
-                `;
+                <img src="${imageUrl}" alt="${titleRu}" class="card__img">
+                <div class="card__data">
+                    <h1 class="card__title" data-lang="RU">${titleRu}</h1>
+                    <h1 class="card__title" data-lang="UK">${titleUk}</h1>
+                    <h1 class="card__title" data-lang="EN">${titleEn}</h1>
+                    <span class="card__price">${price}</span>
+                    <p class="card__description" data-lang="RU">${descriptionRu}</p>
+                    <p class="card__description" data-lang="UK">${descriptionUk}</p>
+                    <p class="card__description" data-lang="EN">${descriptionEn}</p>
+                    <button class="glow-button">
+                        <span data-lang="RU">Добавить в корзину</span>
+                        <span data-lang="UK">Додати до кошика</span>
+                        <span data-lang="EN">Add to Cart</span>
+                    </button>
+                </div>
+            `;
 
                 fragment.appendChild(productCard);
             });
 
             productsContainer.appendChild(fragment);
 
-            // Инициализация обработчиков кнопок
             initializeEventListeners();
-
-            // Применяем текущий язык после загрузки товаров
             changeLanguage(savedLanguage);
-
-            // Генерация эффекта свечения для кнопок
             generateGlowButtons();
-
             // Динамическое изменение размера шрифта для цены
             const priceElements = document.querySelectorAll('.card__price');
             priceElements.forEach(priceElement => {
@@ -123,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Ошибка при загрузке продуктов:', error);
             productsContainer.innerHTML = '<p class="error">Не удалось загрузить продукты. Пожалуйста, попробуйте позже.</p>';
         });
+
 
     // Обработчики событий
     function initializeEventListeners() {
