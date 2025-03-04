@@ -49,10 +49,13 @@ async function sendMessage() {
             }
             const currentOrder = await responseGet.json();
 
+            // Получаем имя пользователя из данных заказа
+            const username = currentOrder.info.username;
+
             // Добавляем новое сообщение
             currentOrder.messages = currentOrder.messages || {}; // Инициализируем, если messages отсутствует
             currentOrder.messages[Date.now()] = {
-                author: localStorage.getItem('role') === 'Admin' ? 'Admin' : 'User', // Имя автора
+                author: localStorage.getItem('role') === 'Admin' ? 'Admin' : username, // Используем имя пользователя
                 message: text
             };
 
