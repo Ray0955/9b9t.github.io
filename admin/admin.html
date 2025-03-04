@@ -126,6 +126,53 @@
         </div>
     </div>
 
+    <!-- Модальное окно для редактирования товара -->
+    <div id="edit-product-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Редактировать товар</h2>
+            <form id="edit-product-form">
+                <div class="input-group">
+                    <label for="edit-product-category">Категория:</label>
+                    <input type="text" id="edit-product-category" name="category" required>
+                </div>
+                <div class="input-group">
+                    <label for="edit-product-title-ru">Название (RU):</label>
+                    <input type="text" id="edit-product-title-ru" name="title-ru" required>
+                </div>
+                <div class="input-group">
+                    <label for="edit-product-title-uk">Название (UK):</label>
+                    <input type="text" id="edit-product-title-uk" name="title-uk" required>
+                </div>
+                <div class="input-group">
+                    <label for="edit-product-title-en">Название (EN):</label>
+                    <input type="text" id="edit-product-title-en" name="title-en" required>
+                </div>
+                <div class="input-group">
+                    <label for="edit-product-description-ru">Описание (RU):</label>
+                    <textarea id="edit-product-description-ru" name="description-ru" required></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="edit-product-description-uk">Описание (UK):</label>
+                    <textarea id="edit-product-description-uk" name="description-uk" required></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="edit-product-description-en">Описание (EN):</label>
+                    <textarea id="edit-product-description-en" name="description-en" required></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="edit-product-price">Цена:</label>
+                    <input type="number" id="edit-product-price" name="price" required>
+                </div>
+                <div class="input-group">
+                    <label for="edit-product-image-url">Ссылка на изображение:</label>
+                    <input type="url" id="edit-product-image-url" name="image-url" required>
+                </div>
+                <button type="submit">Сохранить изменения</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Лоадер -->
     <div class="loader" id="loader">
         <div class="loader-spinner"></div>
