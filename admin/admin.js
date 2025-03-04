@@ -199,6 +199,9 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('edit-product-price').value = product.price || '';
             document.getElementById('edit-product-image-url').value = product.imageUrl || '';
 
+            // Устанавливаем ID товара в форму
+            editProductForm.setAttribute('data-id', productId);
+
             // Открываем модальное окно
             editProductModal.style.display = 'flex';
         } catch (error) {
@@ -214,7 +217,14 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         loader.style.display = 'flex';
 
-        const productId = editProductForm.getAttribute('data-id');
+        const price = parseFloat(document.getElementById('edit-product-price').value);
+        if (price < 0.1) {
+            alert('Минимальная цена товара — 0.1$');
+            loader.style.display = 'none';
+            return;
+        }
+
+        const productId = editProductForm.getAttribute('data-id'); // Получаем ID товара
         const updatedProduct = {
             category: document.getElementById('edit-product-category').value,
             title: {
@@ -227,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 UK: document.getElementById('edit-product-description-uk').value,
                 EN: document.getElementById('edit-product-description-en').value,
             },
-            price: parseFloat(document.getElementById('edit-product-price').value),
+            price: price,
             imageUrl: document.getElementById('edit-product-image-url').value,
             isAvailable: true,
         };
@@ -262,6 +272,13 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         loader.style.display = 'flex';
 
+        const price = parseFloat(document.getElementById('product-price').value);
+        if (price < 0.1) {
+            alert('Минимальная цена товара — 0.1$');
+            loader.style.display = 'none';
+            return;
+        }
+
         const productData = {
             category: document.getElementById('product-category').value,
             title: {
@@ -274,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 UK: document.getElementById('product-description-uk').value,
                 EN: document.getElementById('product-description-en').value,
             },
-            price: parseFloat(document.getElementById('product-price').value),
+            price: price,
             imageUrl: document.getElementById('product-image-url').value,
             isAvailable: true,
         };
