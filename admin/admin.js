@@ -7,8 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const refreshButton = document.getElementById('refresh-button');
     const addProductButton = document.getElementById('add-product-button');
     const addProductModal = document.getElementById('add-product-modal');
-    const closeModal = document.querySelector('.close-modal');
+    const editProductModal = document.getElementById('edit-product-modal');
+    const closeModals = document.querySelectorAll('.close-modal');
     const addProductForm = document.getElementById('add-product-form');
+    const editProductForm = document.getElementById('edit-product-form');
     const ordersTable = document.getElementById('orders-table');
     const productsTable = document.getElementById('products-table');
 
@@ -118,46 +120,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Отображение товаров
-function renderProducts(products) {
-    const tbody = productsTable.querySelector('tbody');
-    tbody.innerHTML = '';
+    function renderProducts(products) {
+        const tbody = productsTable.querySelector('tbody');
+        tbody.innerHTML = '';
 
-    for (const productId in products) {
-        const product = products[productId];
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${product.title?.RU || 'Нет названия'}</td>
-            <td>${product.category || 'Нет категории'}</td>
-            <td>${product.price || '0'}$</td>
-            <td>${product.description?.RU || 'Нет описания'}</td>
-            <td><img src="${product.imageUrl || 'https://via.placeholder.com/150'}" alt="Изображение" width="50"></td>
-            <td>
-                <button class="edit-button" data-id="${productId}">Редактировать</button>
-                <button class="delete-button" data-id="${productId}">Удалить</button>
-            </td>
-        `;
-        tbody.appendChild(row);
+        for (const productId in products) {
+            const product = products[productId];
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${product.title?.RU || 'Нет названия'}</td>
+                <td>${product.category || 'Нет категории'}</td>
+                <td>${product.price || '0'}$</td>
+                <td>${product.description?.RU || 'Нет описания'}</td>
+                <td><img src="${product.imageUrl || 'https://via.placeholder.com/150'}" alt="Изображение" width="50"></td>
+                <td>
+                    <button class="edit-button" data-id="${productId}">Редактировать</button>
+                    <button class="delete-button" data-id="${productId}">Удалить</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        }
+
+        // Обработчики для кнопок редактирования
+        const editButtons = document.querySelectorAll('.edit-button');
+        editButtons.forEach(button => {
+            button.addEventListener('click', async () => {
+                const productId = button.getAttribute('data-id');
+                await openEditModal(productId); // Открываем модальное окно для редактирования
+            });
+        });
+
+        // Обработчики для кнопок удаления
+        const deleteButtons = document.querySelectorAll('.delete-button');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', async () => {
+                const productId = button.getAttribute('data-id');
+                await deleteProduct(productId);
+            });
+        });
     }
-
-    // Обработчики для кнопок редактирования
-    const editButtons = document.querySelectorAll('.edit-button');
-    editButtons.forEach(button => {
-        button.addEventListener('click', async () => {
-            const productId = button.getAttribute('data-id');
-            await openEditModal(productId); // Открываем модальное окно для редактирования
-        });
-    });
-
-    // Обработчики для кнопок удаления
-    const deleteButtons = document.querySelectorAll('.delete-button');
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', async () => {
-            const productId = button.getAttribute('data-id');
-            await deleteProduct(productId);
-        });
-    });
-}
-
 
     // Удаление товара
     async function deleteProduct(productId) {
@@ -177,6 +178,84 @@ function renderProducts(products) {
             loader.style.display = "none";
         }
     }
+
+    // Открытие модального окна для редактирования товара
+    async function openEditModal(productId) {
+        loader.style.display = 'flex';
+        try {
+            const response = await fetch(`https://9b9t.shop:8443/api/products/${productId}`);
+            if (!response.ok) throw new Error('Ошибка загрузки данных товара');
+
+            const product = await response.json();
+
+            // Заполняем форму данными товара
+            document.getElementById('edit-product-category').value = product.category || '';
+            document.getElementById('edit-product-title-ru').value = product.title?.RU || '';
+            document.getElementById('edit-product-title-uk').value = product.title?.UK || '';
+            document.getElementById('edit-product-title-en').value = product.title?.EN || '';
+            document.getElementById('edit-product-description-ru').value = product.description?.RU || '';
+            document.getElementById('edit-product-description-uk').value = product.description?.UK || '';
+            document.getElementById('edit-product-description-en').value = product.description?.EN || '';
+            document.getElementById('edit-product-price').value = product.price || '';
+            document.getElementById('edit-product-image-url').value = product.imageUrl || '';
+
+            // Открываем модальное окно
+            editProductModal.style.display = 'flex';
+        } catch (error) {
+            console.error('Ошибка:', error);
+            alert('Не удалось загрузить данные товара');
+        } finally {
+            loader.style.display = 'none';
+        }
+    }
+
+    // Сохранение изменений товара
+    editProductForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        loader.style.display = 'flex';
+
+        const productId = editProductForm.getAttribute('data-id');
+        const updatedProduct = {
+            category: document.getElementById('edit-product-category').value,
+            title: {
+                RU: document.getElementById('edit-product-title-ru').value,
+                UK: document.getElementById('edit-product-title-uk').value,
+                EN: document.getElementById('edit-product-title-en').value,
+            },
+            description: {
+                RU: document.getElementById('edit-product-description-ru').value,
+                UK: document.getElementById('edit-product-description-uk').value,
+                EN: document.getElementById('edit-product-description-en').value,
+            },
+            price: parseFloat(document.getElementById('edit-product-price').value),
+            imageUrl: document.getElementById('edit-product-image-url').value,
+            isAvailable: true,
+        };
+
+        try {
+            const response = await fetch(`https://9b9t.shop:8443/api/products/${productId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedProduct),
+            });
+
+            if (!response.ok) throw new Error('Ошибка при сохранении изменений');
+
+            const result = await response.json();
+            console.log('Товар обновлен:', result);
+
+            // Закрываем модальное окно и обновляем список товаров
+            editProductModal.style.display = 'none';
+            await loadProducts();
+        } catch (error) {
+            console.error('Ошибка:', error);
+            alert('Не удалось сохранить изменения');
+        } finally {
+            loader.style.display = 'none';
+        }
+    });
 
     // Добавление товара
     addProductForm.addEventListener('submit', async (e) => {
@@ -227,14 +306,17 @@ function renderProducts(products) {
         }
     });
 
-    // Открытие модального окна
+    // Открытие модального окна для добавления товара
     addProductButton.addEventListener('click', () => {
         addProductModal.style.display = 'flex';
     });
 
-    // Закрытие модального окна
-    closeModal.addEventListener('click', () => {
-        addProductModal.style.display = 'none';
+    // Закрытие модальных окон
+    closeModals.forEach(closeModal => {
+        closeModal.addEventListener('click', () => {
+            addProductModal.style.display = 'none';
+            editProductModal.style.display = 'none';
+        });
     });
 
     // Обновление данных
