@@ -118,35 +118,46 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Отображение товаров
-    function renderProducts(products) {
-        const tbody = productsTable.querySelector('tbody');
-        tbody.innerHTML = '';
+function renderProducts(products) {
+    const tbody = productsTable.querySelector('tbody');
+    tbody.innerHTML = '';
 
-        for (const productId in products) {
-            const product = products[productId];
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${product.title?.RU || 'Нет названия'}</td>
-                <td>${product.category || 'Нет категории'}</td>
-                <td>${product.price || '0'}$</td>
-                <td>${product.description?.RU || 'Нет описания'}</td>
-                <td><img src="${product.imageUrl || 'https://via.placeholder.com/150'}" alt="Изображение" width="50"></td>
-                <td>
-                    <button class="delete-button" data-id="${productId}">Удалить</button>
-                </td>
-            `;
-            tbody.appendChild(row);
-        }
-
-        // Добавляем обработчики для кнопок удаления
-        const deleteButtons = document.querySelectorAll('.delete-button');
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', async () => {
-                const productId = button.getAttribute('data-id');
-                await deleteProduct(productId);
-            });
-        });
+    for (const productId in products) {
+        const product = products[productId];
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${product.title?.RU || 'Нет названия'}</td>
+            <td>${product.category || 'Нет категории'}</td>
+            <td>${product.price || '0'}$</td>
+            <td>${product.description?.RU || 'Нет описания'}</td>
+            <td><img src="${product.imageUrl || 'https://via.placeholder.com/150'}" alt="Изображение" width="50"></td>
+            <td>
+                <button class="edit-button" data-id="${productId}">Редактировать</button>
+                <button class="delete-button" data-id="${productId}">Удалить</button>
+            </td>
+        `;
+        tbody.appendChild(row);
     }
+
+    // Обработчики для кнопок редактирования
+    const editButtons = document.querySelectorAll('.edit-button');
+    editButtons.forEach(button => {
+        button.addEventListener('click', async () => {
+            const productId = button.getAttribute('data-id');
+            await openEditModal(productId); // Открываем модальное окно для редактирования
+        });
+    });
+
+    // Обработчики для кнопок удаления
+    const deleteButtons = document.querySelectorAll('.delete-button');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', async () => {
+            const productId = button.getAttribute('data-id');
+            await deleteProduct(productId);
+        });
+    });
+}
+
 
     // Удаление товара
     async function deleteProduct(productId) {
