@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Преобразуем массив в объект (UUID -> Количество)
         const products = productsArray.reduce((acc, product) => {
-            acc[crypto.randomUUID()] = product.quantity || 1; // Используем UUID как ключ, значение — количество товара
+                acc[product.id] = product.quantity || 1; // Используем UUID товара как ключ
             return acc;
         }, {});
 
