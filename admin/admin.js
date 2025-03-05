@@ -117,7 +117,7 @@ function renderOrders(orders) {
             <td>${order.coordinates ? `X: ${order.coordinates.x}<br>Y: ${order.coordinates.y}<br>Z: ${order.coordinates.z}` : 'Нет данных'}</td>
             <td>${order.date || 'Нет данных'}</td>
             <td>
-                <a href="/9b9t/chat.html?orderId=${orderId}" class="chat-button">Чат</a>
+                <a href="/9b9t.github.io/9b9t/chat.html?/chat.html?orderId=${orderId}" class="chat-button">Чат</a>
             </td>
             <td>
                 <button class="delete-order-button" data-order-id="${orderId}">Удалить заказ</button>
