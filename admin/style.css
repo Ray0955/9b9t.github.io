@@ -154,14 +154,45 @@ body {
     vertical-align: top;
 }
 
-#orders-table td ul, #products-table td ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
+.order-products {
+    position: relative;
 }
 
-#orders-table td ul li, #products-table td ul li {
+.toggle-products {
+    background-color: #2a5298;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-products:hover {
+    background-color: #1e3c72;
+}
+
+.products-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0 0;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.products-list li {
     margin-bottom: 5px;
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.products-list li:last-child {
+    border-bottom: none;
 }
 
 .loader {
@@ -242,7 +273,7 @@ body {
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    overflow-y: auto; /* Добавляем прокрутку для модального окна */
+    overflow-y: auto;
 }
 
 .modal-content {
@@ -251,10 +282,10 @@ body {
     border-radius: 10px;
     width: 400px;
     max-width: 90%;
-    max-height: 90vh; /* Ограничиваем высоту модального окна */
-    overflow-y: auto; /* Добавляем прокрутку для содержимого */
+    max-height: 90vh;
+    overflow-y: auto;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    margin: 20px; /* Отступы для модального окна */
+    margin: 20px;
 }
 
 .modal-content h2 {
@@ -303,14 +334,31 @@ body {
 .modal-content button[type="submit"]:hover {
     background-color: #218838;
 }
+
 .close-modal {
     float: right;
     font-size: 35px;
     cursor: pointer;
     color: #002e53;
-    transition: color 0.3s ease; 
+    transition: color 0.3s ease;
 }
 
 .close-modal:hover {
-    color: #1e3c72; 
+    color: #1e3c72;
+}
+
+.delete-order-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.delete-order-button:hover {
+    background-color: #c82333;
 }
