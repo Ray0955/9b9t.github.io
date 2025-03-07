@@ -73,17 +73,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    async function fetchProductById(productId) {
+        try {
+            const response = await fetch(`https://9b9t.shop:8443/api/products/${productId}`);
+            if (!response.ok) throw new Error(`Ошибка загрузки товара с ID: ${productId}`);
+
+            return await response.json();
+        } catch (error) {
+            console.error(`Ошибка загрузки товара ${productId}:`, error);
+            console.error("Ошибка получения товара:", error);
+            return null;
+        }
+    }
+
+
     // Отображение заказов
-function renderOrders(orders) {
-    const tbody = ordersTable.querySelector('tbody');
-    tbody.innerHTML = '';
+    async function renderOrders(orders) {
+        const tbody = ordersTable.querySelector('tbody');
+        tbody.innerHTML = '';
 
-    for (const orderId in orders) {
-        const order = orders[orderId];
-        const products = order.products ? Object.entries(order.products) : []; // Используем Object.entries для получения пар [id, количество]
+        for (const orderId in orders) {
+            const order = orders[orderId];
+            const products = order.products ? Object.entries(order.products) : [];
 
-        const row = document.createElement('tr');
-        row.innerHTML = `
+            const row = document.createElement('tr');
+            row.innerHTML = `
             <td>${order.info.username}</td>
             <td>${order.info.discord}</td>
             <td>${order.info.email}</td>
@@ -91,31 +105,16 @@ function renderOrders(orders) {
                 <div class="order-products">
                     <button class="toggle-products">Показать товары</button>
                     <ul class="products-list" style="display: none;">
-                        ${products.map(([productId, quantity]) => {
-                            // Получаем данные о товаре по его ID
-                            const product = getProductById(productId);
-                            if (product) {
-                                return `
-                                    <li>
-                                        ${product.title?.RU || product.title?.EN || 'Нет названия'} 
-                                        x${quantity} ($${product.price || 0})
-                                    </li>
-                                `;
-                            } else {
-                                return `
-                                    <li>
-                                        Товар с ID ${productId} не найден
-                                    </li>
-                                `;
-                            }
-                        }).join('')}
+                        ${products.map(([productId, quantity]) => `
+                            <li id="product-${productId}">Товар загружается...</li>
+                        `).join('')}
                     </ul>
                 </div>
             </td>
             <td>$${order.totalPrice.toFixed(2)}</td>
             <td>${order.info.deliveryMethod}</td>
             <td>${order.coordinates ? `X: ${order.coordinates.x}<br>Y: ${order.coordinates.y}<br>Z: ${order.coordinates.z}` : 'Нет данных'}</td>
-            <td>${order.date || 'Нет данных'}</td>
+            <td>${order.info.formattedISO || 'Нет данных'}</td>
             <td>
                 <a href="/9b9t.github.io/9b9t/chat.html?orderId=${orderId}" class="chat-button">Чат</a>
             </td>
@@ -123,32 +122,43 @@ function renderOrders(orders) {
                 <button class="delete-order-button" data-order-id="${orderId}">Удалить заказ</button>
             </td>
         `;
-        tbody.appendChild(row);
-    }
+            tbody.appendChild(row);
 
-    // Обработчики для кнопок удаления заказов
-    const deleteOrderButtons = document.querySelectorAll('.delete-order-button');
-    deleteOrderButtons.forEach(button => {
-        button.addEventListener('click', async () => {
-            const orderId = button.getAttribute('data-order-id');
-            await deleteOrder(orderId);
-        });
-    });
-
-    // Обработчики для кнопок показа/скрытия товаров
-    const toggleButtons = document.querySelectorAll('.toggle-products');
-    toggleButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const productsList = button.nextElementSibling;
-            if (productsList.style.display === 'none') {
-                productsList.style.display = 'block';
-                button.textContent = 'Скрыть товары';
-            } else {
-                productsList.style.display = 'none';
-                button.textContent = 'Показать товары';
+            // Загружаем данные о товарах
+            for (const [productId, quantity] of products) {
+                fetchProductById(productId).then(product => {
+                    const productElement = document.getElementById(`product-${productId}`);
+                    if (product) {
+                        productElement.innerHTML = `
+                        <img src="${product.imageUrl}" width="50" alt="${product.title?.RU || 'Нет названия'}">
+                        ${product.title?.RU || product.title?.EN || 'Нет названия'} 
+                        x${quantity} ($${product.price || 0})
+                    `;
+                    } else {
+                        productElement.innerText = `Товар с ID ${productId} не найден`;
+                    }
+                }).catch(error => {
+                    console.error(`Ошибка загрузки товара ${productId}:`, error);
+                });
             }
+        }
+
+        // Добавляем обработчики событий (скрытие/показ товаров)
+        document.querySelectorAll('.toggle-products').forEach(button => {
+            button.addEventListener('click', () => {
+                const productsList = button.nextElementSibling;
+                productsList.style.display = productsList.style.display === 'none' ? 'block' : 'none';
+                button.textContent = productsList.style.display === 'none' ? 'Показать товары' : 'Скрыть товары';
+            });
         });
-    });
+
+        // Добавляем обработчики для удаления заказов
+        document.querySelectorAll('.delete-order-button').forEach(button => {
+            button.addEventListener('click', async () => {
+                const orderId = button.getAttribute('data-order-id');
+                await deleteOrder(orderId);
+            });
+        });
 }
 
 // Функция для получения товара по его ID

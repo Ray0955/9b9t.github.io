@@ -157,7 +157,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             return element.value;
         };
-    
+
+        const formattedISO = new Date().toISOString();
         const username = getValue('username');
         const discord = getValue('discord');
         const email = getValue('email');
@@ -193,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const orderData = {
             orders: {
                 [orderId]: {
-                    info: { username, discord, email, deliveryMethod },
+                    info: { formattedISO, username, discord, email, deliveryMethod },
                     coordinates,
                     totalPrice,
                     products, // Теперь `products` — это объект, а не массив
