@@ -64,14 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateThemeIcon(isDarkTheme);
     });
     
-    // Обработчик для кнопки переключения темы
-    document.getElementById('theme-toggle').addEventListener('click', () => {
-        document.body.classList.toggle('dark-theme');
-        const isDarkTheme = document.body.classList.contains('dark-theme');
-        localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
-        updateThemeIcon(isDarkTheme);
-    });
-    
     // Функция для обновления иконки
     function updateThemeIcon(isDarkTheme) {
         const moonIcon = document.querySelector('.moon-icon');
@@ -95,6 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.remove('dark-theme');
         updateThemeIcon(false);
     }
+
     
     // Загрузка заказов
     async function loadOrders() {
