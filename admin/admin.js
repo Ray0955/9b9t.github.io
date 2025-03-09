@@ -56,6 +56,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Обработчик для кнопки переключения темы
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+        document.body.classList.toggle('dark-theme');
+        const isDarkTheme = document.body.classList.contains('dark-theme');
+        localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
+        updateThemeIcon(isDarkTheme);
+    });
+    
+    // Функция для обновления иконки
+    function updateThemeIcon(isDarkTheme) {
+        const moonIcon = document.querySelector('.moon-icon');
+        const sunIcon = document.querySelector('.sun-icon');
+    
+        if (isDarkTheme) {
+            moonIcon.style.display = 'none';
+            sunIcon.style.display = 'block';
+        } else {
+            moonIcon.style.display = 'block';
+            sunIcon.style.display = 'none';
+        }
+    }
+    
+    // При загрузке страницы применяем сохраненную тему
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+        updateThemeIcon(true);
+    } else {
+        document.body.classList.remove('dark-theme');
+        updateThemeIcon(false);
+    }
+    
     // Загрузка заказов
     async function loadOrders() {
         loader.style.display = "flex";
