@@ -362,3 +362,80 @@ body {
 .delete-order-button:hover {
     background-color: #c82333;
 }
+
+/* Стили для кнопки переключения темы */
+.theme-toggle-button {
+    background-color: #2a5298;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.theme-toggle-button:hover {
+    background-color: #1e3c72;
+    transform: translateY(-2px);
+}
+
+.theme-icon {
+    fill: white;
+    width: 20px;
+    height: 20px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Скрываем одну иконку по умолчанию */
+.sun-icon {
+    display: none;
+}
+
+/* Для темной темы */
+body.dark-theme .theme-toggle-button {
+    background-color: #4a90e2;
+}
+
+body.dark-theme .theme-toggle-button:hover {
+    background-color: #357abd;
+}
+
+body.dark-theme .moon-icon {
+    display: none;
+}
+
+body.dark-theme .sun-icon {
+    display: block;
+}
+
+/* Стили для кнопок "Добавить товар" и "Обновить" */
+.add-product-button, .refresh-button {
+    background-color: #2a5298;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.add-product-button:hover, .refresh-button:hover {
+    background-color: #1e3c72;
+    transform: translateY(-2px);
+}
+
+.refresh-icon {
+    font-size: 16px;
+}
