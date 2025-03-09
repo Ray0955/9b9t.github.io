@@ -23,11 +23,17 @@ if (!uuid || !uuidPattern.test(uuid)) {
             const data = await response.json();
             const messages = data.messages || {}; // Получаем сообщения из ответа
     
-            // Очищаем и обновляем чат
+            // ЧАТ
+            function formatTimestamp(timestamp) {
+                const date = new Date(Number(timestamp));
+                return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
+            
+            // В функции loadMessages:
             chatMessages.innerHTML = Object.entries(messages)
                 .map(([timestamp, message]) => `
                     <div class="message ${message.author === 'Admin' ? 'admin' : 'user'}">
-                        <strong>${message.author}</strong>: ${message.message}
+                        <strong>${message.author}</strong> (${formatTimestamp(timestamp)}): ${message.message}
                     </div>
                 `)
                 .join('');
