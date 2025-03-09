@@ -1,3 +1,4 @@
+/* Общие стили для светлой темы (по умолчанию) */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #1e3c72, #2a5298);
@@ -8,6 +9,7 @@ body {
     align-items: center;
     min-height: 100vh;
     color: #333;
+    transition: background-color 0.3s, color 0.3s; /* Плавный переход для темы */
 }
 
 #login-container {
@@ -18,17 +20,14 @@ body {
     width: 350px;
     text-align: center;
     animation: fadeIn 0.5s ease-in-out;
+    transition: background-color 0.3s, color 0.3s; /* Плавный переход для темы */
 }
 
 #login-container h1 {
     margin-bottom: 20px;
     font-size: 28px;
     color: #2a5298;
-}
-
-.input-group {
-    margin-bottom: 20px;
-    text-align: left;
+    transition: color 0.3s; /* Плавный переход для текста */
 }
 
 .input-group label {
@@ -36,6 +35,7 @@ body {
     margin-bottom: 8px;
     font-weight: bold;
     color: #555;
+    transition: color 0.3s; /* Плавный переход для текста */
 }
 
 .input-group input {
@@ -45,7 +45,7 @@ body {
     border: 1px solid #ccc;
     border-radius: 8px;
     font-size: 16px;
-    transition: border-color 0.3s ease;
+    transition: border-color 0.3s ease, background-color 0.3s, color 0.3s; /* Плавный переход для темы */
     box-sizing: border-box;
 }
 
@@ -87,6 +87,7 @@ body {
     max-width: 1200px;
     display: none;
     animation: fadeIn 0.5s ease-in-out;
+    transition: background-color 0.3s, color 0.3s; /* Плавный переход для темы */
 }
 
 .admin-header {
@@ -99,6 +100,7 @@ body {
 .admin-header h1 {
     color: #2a5298;
     margin: 0;
+    transition: color 0.3s; /* Плавный переход для текста */
 }
 
 .refresh-button, .add-product-button {
@@ -131,6 +133,7 @@ body {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    transition: background-color 0.3s, color 0.3s; /* Плавный переход для темы */
 }
 
 #orders-table th, #orders-table td,
@@ -138,6 +141,7 @@ body {
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Плавный переход для темы */
 }
 
 #orders-table th, #products-table th {
@@ -183,12 +187,14 @@ body {
     padding: 10px;
     max-height: 200px;
     overflow-y: auto;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Плавный переход для темы */
 }
 
 .products-list li {
     margin-bottom: 5px;
     padding: 5px;
     border-bottom: 1px solid #eee;
+    transition: border-color 0.3s; /* Плавный переход для темы */
 }
 
 .products-list li:last-child {
@@ -286,15 +292,13 @@ body {
     overflow-y: auto;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     margin: 20px;
+    transition: background-color 0.3s, color 0.3s; /* Плавный переход для темы */
 }
 
 .modal-content h2 {
     margin-top: 0;
     color: #2a5298;
-}
-
-.modal-content .input-group {
-    margin-bottom: 15px;
+    transition: color 0.3s; /* Плавный переход для текста */
 }
 
 .modal-content .input-group label {
@@ -302,6 +306,7 @@ body {
     margin-bottom: 5px;
     font-weight: bold;
     color: #555;
+    transition: color 0.3s; /* Плавный переход для текста */
 }
 
 .modal-content .input-group input,
@@ -312,6 +317,7 @@ body {
     border-radius: 5px;
     font-size: 14px;
     box-sizing: border-box;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Плавный переход для темы */
 }
 
 .modal-content .input-group textarea {
@@ -361,6 +367,129 @@ body {
 
 .delete-order-button:hover {
     background-color: #c82333;
+}
+
+.toggle-specific-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-specific-button:hover {
+    background-color: #218838;
+}
+
+/* Темная тема */
+body.dark-theme {
+    background: linear-gradient(135deg, #0a1a3a, #142850);
+    color: #ffffff;
+}
+
+body.dark-theme #login-container {
+    background: rgba(30, 30, 30, 0.9);
+    color: #ffffff;
+}
+
+body.dark-theme #login-container h1 {
+    color: #4a90e2;
+}
+
+body.dark-theme .input-group label {
+    color: #cccccc;
+}
+
+body.dark-theme .input-group input {
+    background-color: #333;
+    color: #ffffff;
+    border-color: #555;
+}
+
+body.dark-theme .input-group input:focus {
+    border-color: #4a90e2;
+}
+
+body.dark-theme #admin-container {
+    background: rgba(30, 30, 30, 0.9);
+    color: #ffffff;
+}
+
+body.dark-theme .admin-header h1 {
+    color: #4a90e2;
+}
+
+body.dark-theme .refresh-button,
+body.dark-theme .add-product-button {
+    background-color: #4a90e2;
+}
+
+body.dark-theme .refresh-button:hover,
+body.dark-theme .add-product-button:hover {
+    background-color: #357abd;
+}
+
+body.dark-theme #orders-table,
+body.dark-theme #products-table {
+    background-color: #2d2d2d;
+    color: #ffffff;
+}
+
+body.dark-theme #orders-table th,
+body.dark-theme #products-table th {
+    background-color: #4a90e2;
+    color: #ffffff;
+}
+
+body.dark-theme #orders-table tr:hover,
+body.dark-theme #products-table tr:hover {
+    background-color: rgba(74, 144, 226, 0.1);
+}
+
+body.dark-theme .products-list {
+    background-color: #333;
+    border-color: #555;
+}
+
+body.dark-theme .products-list li {
+    border-color: #444;
+}
+
+body.dark-theme .modal-content {
+    background-color: #333;
+    color: #ffffff;
+}
+
+body.dark-theme .modal-content h2 {
+    color: #4a90e2;
+}
+
+body.dark-theme .modal-content .input-group label {
+    color: #cccccc;
+}
+
+body.dark-theme .modal-content .input-group input,
+body.dark-theme .modal-content .input-group textarea {
+    background-color: #444;
+    color: #ffffff;
+    border-color: #555;
+}
+
+body.dark-theme .close-modal {
+    color: #4a90e2;
+}
+
+body.dark-theme .close-modal:hover {
+    color: #357abd;
+}
+/* Стили для группы кнопок */
+.button-group {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Отступ между кнопками */
 }
 
 /* Стили для кнопки переключения темы */
