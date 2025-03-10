@@ -32,21 +32,30 @@ document.addEventListener('DOMContentLoaded', () => {
         updateDeliveryDescription(selectedMethod, languageSelect.value);
         if (selectedMethod === 'specific') {
             coordinatesInput.style.display = 'block';
+            updateOrderTotalWithDelivery(); // Обновляем стоимость при выборе способа доставки
         } else {
             coordinatesInput.style.display = 'none';
+            updateOrderTotalWithDelivery(); // Обновляем стоимость при выборе способа доставки
         }
     });
 
-    // Ограничение ввода координат (максимум 1 000 000)
-    [xCoordInput, yCoordInput, zCoordInput].forEach(input => {
+    // Ограничение ввода координат X и Z (максимум 1 000 000)
+    [xCoordInput, zCoordInput].forEach(input => {
         input.addEventListener('input', (e) => {
-            const value = parseInt(e.target.value);
-            if (value > 1000000) {
-                e.target.value = 1000000;
-            } else if (value < -1000000) {
-                e.target.value = -1000000;
-            }
+            let value = parseInt(e.target.value) || 0;
+            if (value > 1000000) value = 1000000;
+            if (value < -1000000) value = -1000000;
+            e.target.value = value; // Устанавливаем скорректированное значение
+            if (deliverySelect.value === 'specific') updateOrderTotalWithDelivery();
         });
+    });
+
+    // Ограничение ввода координаты Y (только от 20 до 250)
+    yCoordInput.addEventListener('blur', (e) => {
+        let value = parseInt(e.target.value) || 20; // По умолчанию 20, если поле пустое
+        if (value > 250) value = 250;
+        if (value < 20) value = 20;
+        e.target.value = value; // Устанавливаем скорректированное значение только после потери фокуса
     });
 
     // Функция для обновления описания способа доставки
@@ -59,6 +68,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 desc.style.display = 'none';
             }
         });
+    }
+
+    // Функция для расчета дополнительной стоимости доставки
+    function calculateDeliveryFee(x, z) {
+        const distance = Math.max(Math.abs(x), Math.abs(z)); // Максимальное расстояние по X или Z
+        const feePer10000Blocks = 0.1; // Стоимость за каждые 10 000 блоков
+        const additionalFee = Math.floor(distance / 10000) * feePer10000Blocks; // Округляем вниз
+        return additionalFee;
+    }
+
+    // Обновляем отображение итоговой суммы с учетом доставки
+    function updateOrderTotalWithDelivery() {
+        const x = parseInt(xCoordInput.value) || 0;
+        const z = parseInt(zCoordInput.value) || 0;
+        const deliveryFee = calculateDeliveryFee(x, z);
+        const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0); // Пересчитываем общую стоимость товаров
+        const finalTotalPrice = totalPrice + deliveryFee;
+
+        // Обновляем отображение итоговой суммы
+        orderTotal.textContent = finalTotalPrice.toFixed(2);
+
+        // Обновляем отображение стоимости доставки
+        const deliveryFeeElement = document.getElementById('delivery-fee');
+        if (deliveryFeeElement) {
+            deliveryFeeElement.textContent = deliveryFee.toFixed(2);
+        }
     }
 
     // Функция для переключения языка
@@ -147,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function sendOrder() {
         const orderId = crypto.randomUUID(); // Генерация UUID
-    
+
         // Проверяем существование элементов перед доступом к их значению
         const getValue = (id) => {
             const element = document.getElementById(id);
@@ -162,66 +197,61 @@ document.addEventListener('DOMContentLoaded', () => {
         const username = getValue('username');
         const discord = getValue('discord');
         const email = getValue('email');
-        const deliveryMethod = 'Random discover-method';
-    
-        if (!username || !discord || !email || !deliveryMethod) {
-            alert('Пожалуйста, заполните все обязательные поля!');
-            console.log({ username, discord, email, deliveryMethod });
-            console.log(contactForm.checkValidity());
+        const deliveryMethod = deliverySelect.value;
+
+        // Получаем координаты
+        const x = parseInt(getValue('x-coord')) || 0;
+        const y = parseInt(getValue('y-coord')) || 0;
+        const z = parseInt(getValue('z-coord')) || 0;
+
+        // Проверяем координату Y
+        if (y < 20 || y > 250) {
+            alert('Координата Y должна быть в диапазоне от 20 до 250!');
             return;
         }
-    
-        let coordinates = null;
-        if (deliveryMethod === 'specific') {
-            coordinates = {
-                x: parseInt(getValue('xCoord')) || 0,
-                y: parseInt(getValue('yCoord')) || 0,
-                z: parseInt(getValue('zCoord')) || 0
-            };
-        }
-    
-        const totalPriceElement = orderTotal;
-        const totalPrice = totalPriceElement ? parseFloat(totalPriceElement.textContent) || 0 : 0;
 
-        const productsArray = getCartItems(); // Получаем товары в виде массива
+        // Рассчитываем дополнительную стоимость доставки
+        const deliveryFee = calculateDeliveryFee(x, z);
 
-        // Преобразуем массив в объект (UUID -> Количество)
-        const products = productsArray.reduce((acc, product) => {
-                acc[product.id] = product.quantity || 1; // Используем UUID товара как ключ
-            return acc;
-        }, {});
+        // Общая стоимость заказа
+        const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        const finalTotalPrice = totalPrice + deliveryFee;
 
+        // Формируем данные заказа
         const orderData = {
             orders: {
                 [orderId]: {
                     info: { formattedISO, username, discord, email, deliveryMethod },
-                    coordinates,
-                    totalPrice,
-                    products, // Теперь `products` — это объект, а не массив
+                    coordinates: { x, y, z },
+                    totalPrice: finalTotalPrice,
+                    deliveryFee,
+                    products: getCartItems().reduce((acc, product) => {
+                        acc[product.id] = product.quantity || 1;
+                        return acc;
+                    }, {}),
                     messages: {}
                 }
             }
         };
 
-    
         console.log("Sending order data:", JSON.stringify(orderData, null, 2)); // Логируем данные
-    
+
         try {
             const response = await fetch('https://9b9t.shop:8443/api/orders', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(orderData)
             });
-    
+
             if (!response.ok) {
                 const errorResponse = await response.json();
                 console.error("Server error:", errorResponse);
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-    
+
             const responseData = await response.json();
             console.log("Server response:", responseData);
-    
+
             // Перенаправляем пользователя на страницу чата
             window.location.href = `https://ray0955.github.io/9b9t.github.io/9b9t/chat.html?orderId=${orderId}`;
         } catch (error) {
@@ -229,6 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Ошибка соединения с сервером.');
         }
     }
+
     // Функция получения товаров из корзины
     function getCartItems() {
         return JSON.parse(localStorage.getItem('cart')) || [];
