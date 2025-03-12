@@ -204,11 +204,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const y = parseInt(getValue('y-coord')) || 0;
         const z = parseInt(getValue('z-coord')) || 0;
 
-        // Проверяем координату Y
-        if (y < 20 || y > 250) {
-            alert('Координата Y должна быть в диапазоне от 20 до 250!');
-            return;
-        }
+    // Проверяем координату Y 
+    if (deliveryMethod !== 'random' && (y < 20 || y > 250)) {
+        alert('Координата Y должна быть в диапазоне от 20 до 250!');
+        return;
+    }
 
         // Рассчитываем дополнительную стоимость доставки
         const deliveryFee = calculateDeliveryFee(x, z);
