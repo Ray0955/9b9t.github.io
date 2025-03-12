@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Админ-панель</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="background"></div>
@@ -43,8 +44,38 @@
             </div>
         </div>
 
+        <!-- Вкладки -->
+        <div class="tabs">
+            <button class="tab-button active" data-tab="orders">Заказы</button>
+            <button class="tab-button" data-tab="products">Товары</button>
+            <button class="tab-button" data-tab="analytics">Аналитика</button>
+        </div>
+
+        <!-- Контейнер для аналитики -->
+   <div class="table-wrapper" data-tab="analytics">
+    <h2>Аналитика продаж</h2>
+    <div class="analytics-container">
+        <!-- График популярности товаров -->
+        <div class="chart-container">
+            <h3>Популярные товары</h3>
+            <canvas id="popular-products-chart"></canvas>
+        </div>
+
+        <!-- График продаж по времени -->
+        <div class="chart-container">
+            <h3>Продажи по времени</h3>
+            <canvas id="sales-by-time-chart"></canvas>
+        </div>
+
+        <!-- Статистика по категориям -->
+        <div class="chart-container">
+            <h3>Продажи по категориям</h3>
+            <canvas id="sales-by-category-chart"></canvas>
+        </div>
+    </div>
+   </div>
         <!-- Таблица заказов -->
-        <div class="table-wrapper">
+        <div class="table-wrapper active" data-tab="orders">
             <h2>Заказы</h2>
             <table id="orders-table">
                 <thead>
@@ -68,7 +99,7 @@
         </div>
 
         <!-- Таблица товаров -->
-        <div class="table-wrapper">
+        <div class="table-wrapper" data-tab="products">
             <h2>Товары</h2>
             <table id="products-table">
                 <thead>
