@@ -63,12 +63,12 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
         updateThemeIcon(isDarkTheme);
     });
-    
+
     // Функция для обновления иконки
     function updateThemeIcon(isDarkTheme) {
         const moonIcon = document.querySelector('.moon-icon');
         const sunIcon = document.querySelector('.sun-icon');
-    
+
         if (isDarkTheme) {
             moonIcon.style.display = 'none';
             sunIcon.style.display = 'block';
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
             sunIcon.style.display = 'none';
         }
     }
-    
+
     // При загрузке страницы применяем сохраненную тему
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
@@ -88,7 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateThemeIcon(false);
     }
 
-    
     // Загрузка заказов
     async function loadOrders() {
         loader.style.display = "flex";
@@ -106,20 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    async function fetchProductById(productId) {
-        try {
-            const response = await fetch(`https://9b9t.shop:8443/api/products/${productId}`);
-            if (!response.ok) throw new Error(`Ошибка загрузки товара с ID: ${productId}`);
-
-            return await response.json();
-        } catch (error) {
-            console.error(`Ошибка загрузки товара ${productId}:`, error);
-            console.error("Ошибка получения товара:", error);
-            return null;
-        }
-    }
-
-
     // Отображение заказов
     async function renderOrders(orders) {
         const tbody = ordersTable.querySelector('tbody');
@@ -131,30 +116,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const row = document.createElement('tr');
             row.innerHTML = `
-            <td>${order.info.username}</td>
-            <td>${order.info.discord}</td>
-            <td>${order.info.email}</td>
-            <td>
-                <div class="order-products">
-                    <button class="toggle-products">Показать товары</button>
-                    <ul class="products-list" style="display: none;">
-                        ${products.map(([productId, quantity]) => `
-                            <li id="product-${productId}">Товар загружается...</li>
-                        `).join('')}
-                    </ul>
-                </div>
-            </td>
-            <td>$${order.totalPrice.toFixed(2)}</td>
-            <td>${order.info.deliveryMethod}</td>
-            <td>${order.coordinates ? `X: ${order.coordinates.x}<br>Y: ${order.coordinates.y}<br>Z: ${order.coordinates.z}` : 'Нет данных'}</td>
-            <td>${order.info.formattedISO || 'Нет данных'}</td>
-            <td>
-                <a href="/9b9t.github.io/9b9t/chat.html?orderId=${orderId}" class="chat-button">Чат</a>
-            </td>
-            <td>
-                <button class="delete-order-button" data-order-id="${orderId}">Удалить заказ</button>
-            </td>
-        `;
+                <td>${order.info.username}</td>
+                <td>${order.info.discord}</td>
+                <td>${order.info.email}</td>
+                <td>
+                    <div class="order-products">
+                        <button class="toggle-products">Показать товары</button>
+                        <ul class="products-list" style="display: none;">
+                            ${products.map(([productId, quantity]) => `
+                                <li id="product-${productId}">Товар загружается...</li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                </td>
+                <td>$${order.totalPrice.toFixed(2)}</td>
+                <td>${order.info.deliveryMethod}</td>
+                <td>${order.coordinates ? `X: ${order.coordinates.x}<br>Y: ${order.coordinates.y}<br>Z: ${order.coordinates.z}` : 'Нет данных'}</td>
+                <td>${order.info.formattedISO || 'Нет данных'}</td>
+                <td>
+                    <a href="/9b9t.github.io/9b9t/chat.html?orderId=${orderId}" class="chat-button">Чат</a>
+                </td>
+                <td>
+                    <button class="delete-order-button" data-order-id="${orderId}">Удалить заказ</button>
+                </td>
+            `;
             tbody.appendChild(row);
 
             // Загружаем данные о товарах
@@ -163,10 +148,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     const productElement = document.getElementById(`product-${productId}`);
                     if (product) {
                         productElement.innerHTML = `
-                        <img src="${product.imageUrl}" width="50" alt="${product.title?.RU || 'Нет названия'}">
-                        ${product.title?.RU || product.title?.EN || 'Нет названия'} 
-                        x${quantity} ($${product.price || 0})
-                    `;
+                            <img src="${product.imageUrl}" width="50" alt="${product.title?.RU || 'Нет названия'}">
+                            ${product.title?.RU || product.title?.EN || 'Нет названия'} 
+                            x${quantity} ($${product.price || 0})
+                        `;
                     } else {
                         productElement.innerText = `Товар с ID ${productId} не найден`;
                     }
@@ -192,15 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 await deleteOrder(orderId);
             });
         });
-}
-
-// Функция для получения товара по его ID
-function getProductById(productId) {
-    // Здесь нужно реализовать логику получения товара по его ID
-    // Например, если у вас есть доступ к списку товаров, можно сделать так:
-    const products = JSON.parse(localStorage.getItem('products')) || {};
-    return products[productId];
-}
+    }
 
     // Удаление заказа
     async function deleteOrder(orderId) {
@@ -467,4 +444,238 @@ function getProductById(productId) {
         await loadOrders(); // Обновляем заказы
         await loadProducts(); // Обновляем товары
     });
+
+    // Переключение между вкладками
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tableWrappers = document.querySelectorAll('.table-wrapper');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Убираем активный класс у всех кнопок и таблиц
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tableWrappers.forEach(table => table.classList.remove('active'));
+
+            // Добавляем активный класс к выбранной кнопке и соответствующей таблице
+            button.classList.add('active');
+            const tabName = button.getAttribute('data-tab');
+            document.querySelector(`.table-wrapper[data-tab="${tabName}"]`).classList.add('active');
+
+            // Если выбрана вкладка "Аналитика", загружаем данные
+            if (tabName === 'analytics') {
+                loadAnalytics();
+            }
+        });
+    });
+
+    // По умолчанию показываем вкладку "Заказы"
+    document.querySelector('.tab-button[data-tab="orders"]').click();
+
+// Функция для загрузки данных аналитики
+async function loadAnalytics() {
+    loader.style.display = 'flex';
+    try {
+        const response = await fetch('https://9b9t.shop:8443/api/orders');
+        if (!response.ok) throw new Error('Ошибка загрузки данных');
+
+        const orders = await response.json();
+
+        // Анализ данных
+        const productSales = await analyzeProductSales(orders);
+        const salesByTime = analyzeSalesByTime(orders);
+        const salesByCategory = await analyzeSalesByCategory(orders);
+
+        // Отрисовка графиков
+        renderPopularProductsChart(productSales);
+        renderSalesByTimeChart(salesByTime);
+        renderSalesByCategoryChart(salesByCategory);
+    } catch (error) {
+        console.error('Ошибка загрузки аналитики:', error);
+        alert('Не удалось загрузить данные для аналитики');
+    } finally {
+        loader.style.display = 'none';
+    }
+}
+
+// Анализ популярности товаров
+async function analyzeProductSales(orders) {
+    const productSales = {};
+
+    for (const orderId in orders) {
+        const order = orders[orderId];
+        for (const productId in order.products) {
+            const quantity = order.products[productId];
+            if (!productSales[productId]) {
+                productSales[productId] = 0;
+            }
+            productSales[productId] += quantity;
+        }
+    }
+
+    // Получаем названия товаров
+    const productNames = await getProductNames(Object.keys(productSales));
+
+    // Заменяем UUID на названия товаров
+    const result = {};
+    for (const productId in productSales) {
+        const productName = productNames[productId] || `Товар ${productId}`;
+        result[productName] = productSales[productId];
+    }
+
+    return result;
+}
+
+// Получение названий товаров по их UUID
+async function getProductNames(productIds) {
+    const productNames = {};
+
+    for (const productId of productIds) {
+        const product = await fetchProductById(productId);
+        if (product) {
+            productNames[productId] = product.title?.RU || product.title?.EN || `Товар ${productId}`;
+        } else {
+            productNames[productId] = `Товар ${productId}`;
+        }
+    }
+
+    return productNames;
+}
+
+// Анализ продаж по времени
+function analyzeSalesByTime(orders) {
+    const salesByTime = {};
+
+    for (const orderId in orders) {
+        const order = orders[orderId];
+        const hour = new Date(order.info.formattedISO).getHours();
+        if (!salesByTime[hour]) {
+            salesByTime[hour] = 0;
+        }
+        salesByTime[hour] += 1;
+    }
+
+    return salesByTime;
+}
+
+// Анализ продаж по категориям
+async function analyzeSalesByCategory(orders) {
+    const salesByCategory = {};
+
+    for (const orderId in orders) {
+        const order = orders[orderId];
+        for (const productId in order.products) {
+            const product = await fetchProductById(productId);
+            if (product) {
+                const category = product.category || 'Без категории';
+                if (!salesByCategory[category]) {
+                    salesByCategory[category] = 0;
+                }
+                salesByCategory[category] += order.products[productId];
+            }
+        }
+    }
+
+    return salesByCategory;
+}
+
+// Отрисовка графика популярных товаров
+function renderPopularProductsChart(productSales) {
+    const ctx = document.getElementById('popular-products-chart').getContext('2d');
+    const labels = Object.keys(productSales);
+    const data = Object.values(productSales);
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Количество продаж',
+                data: data,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+// Отрисовка графика продаж по времени
+function renderSalesByTimeChart(salesByTime) {
+    const ctx = document.getElementById('sales-by-time-chart').getContext('2d');
+    const labels = Object.keys(salesByTime).map(hour => `${hour}:00`);
+    const data = Object.values(salesByTime);
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Количество заказов',
+                data: data,
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+// Отрисовка графика продаж по категориям
+function renderSalesByCategoryChart(salesByCategory) {
+    const ctx = document.getElementById('sales-by-category-chart').getContext('2d');
+    const labels = Object.keys(salesByCategory);
+    const data = Object.values(salesByCategory);
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Продажи по категориям',
+                data: data,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        }
+    });
+}
+
+    // Функция для получения товара по его ID
+    async function fetchProductById(productId) {
+        try {
+            const response = await fetch(`https://9b9t.shop:8443/api/products/${productId}`);
+            if (!response.ok) throw new Error(`Ошибка загрузки товара с ID: ${productId}`);
+
+            return await response.json();
+        } catch (error) {
+            console.error(`Ошибка загрузки товара ${productId}:`, error);
+            return null;
+        }
+    }
 });
