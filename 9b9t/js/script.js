@@ -62,7 +62,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const descriptionEn = product.description?.EN || 'No description';
                 const price = product.price ? `${product.price}$` : '0$';
 
+
+                const isNew = product.isNew || false;
+                
                 productCard.innerHTML = `
+                 ${isNew ? '<div class="new-badge">Новый</div>' : ''}
                 <img src="${imageUrl}" alt="${titleRu}" class="card__img">
                 <div class="card__data">
                     <h1 class="card__title" data-lang="RU">${titleRu}</h1>
