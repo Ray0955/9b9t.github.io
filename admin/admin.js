@@ -345,7 +345,6 @@ document.addEventListener('DOMContentLoaded', () => {
             isAvailable: true,
             isNew: document.getElementById('edit-product-is-new').checked, // Сохраняем значение чекбокса
         };
-        };
 
         try {
             const response = await fetch(`https://9b9t.shop:8443/api/products/${productId}`, {
