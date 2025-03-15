@@ -18,13 +18,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Хешированные данные для авторизации
     const users = [
         {
-            usernameHash: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', // Хеш логина "admin"
-            passwordHash: 'd396111421e8b2ed6edaf4aed7a6a01a064a0f15b85d5783d5533cb87dd93106', // Хеш пароля "admintop1234567890"
+            usernameHash: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918',
+            passwordHash: 'd396111421e8b2ed6edaf4aed7a6a01a064a0f15b85d5783d5533cb87dd93106', 
             role: 'admin',
         },
         {
-            usernameHash: 'b465361ffa25886d97c693b209bd347e600d1b14d397a8e42b7b7c408f32f0a9', // Хеш логина "moder"
-            passwordHash: '635b589ffadc73a0f83f97ff8ce88fc9a93478ecc51a2dd82e3a455b6c225ead', // Хеш пароля "moder1234567890moder"
+            usernameHash: 'b465361ffa25886d97c693b209bd347e600d1b14d397a8e42b7b7c408f32f0a9',
+            passwordHash: '635b589ffadc73a0f83f97ff8ce88fc9a93478ecc51a2dd82e3a455b6c225ead', 
             role: 'moderator',
         },
     ];
