@@ -28,184 +28,184 @@ document.addEventListener('DOMContentLoaded', () => {
             role: 'moderator',
         },
     ];
+// Функция для хеширования текста с использованием SHA-256
+async function hashSHA256(text) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+}
 
-    // Функция для хеширования текста с использованием SHA-256
-    async function hashSHA256(text) {
-        const encoder = new TextEncoder();
-        const data = encoder.encode(text);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
-        return hashHex;
-    }
+// Обработчик авторизации
+loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    loader.style.display = 'flex';
 
-    // Обработчик авторизации
-    loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        loader.style.display = 'flex';
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
 
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
+    try {
+        // Хешируем введенные логин и пароль
+        const usernameHash = await hashSHA256(username);
+        const passwordHash = await hashSHA256(password);
 
-        try {
-            // Хешируем введенные логин и пароль
-            const usernameHash = await hashSHA256(username);
-            const passwordHash = await hashSHA256(password);
+        // Поиск пользователя по хешу логина и пароля
+        const user = users.find(
+            u => u.usernameHash === usernameHash && u.passwordHash === passwordHash
+        );
 
-            // Поиск пользователя по хешу логина и пароля
-            const user = users.find(
-                u => u.usernameHash === usernameHash && u.passwordHash === passwordHash
-            );
-
-            if (user) {
-                // Сохраняем роль в localStorage
-                localStorage.setItem('role', user.role);
-
-                loginContainer.style.display = 'none';
-                adminContainer.style.display = 'block';
-
-                // Настройка интерфейса в зависимости от роли
-                configureUI(user.role);
-
-                // Загружаем данные
-                loadOrders();
-                if (user.role === 'admin') {
-                    loadProducts();
-                    addModeratorBlockButton(); // Добавляем кнопку блокировки модератора
-                }
-            } else {
-                errorMessage.textContent = 'Неверный логин или пароль!';
+        if (user) {
+            // Проверка, заблокирован ли модератор
+            if (user.role === 'moderator' && localStorage.getItem('moderator_blocked')) {
+                errorMessage.textContent = 'Вход для модератора заблокирован администратором!';
                 errorMessage.style.display = 'block';
+                loader.style.display = 'none';
+                return;
             }
-        } catch (error) {
-            console.error('Ошибка при авторизации:', error);
-            alert('Ошибка при авторизации');
-        } finally {
-            loader.style.display = 'none';
+
+            // Сохраняем роль в localStorage
+            localStorage.setItem('role', user.role);
+
+            loginContainer.style.display = 'none';
+            adminContainer.style.display = 'block';
+
+            // Настройка интерфейса в зависимости от роли
+            configureUI(user.role);
+
+            // Загружаем данные
+            loadOrders();
+            if (user.role === 'admin') {
+                loadProducts();
+                addModeratorBlockButton(); // Добавляем кнопку блокировки модератора
+            }
+        } else {
+            errorMessage.textContent = 'Неверный логин или пароль!';
+            errorMessage.style.display = 'block';
         }
-    });
-
-    // Функция для настройки интерфейса в зависимости от роли
-    function configureUI(role) {
-        const addProductButton = document.getElementById('add-product-button');
-        const refreshButton = document.getElementById('refresh-button');
-        const tabButtons = document.querySelectorAll('.tab-button');
-        const editButtons = document.querySelectorAll('.edit-button');
-        const deleteButtons = document.querySelectorAll('.delete-button');
-
-        if (role === 'moderator') {
-            // Делаем кнопки и вкладки недоступными для модератора
-            addProductButton.disabled = true;
-            refreshButton.disabled = false;
-            editButtons.forEach(button => button.disabled = true);
-            deleteButtons.forEach(button => button.disabled = true);
-
-            // Добавляем подсказки для недоступных элементов
-            addProductButton.title = 'Доступно для Администрации';
-            refreshButton.title = 'Доступно для Администрации';
-            editButtons.forEach(button => button.title = 'Доступно для Администрации');
-            deleteButtons.forEach(button => button.title = 'Доступно для Администрации');
-
-            // Добавляем класс для изменения курсора
-            addProductButton.classList.add('disabled-button');
-            editButtons.forEach(button => button.classList.add('disabled-button'));
-            deleteButtons.forEach(button => button.classList.add('disabled-button'));
-
-            // Делаем вкладки "Товары" и "Аналитика" недоступными
-            tabButtons.forEach(button => {
-                if (button.getAttribute('data-tab') !== 'orders') {
-                    button.disabled = true;
-                    button.title = 'Доступно для Администрации';
-                    button.classList.add('disabled-button');
-                }
-            });
-
-            // Показываем только вкладку "Заказы" по умолчанию
-            document.querySelector('.tab-button[data-tab="orders"]').click();
-        } else if (role === 'admin') {
-            // Администратору все доступно
-            addProductButton.disabled = false;
-            refreshButton.disabled = false;
-            editButtons.forEach(button => button.disabled = false);
-            deleteButtons.forEach(button => button.disabled = false);
-            tabButtons.forEach(button => {
-                button.disabled = false;
-                button.title = '';
-                button.classList.remove('disabled-button');
-            });
-        }
+    } catch (error) {
+        console.error('Ошибка при авторизации:', error);
+        alert('Ошибка при авторизации');
+    } finally {
+        loader.style.display = 'none';
     }
+});
 
-    // Добавляем кнопку блокировки модератора для администратора
-    function addModeratorBlockButton() {
-        const adminHeader = document.querySelector('.admin-header');
-        if (!adminHeader) return;
+// Функция для настройки интерфейса в зависимости от роли
+function configureUI(role) {
+    const addProductButton = document.getElementById('add-product-button');
+    const refreshButton = document.getElementById('refresh-button');
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const editButtons = document.querySelectorAll('.edit-button');
+    const deleteButtons = document.querySelectorAll('.delete-button');
 
-        // Создаем кнопку
-        const blockButton = document.createElement('button');
-        blockButton.id = 'block-moderator-button';
-        blockButton.textContent = 'Заблокировать модератора';
-        blockButton.classList.add('block-moderator-button');
+    if (role === 'moderator') {
+        // Делаем кнопки и вкладки недоступными для модератора
+        addProductButton.disabled = true;
+        refreshButton.disabled = false;
+        editButtons.forEach(button => button.disabled = true);
+        deleteButtons.forEach(button => button.disabled = true);
 
-        // Обработчик для кнопки
-        blockButton.addEventListener('click', async () => {
-            try {
-                const response = await fetch('/api/toggle-moderator-block', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-                const data = await response.json();
+        // Добавляем подсказки для недоступных элементов
+        addProductButton.title = 'Доступно для Администрации';
+        editButtons.forEach(button => button.title = 'Доступно для Администрации');
+        deleteButtons.forEach(button => button.title = 'Доступно для Администрации');
 
-                if (data.blocked) {
-                    blockButton.textContent = 'Разблокировать модератора';
-                    alert('Модератор заблокирован!');
-                } else {
-                    blockButton.textContent = 'Заблокировать модератора';
-                    alert('Модератор разблокирован!');
-                }
-            } catch (error) {
-                console.error('Ошибка при блокировке модератора:', error);
-                alert('Ошибка при блокировке модератора');
+        // Добавляем класс для изменения курсора
+        addProductButton.classList.add('disabled-button');
+        editButtons.forEach(button => button.classList.add('disabled-button'));
+        deleteButtons.forEach(button => button.classList.add('disabled-button'));
+
+        // Делаем вкладки "Товары" и "Аналитика" недоступными
+        tabButtons.forEach(button => {
+            if (button.getAttribute('data-tab') !== 'orders') {
+                button.disabled = true;
+                button.title = 'Доступно для Администрации';
+                button.classList.add('disabled-button');
             }
         });
 
-        // Добавляем кнопку в интерфейс
-        adminHeader.appendChild(blockButton);
+        // Показываем только вкладку "Заказы" по умолчанию
+        document.querySelector('.tab-button[data-tab="orders"]').click();
+    } else if (role === 'admin') {
+        // Администратору все доступно
+        addProductButton.disabled = false;
+        refreshButton.disabled = false;
+        editButtons.forEach(button => button.disabled = false);
+        deleteButtons.forEach(button => button.disabled = false);
+        tabButtons.forEach(button => {
+            button.disabled = false;
+            button.title = '';
+            button.classList.remove('disabled-button');
+        });
     }
+}
 
-    // Переключение темы (день/ночь)
-    themeToggleButton.addEventListener('click', () => {
-        document.body.classList.toggle('dark-theme');
-        const isDarkTheme = document.body.classList.contains('dark-theme');
-        localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
-        updateThemeIcon(isDarkTheme);
+// Добавляем кнопку блокировки модератора для администратора
+function addModeratorBlockButton() {
+    const adminHeader = document.querySelector('.admin-header');
+    if (!adminHeader) return;
+
+    // Создаем кнопку
+    const blockButton = document.createElement('button');
+    blockButton.id = 'block-moderator-button';
+    blockButton.textContent = localStorage.getItem('moderator_blocked')
+        ? 'Разблокировать модератора'
+        : 'Заблокировать модератора';
+    blockButton.classList.add('block-moderator-button');
+
+    // Обработчик для кнопки
+    blockButton.addEventListener('click', () => {
+        const isBlocked = localStorage.getItem('moderator_blocked');
+
+        if (isBlocked) {
+            localStorage.removeItem('moderator_blocked'); // Разблокируем модератора
+            blockButton.textContent = 'Заблокировать модератора';
+            alert('Модератор разблокирован!');
+        } else {
+            localStorage.setItem('moderator_blocked', 'true'); // Блокируем модератора
+            blockButton.textContent = 'Разблокировать модератора';
+            alert('Модератор заблокирован!');
+        }
     });
 
-    // Функция для обновления иконки темы
-    function updateThemeIcon(isDarkTheme) {
-        const moonIcon = document.querySelector('.moon-icon');
-        const sunIcon = document.querySelector('.sun-icon');
+    // Добавляем кнопку в интерфейс
+    adminHeader.appendChild(blockButton);
+}
 
-        if (isDarkTheme) {
-            moonIcon.style.display = 'none';
-            sunIcon.style.display = 'block';
-        } else {
-            moonIcon.style.display = 'block';
-            sunIcon.style.display = 'none';
-        }
-    }
+// Переключение темы (день/ночь)
+themeToggleButton.addEventListener('click', () => {
+    document.body.classList.toggle('dark-theme');
+    const isDarkTheme = document.body.classList.contains('dark-theme');
+    localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
+    updateThemeIcon(isDarkTheme);
+});
 
-    // Применение сохраненной темы при загрузке страницы
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-        document.body.classList.add('dark-theme');
-        updateThemeIcon(true);
+// Функция для обновления иконки темы
+function updateThemeIcon(isDarkTheme) {
+    const moonIcon = document.querySelector('.moon-icon');
+    const sunIcon = document.querySelector('.sun-icon');
+
+    if (isDarkTheme) {
+        moonIcon.style.display = 'none';
+        sunIcon.style.display = 'block';
     } else {
-        document.body.classList.remove('dark-theme');
-        updateThemeIcon(false);
+        moonIcon.style.display = 'block';
+        sunIcon.style.display = 'none';
     }
+}
+
+// Применение сохраненной темы при загрузке страницы
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'dark') {
+    document.body.classList.add('dark-theme');
+    updateThemeIcon(true);
+} else {
+    document.body.classList.remove('dark-theme');
+    updateThemeIcon(false);
+}
+
 
     // Загрузка заказов
     async function loadOrders() {
