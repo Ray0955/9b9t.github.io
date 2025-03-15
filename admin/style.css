@@ -704,6 +704,11 @@ body.dark-theme .add-product-button:hover,
 body.dark-theme .refresh-button:hover {
     background-color: #357abd;
 }
+/* Стиль для недоступных вкладок */
+.disabled-button {
+    cursor: not-allowed; /* Запретный знак */
+    opacity: 0.3; /* Немного прозрачности для визуального выделения */
+}
 /* Стиль для кнопки блокировки модератора */
 .block-moderator-button {
     background-color: #ff4d4d;
@@ -719,4 +724,3 @@ body.dark-theme .refresh-button:hover {
 .block-moderator-button:hover {
     background-color: #ff1a1a;
 }
-
