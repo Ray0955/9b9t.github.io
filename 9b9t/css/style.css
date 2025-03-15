@@ -587,6 +587,10 @@ body, html {
     --small-font-size: .875rem;
 }
 
+.product.card {
+    position: relative; /* Для позиционирования new-badge */
+    overflow: visible; /* Чтобы значок не обрезался */
+}
 /* Стили для карточек товаров */
 .product.card {
     width: 280px;
@@ -598,6 +602,36 @@ body, html {
     overflow: hidden;
     position: relative;
     transition: transform 0.3s ease;
+}
+
+/* Стиль для отметки "Новый товар" */
+.new-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #ff4757; /* Красный цвет фона */
+    color: white; /* Белый текст */ 
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase; /* Текст в верхнем регистре */
+    z-index: 2; /* Чтобы значок был поверх других элементов */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Тень для выделения */
+    animation: pulse 1.5s infinite; /* Анимация пульсации */
+}
+
+/* Анимация пульсации для значка "Новый" */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 .card__img {
