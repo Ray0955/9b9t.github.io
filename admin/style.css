@@ -704,4 +704,19 @@ body.dark-theme .add-product-button:hover,
 body.dark-theme .refresh-button:hover {
     background-color: #357abd;
 }
+/* Стиль для кнопки блокировки модератора */
+.block-moderator-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+.block-moderator-button:hover {
+    background-color: #ff1a1a;
+}
 
