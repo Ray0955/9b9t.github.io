@@ -1,29 +1,19 @@
-/* Подключаем шрифт */
-@font-face {
-    font-family: 'Klukva';
-    src: url('fonts/Klukva.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-}
-
 /* Основные стили */
 body, html {
     margin: 0;
     padding: 0;
     height: 100%;
     overflow: auto;
-    font-family: 'Klukva', sans-serif; /* Используем новый шрифт */
+    font-family: 'Minecraft', sans-serif;
     font-size: 1rem;
+    font-weight: normal; 
 }
 
-/* Пример применения шрифта к заголовкам */
-h1, h2, h3 {
-    font-family: 'Klukva', sans-serif;
-}
-
-/* Пример применения шрифта к кнопкам */
-button {
-    font-family: 'Klukva', sans-serif;
+@font-face {
+    font-family: 'Minecraft';
+    src: url('fonts/Lilita One Regular.ttf') format('truetype'); 
+    font-weight: normal; 
+    font-style: normal;
 }
 
 
