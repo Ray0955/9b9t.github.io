@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const deliveryDescription = document.getElementById('delivery-description');
     const coordinatesInput = document.getElementById('coordinates-input');
     const xCoordInput = document.getElementById('x-coord');
-    const yCoordInput = document.getElementById('y-coord');
     const zCoordInput = document.getElementById('z-coord');
 
     // Загрузка выбранного языка из localStorage
@@ -48,14 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
             e.target.value = value; // Устанавливаем скорректированное значение
             if (deliverySelect.value === 'specific') updateOrderTotalWithDelivery();
         });
-    });
-
-    // Ограничение ввода координаты Y (только от 20 до 250)
-    yCoordInput.addEventListener('blur', (e) => {
-        let value = parseInt(e.target.value) || 20; // По умолчанию 20, если поле пустое
-        if (value > 250) value = 250;
-        if (value < 20) value = 20;
-        e.target.value = value; // Устанавливаем скорректированное значение только после потери фокуса
     });
 
     // Функция для обновления описания способа доставки
@@ -169,9 +160,30 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Функция для проверки, заполнены ли координаты X и Z
+    function validateCoordinates() {
+    const x = xCoordInput.value.trim();
+    const z = zCoordInput.value.trim();
+
+    // Проверка, что поля не пустые
+    if (x === "" || z === "") {
+        alert('Пожалуйста, заполните координаты X и Z.'); // Показываем alert, если поля пустые
+        return false;
+    }
+
+    return true;
+    }   
+
     payButtons.forEach(button => {
         button.addEventListener('click', async (e) => {
             e.preventDefault();
+
+            // Проверяем, заполнены ли координаты
+            if (deliverySelect.value === 'specific' && !validateCoordinates()) {
+                alert('Пожалуйста, заполните координаты X и Z.');
+                return;
+            }
+
             if (contactForm.checkValidity()) {
                 await sendOrder();
             } else {
@@ -183,7 +195,6 @@ document.addEventListener('DOMContentLoaded', () => {
     async function sendOrder() {
         const orderId = crypto.randomUUID(); // Генерация UUID
 
-        // Проверяем существование элементов перед доступом к их значению
         const getValue = (id) => {
             const element = document.getElementById(id);
             if (!element) {
@@ -199,16 +210,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const email = getValue('email');
         const deliveryMethod = deliverySelect.value;
 
-        // Получаем координаты
+        // Получаем координаты X и Z
         const x = parseInt(getValue('x-coord')) || 0;
-        const y = parseInt(getValue('y-coord')) || 0;
         const z = parseInt(getValue('z-coord')) || 0;
-
-    // Проверяем координату Y 
-    if (deliveryMethod !== 'random' && (y < 20 || y > 250)) {
-        alert('Координата Y должна быть в диапазоне от 20 до 250!');
-        return;
-    }
 
         // Рассчитываем дополнительную стоимость доставки
         const deliveryFee = calculateDeliveryFee(x, z);
@@ -222,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
             orders: {
                 [orderId]: {
                     info: { formattedISO, username, discord, email, deliveryMethod },
-                    coordinates: { x, y, z },
+                    coordinates: { x, z },
                     totalPrice: finalTotalPrice,
                     deliveryFee,
                     products: getCartItems().reduce((acc, product) => {
