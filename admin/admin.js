@@ -223,71 +223,80 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Отображение заказов
-    async function renderOrders(orders) {
-        const tbody = ordersTable.querySelector('tbody');
-        tbody.innerHTML = '';
+// Отображение заказов
+async function renderOrders(orders) {
+    const tbody = ordersTable.querySelector('tbody');
+    tbody.innerHTML = '';
 
-        for (const orderId in orders) {
-            const order = orders[orderId];
-            const products = order.products ? Object.entries(order.products) : [];
+    const role = localStorage.getItem('role'); // Получаем роль пользователя
 
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${order.info.username}</td>
-                <td>${order.info.discord}</td>
-                <td>${order.info.email}</td>
-                <td>
-                    <div class="order-products">
-                        <button class="toggle-products">Показать товары</button>
-                        <ul class="products-list" style="display: none;">
-                            ${products.map(([productId, quantity]) => `
-                                <li id="product-${productId}">Товар загружается...</li>
-                            `).join('')}
-                        </ul>
-                    </div>
-                </td>
-                <td>$${order.totalPrice.toFixed(2)}</td>
-                <td>${order.info.deliveryMethod}</td>
-                <td>${order.coordinates ? `X: ${order.coordinates.x}<br>Y: ${order.coordinates.y}<br>Z: ${order.coordinates.z}` : 'Нет данных'}</td>
-                <td>${order.info.formattedISO || 'Нет данных'}</td>
-                <td>
-                    <a href="/9b9t.github.io/9b9t/chat.html?orderId=${orderId}" class="chat-button">Чат</a>
-                </td>
-                <td>
-                    <button class="delete-order-button" data-order-id="${orderId}">Удалить заказ</button>
-                </td>
-            `;
-            tbody.appendChild(row);
+    for (const orderId in orders) {
+        const order = orders[orderId];
+        const products = order.products ? Object.entries(order.products) : [];
 
-            // Загружаем данные о товарах
-            for (const [productId, quantity] of products) {
-                fetchProductById(productId).then(product => {
-                    const productElement = document.getElementById(`product-${productId}`);
-                    if (product) {
-                        productElement.innerHTML = `
-                            <img src="${product.imageUrl}" width="50" alt="${product.title?.RU || 'Нет названия'}">
-                            ${product.title?.RU || product.title?.EN || 'Нет названия'} 
-                            x${quantity} ($${product.price || 0})
-                        `;
-                    } else {
-                        productElement.innerText = `Товар с ID ${productId} не найден`;
-                    }
-                }).catch(error => {
-                    console.error(`Ошибка загрузки товара ${productId}:`, error);
-                });
-            }
-        }
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${order.info.username}</td>
+            <td>${order.info.discord}</td>
+            <td>${order.info.email}</td>
+            <td>
+                <div class="order-products">
+                    <button class="toggle-products">Показать товары</button>
+                    <ul class="products-list" style="display: none;">
+                        ${products.map(([productId, quantity]) => `
+                            <li id="product-${productId}">Товар загружается...</li>
+                        `).join('')}
+                    </ul>
+                </div>
+            </td>
+            <td>$${order.totalPrice.toFixed(2)}</td>
+            <td>${order.info.deliveryMethod}</td>
+            <td>${order.coordinates ? `X: ${order.coordinates.x}<br>Y: ${order.coordinates.y}<br>Z: ${order.coordinates.z}` : 'Нет данных'}</td>
+            <td>${order.info.formattedISO || 'Нет данных'}</td>
+            <td>
+                <a href="/9b9t.github.io/9b9t/chat.html?orderId=${orderId}" class="chat-button">Чат</a>
+            </td>
+            <td>
+                <button class="delete-order-button ${role === 'moderator' ? 'disabled-button' : ''}" 
+                        data-order-id="${orderId}" 
+                        ${role === 'moderator' ? 'disabled' : ''}
+                        title="${role === 'moderator' ? 'Доступно для Администрации' : ''}">
+                    Удалить заказ
+                </button>
+            </td>
+        `;
+        tbody.appendChild(row);
 
-        // Добавляем обработчики событий (скрытие/показ товаров)
-        document.querySelectorAll('.toggle-products').forEach(button => {
-            button.addEventListener('click', () => {
-                const productsList = button.nextElementSibling;
-                productsList.style.display = productsList.style.display === 'none' ? 'block' : 'none';
-                button.textContent = productsList.style.display === 'none' ? 'Показать товары' : 'Скрыть товары';
+        // Загружаем данные о товарах
+        for (const [productId, quantity] of products) {
+            fetchProductById(productId).then(product => {
+                const productElement = document.getElementById(`product-${productId}`);
+                if (product) {
+                    productElement.innerHTML = `
+                        <img src="${product.imageUrl}" width="50" alt="${product.title?.RU || 'Нет названия'}">
+                        ${product.title?.RU || product.title?.EN || 'Нет названия'} 
+                        x${quantity} ($${product.price || 0})
+                    `;
+                } else {
+                    productElement.innerText = `Товар с ID ${productId} не найден`;
+                }
+            }).catch(error => {
+                console.error(`Ошибка загрузки товара ${productId}:`, error);
             });
-        });
+        }
+    }
 
-        // Добавляем обработчики для удаления заказов
+    // Добавляем обработчики событий (скрытие/показ товаров)
+    document.querySelectorAll('.toggle-products').forEach(button => {
+        button.addEventListener('click', () => {
+            const productsList = button.nextElementSibling;
+            productsList.style.display = productsList.style.display === 'none' ? 'block' : 'none';
+            button.textContent = productsList.style.display === 'none' ? 'Показать товары' : 'Скрыть товары';
+        });
+    });
+
+    // Добавляем обработчики для удаления заказов (только для администратора)
+    if (role === 'admin') {
         document.querySelectorAll('.delete-order-button').forEach(button => {
             button.addEventListener('click', async () => {
                 const orderId = button.getAttribute('data-order-id');
@@ -295,7 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-
+}
     // Удаление заказа
     async function deleteOrder(orderId) {
         loader.style.display = 'flex';
