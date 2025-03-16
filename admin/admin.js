@@ -28,18 +28,18 @@ document.addEventListener('DOMContentLoaded', () => {
             role: 'moderator',
         },
     ];
-// Функция для хеширования текста с использованием SHA-256
-async function hashSHA256(text) {
+    // Функция для хеширования текста с использованием SHA-256
+    async function hashSHA256(text) {
     const encoder = new TextEncoder();
     const data = encoder.encode(text);
     const hashBuffer = await crypto.subtle.digest('SHA-256', data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
     return hashHex;
-}
+    }
 
-// Обработчик авторизации
-loginForm.addEventListener('submit', async (e) => {
+    // Обработчик авторизации
+    loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     loader.style.display = 'flex';
 
@@ -90,10 +90,10 @@ loginForm.addEventListener('submit', async (e) => {
     } finally {
         loader.style.display = 'none';
     }
-});
+    });
 
-// Функция для настройки интерфейса в зависимости от роли
-function configureUI(role) {
+    // Функция для настройки интерфейса в зависимости от роли
+    function configureUI(role) {
     const addProductButton = document.getElementById('add-product-button');
     const refreshButton = document.getElementById('refresh-button');
     const tabButtons = document.querySelectorAll('.tab-button');
@@ -140,10 +140,10 @@ function configureUI(role) {
             button.classList.remove('disabled-button');
         });
     }
-}
+    }
 
-// Добавляем кнопку блокировки модератора для администратора
-function addModeratorBlockButton() {
+    // Добавляем кнопку блокировки модератора для администратора
+    function addModeratorBlockButton() {
     const adminHeader = document.querySelector('.admin-header');
     if (!adminHeader) return;
 
@@ -172,18 +172,18 @@ function addModeratorBlockButton() {
 
     // Добавляем кнопку в интерфейс
     adminHeader.appendChild(blockButton);
-}
+    }
 
-// Переключение темы (день/ночь)
-themeToggleButton.addEventListener('click', () => {
+    // Переключение темы (день/ночь)
+    themeToggleButton.addEventListener('click', () => {
     document.body.classList.toggle('dark-theme');
     const isDarkTheme = document.body.classList.contains('dark-theme');
     localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
     updateThemeIcon(isDarkTheme);
-});
+    });
 
-// Функция для обновления иконки темы
-function updateThemeIcon(isDarkTheme) {
+    // Функция для обновления иконки темы
+    function updateThemeIcon(isDarkTheme) {
     const moonIcon = document.querySelector('.moon-icon');
     const sunIcon = document.querySelector('.sun-icon');
 
@@ -194,17 +194,18 @@ function updateThemeIcon(isDarkTheme) {
         moonIcon.style.display = 'block';
         sunIcon.style.display = 'none';
     }
-}
+    }
 
-// Применение сохраненной темы при загрузке страницы
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme === 'dark') {
+    // Применение сохраненной темы при загрузке страницы
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
     document.body.classList.add('dark-theme');
     updateThemeIcon(true);
-} else {
+    } else {
     document.body.classList.remove('dark-theme');
     updateThemeIcon(false);
-}
+    }    
+
 
     // Загрузка товаров
     async function loadProducts() {
