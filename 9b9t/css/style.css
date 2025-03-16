@@ -1,18 +1,29 @@
+/* Подключаем шрифт */
+@font-face {
+    font-family: 'Klukva';
+    src: url('fonts/Klukva.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 /* Основные стили */
 body, html {
     margin: 0;
     padding: 0;
     height: 100%;
     overflow: auto;
-    font-family: 'Klukva', sans-serif;
+    font-family: 'Klukva', sans-serif; /* Используем новый шрифт */
     font-size: 1rem;
 }
 
-@font-face {
-    font-family: 'Klukva';
-    src: url('fonts/Klukva.ttf') format('truetype'); 
-    font-weight: normal;
-    font-style: normal;
+/* Пример применения шрифта к заголовкам */
+h1, h2, h3 {
+    font-family: 'Klukva', sans-serif;
+}
+
+/* Пример применения шрифта к кнопкам */
+button {
+    font-family: 'Klukva', sans-serif;
 }
 
 
@@ -269,7 +280,7 @@ body, html {
     align-items: center;
 }
 
-.cart-items .quantity-controls button {
+.cart-items .quantity-controls  {
     background: #28a745;
     color: #fff;
     border: none;
@@ -279,7 +290,7 @@ body, html {
     margin: 0 5px;
 }
 
-.cart-items .quantity-controls button:hover {
+.cart-items .quantity-controls :hover {
     background: #218838;
 }
 
@@ -296,7 +307,7 @@ body, html {
     margin-top: 20px;
 }
 
-.checkout-button {
+.checkout- {
     background: linear-gradient(90deg, #28a745, #17a2b8, #28a745); /* Градиентный фон */
     color: #fff;
     border: none;
@@ -311,13 +322,13 @@ body, html {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень для объема */
 }
 
-.checkout-button:hover {
+.checkout-:hover {
     background-position: -100% 0; /* Анимация градиента */
     transform: scale(1.05); /* Увеличение кнопки при наведении */
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Увеличенная тень при наведении */
 }
 
-.checkout-button:active {
+.checkout-:active {
     transform: scale(0.95); /* Эффект нажатия */
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1); /* Уменьшенная тень при нажатии */
 }
@@ -334,7 +345,7 @@ body, html {
     }
 }
 
-.checkout-button {
+.checkout- {
     animation: gradientShift 3s infinite ease-in-out; /* Бесконечная анимация градиента */
 }
 
@@ -446,7 +457,7 @@ body, html {
     color: #ffffff;
 }
 
-.pay-button {
+.pay- {
     background: #28a745;
     color: #fff;
     border: none;
@@ -459,7 +470,7 @@ body, html {
     transition: background 0.3s ease;
 }
 
-.pay-button:hover {
+.pay-:hover {
     background: #218838;
 }
 
@@ -484,7 +495,7 @@ body, html {
 }
 
 /* Стили для новой кнопки с эффектом свечения */
-.glow-button {
+.glow- {
     --button-background: #09041e;
     --button-color: #fff;
     --button-shadow: rgba(33, 4, 104, 0.2);
