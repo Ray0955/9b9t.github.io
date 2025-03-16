@@ -6,7 +6,6 @@ body, html {
     overflow: auto;
     font-family: 'Minecraft', sans-serif;
     font-size: 1rem;
-    font-weight: bold;
 }
 
 @font-face {
