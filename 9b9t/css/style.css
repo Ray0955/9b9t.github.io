@@ -8,12 +8,7 @@ body, html {
     font-size: 1rem;
 }
 
-@font-face {
-    font-family: 'Minecraft';
-    src: url('fonts/Lilita One Regular.ttf') format('truetype'); /* Укажите реальный путь */
-    font-weight: normal;
-    font-style: normal;
-}
+
 
 
 .background {
