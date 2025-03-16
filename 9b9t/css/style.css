@@ -228,6 +228,7 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
+    color: #ffffff;
 }
 
 .cart-content, .checkout-content {
@@ -368,7 +369,7 @@ body, html {
 
 .delivery-description {
     margin-top: 10px;
-    color: #555;
+    color: #ffffff;
     font-size: 14px;
 }
 
@@ -388,14 +389,14 @@ body, html {
 .contact-info h2 {
     margin-bottom: 20px;
     font-size: 24px;
-    color: #333;
+    color: #ffffff;
 }
 
 .contact-info label {
     display: block;
     margin-top: 10px;
     font-weight: bold;
-    color: #555;
+    color: #ffffff;
 }
 
 .contact-info input {
@@ -410,7 +411,7 @@ body, html {
 .contact-notice {
     margin-top: 20px;
     font-size: 14px;
-    color: #666;
+    color: #ffffff;
 }
 
 .order-summary {
@@ -442,7 +443,7 @@ body, html {
     font-size: 20px;
     font-weight: bold;
     margin-top: 20px;
-    color: #333;
+    color: #ffffff;
 }
 
 .pay-button {
