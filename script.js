@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         server.addEventListener('click', () => {
             const selectedServer = server.getAttribute('data-server');
             if (selectedServer === '2b2t') {
-                window.location.href = '2b2t/index.html';
+                window.location.href = '2b2t/2b2t.html';
             } else if (selectedServer === '9b9t') {
                 window.location.href = '9b9t/index.html';
             } else {
