@@ -955,3 +955,54 @@ body, html {
 .filter-icon:hover {
     transform: scale(1.1); /* Увеличение при наведении */
 }
+
+/* для футтера */
+html, body {
+    height: 100%; /* Занимаем всю высоту экрана */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Основной контент */
+.main-content {
+    flex: 1; /* Растягиваем контент на всю доступную высоту */
+    padding-bottom: 20px; /* Отступ снизу, чтобы футер не наезжал на контент */
+}
+
+/* Стили для футера */
+.footer {
+
+    color: #ffffff; /* Белый текст */
+    padding: 20px;
+    text-align: center;
+
+    flex-shrink: 0; /* Футер не сжимается */
+    margin-top: auto; /* Прижимаем футер к низу */
+}
+
+/* Стили для ссылок в футере */
+.footer a {
+    color: #ffffff; /* Белый цвет ссылок */
+    text-decoration: none; /* Убираем подчеркивание */
+    transition: color 0.7s ease; /* Плавное изменение цвета */
+}
+
+.footer a:hover {
+    color: #009efa; /* Цвет ссылок при наведении */
+}
+
+/* Стили для списка в футере */
+.footer ul {
+    list-style: none; /* Убираем маркеры списка */
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 100px; /* Расстояние между элементами списка */
+}
+
+.footer ul li {
+    display: inline-block;
+}
