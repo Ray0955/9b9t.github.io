@@ -29,14 +29,19 @@ if (!uuid || !uuidPattern.test(uuid)) {
                 return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             }
             
-            // В функции loadMessages:
-            chatMessages.innerHTML = Object.entries(messages)
-                .map(([timestamp, message]) => `
-                    <div class="message ${message.author === 'Admin' ? 'admin' : 'user'}">
-                        <strong>${message.author}</strong> (${formatTimestamp(timestamp)}): ${message.message}
-                    </div>
-                `)
-                .join('');
+     // В функции loadMessages:
+       chatMessages.innerHTML = Object.entries(messages)
+    .map(([timestamp, message]) => {
+        // Определяем класс автора сообщения
+        const authorClass = message.author === 'Admin' ? 'admin' : 
+                           message.author === 'Moderator' ? 'moderator' : 'user';
+        return `
+            <div class="message ${authorClass}">
+                <strong>${message.author}</strong> (${formatTimestamp(timestamp)}): ${message.message}
+            </div>
+        `;
+    })
+    .join('')
             chatMessages.scrollTop = chatMessages.scrollHeight; // Автопрокрутка
         } catch (error) {
             console.error('Ошибка:', error);
