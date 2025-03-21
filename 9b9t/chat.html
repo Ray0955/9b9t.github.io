@@ -23,16 +23,21 @@
             role = 'User'; // Если роль не установлена, по умолчанию "User"
             localStorage.setItem('role', role);
         }
-
-        // Отображаем имя "Admin", если роль "Admin"
-        if (role === 'Admin') {
-            const adminTag = document.createElement('span');
-            adminTag.textContent = 'Admin';
-            adminTag.style.color = 'red'; // Красный цвет для имени "Admin"
-            adminTag.style.fontWeight = 'bold';
-            adminTag.style.marginLeft = '10px';
-            document.getElementById('admin-tag').appendChild(adminTag);
-        }
+        
+//  "Admin"
+const adminTagElement = document.getElementById('admin-tag');
+if (role === 'Admin') {
+    const adminTag = document.createElement('span');
+    adminTag.textContent = 'Admin';
+    adminTag.classList.add('admin-tag'); 
+    adminTagElement.appendChild(adminTag);
+} else if (role === 'Moderator') {
+    // "Moderator"
+    const moderatorTag = document.createElement('span');
+    moderatorTag.textContent = 'Moderator';
+    moderatorTag.classList.add('moderator-tag');
+    adminTagElement.appendChild(moderatorTag); 
+}
     </script>
     <script src="js/chat.js"></script>
 </body>
