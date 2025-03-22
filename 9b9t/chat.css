@@ -32,6 +32,10 @@ body {
 .message.admin {
     background-color: #2196f3;
 }
+.input-container {
+    display: flex; 
+    gap: 10px; 
+}
 #chat-input {
     width: calc(100% - 90px);
     padding: 8px;
@@ -68,11 +72,3 @@ body {
     border-radius: 4px;
 }
 
-.message.admin {
-    background-color: #2196f3; /* Синий для сообщений администратора */
-}
-
-/* Стили для имени "Admin" */
-.message.admin strong {
-    color: red; /* Красный цвет для имени "Admin" */
-}
