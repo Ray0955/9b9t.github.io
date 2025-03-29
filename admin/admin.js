@@ -309,7 +309,7 @@ async function renderOrders(orders) {
     async function deleteOrder(orderId) {
         loader.style.display = 'flex';
         try {
-            const response = await fetch(`https://9b9t.shop:8443/api/orders/${orderId}`, {
+            const response = await fetch(`https://9b9t.shop:8443/api/{server}/orders/${orderId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -393,7 +393,7 @@ async function renderOrders(orders) {
     async function deleteProduct(productId) {
         loader.style.display = "flex";
         try {
-            const response = await fetch(`https://9b9t.shop:8443/api/products/${productId}`, {
+            const response = await fetch(`https://9b9t.shop:8443/api/{server}/products/${productId}`, {
                 method: 'DELETE',
             });
 
@@ -412,7 +412,7 @@ async function renderOrders(orders) {
     async function openEditModal(productId) {
         loader.style.display = 'flex';
         try {
-            const response = await fetch(`https://9b9t.shop:8443/api/products/${productId}`);
+            const response = await fetch(`https://9b9t.shop:8443/api/{server}/products/${productId}`);
             if (!response.ok) throw new Error('Ошибка загрузки данных товара');
 
             const product = await response.json();
@@ -474,7 +474,7 @@ async function renderOrders(orders) {
         };
 
         try {
-            const response = await fetch(`https://9b9t.shop:8443/api/products/${productId}`, {
+            const response = await fetch(`https://9b9t.shop:8443/api/{server}/products/${productId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -529,7 +529,7 @@ async function renderOrders(orders) {
         };
 
         try {
-            const response = await fetch('https://9b9t.shop:8443/api/products', {
+            const response = await fetch('https://9b9t.shop:8443/api/{server}/products', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -603,7 +603,7 @@ async function renderOrders(orders) {
     async function loadAnalytics() {
         loader.style.display = 'flex';
         try {
-            const response = await fetch('https://9b9t.shop:8443/api/orders');
+            const response = await fetch('https://9b9t.shop:8443/api/{server}/orders');
             if (!response.ok) throw new Error('Ошибка загрузки данных');
 
             const orders = await response.json();
@@ -798,7 +798,7 @@ async function renderOrders(orders) {
     // Функция для получения товара по его ID
     async function fetchProductById(productId) {
         try {
-            const response = await fetch(`https://9b9t.shop:8443/api/products/${productId}`);
+            const response = await fetch(`https://9b9t.shop:8443/api/{server}/products/${productId}`);
             if (!response.ok) throw new Error(`Ошибка загрузки товара с ID: ${productId}`);
 
             return await response.json();
