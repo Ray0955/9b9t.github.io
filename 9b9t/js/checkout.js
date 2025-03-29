@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Sending order data:", JSON.stringify(orderData, null, 2)); // Логируем данные
 
         try {
-            const response = await fetch('https://9b9t.shop:8443/api/orders', {
+            const response = await fetch('https://9b9t.shop:8443/api/{server}/orders', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(orderData)
