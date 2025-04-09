@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Загрузка товаров с API
-    fetch("https://9b9t.shop:8443/api/products")
+    fetch("https://9b9t.shop:8443/api/9b9t/products")
         .then(response => response.json())
         .then(products => {
             if (!products || Object.keys(products).length === 0) {
