@@ -16,7 +16,7 @@ if (!uuid || !uuidPattern.test(uuid)) {
     // Функция для загрузки сообщений
     async function loadMessages() {
         try {
-            const response = await fetch(`https://9b9t.shop:8443/api/{server}/orders/${uuid}`);
+            const response = await fetch(`https://9b9t.shop:8443/api/9b9t/orders/${uuid}`);
             if (!response.ok) {
                 throw new Error('Ошибка загрузки сообщений');
             }
@@ -54,7 +54,7 @@ async function sendMessage() {
     if (text) {
         try {
             // Сначала загружаем текущий заказ
-            const responseGet = await fetch(`https://9b9t.shop:8443/api/{server}/orders/${uuid}`);
+            const responseGet = await fetch(`https://9b9t.shop:8443/api/9b9t/orders/${uuid}`);
             if (!responseGet.ok) {
                 throw new Error('Ошибка загрузки заказа');
             }
@@ -71,7 +71,7 @@ async function sendMessage() {
             };
 
             // Отправляем обновленный заказ
-            const responsePut = await fetch(`https://9b9t.shop:8443/api/{server}/orders/${uuid}`, {
+            const responsePut = await fetch(`https://9b9t.shop:8443/api/9b9t/orders/${uuid}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
