@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оформление заказа</title>
+    <link rel="stylesheet" href="/9b9t/css/style.css">
+    <link rel="icon" type="image/png" href="images/ic.png">
+    <script src="https://js.stripe.com/v3/"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Стили для 3D фона */
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            width: 100%;
+            height: 100%;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        #bg-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            pointer-events: none;
+        }
+
+        /* Основные стили контента */
+        .main-container {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .checkout-container {
+            flex: 1;
+            padding-bottom: 150px; /* Отступ для футера */
+        }
+
+        .pay-button.visible {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Стили для маленькой иконки Discord */
+        .discord-icon-bottom {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            z-index: 100;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #5865F2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .discord-icon-bottom:hover {
+            transform: scale(1.1);
+            background-color: #4752C4;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .discord-icon-bottom i {
+            color: white;
+            font-size: 20px;
+        }
+
+        /* Стили для компактного футера */
+        .compact-footer {
+            background-color: rgba(34, 34, 34, 0.8);
+            color: white;
+            padding: 10px 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 90;
+            backdrop-filter: blur(5px);
+        }
+
+        .footer-links {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px 30px;
+            padding: 0 20px;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+            white-space: nowrap;
+        }
+
+        .footer-links a:hover {
+            color: #ff6600;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            margin-top: 10px;
+            color: #777;
+            font-size: 13px;
+        }
+
+        /* Скрываем неактивные языки */
+        .footer-links span,
+        .footer-copyright span {
+            display: none;
+        }
+        .footer-links span[data-lang="ru"],
+        .footer-copyright span[data-lang="ru"] {
+            display: inline;
+        }
+
+        /* Адаптация существующих стилей */
+        .checkout-content {
+            padding-bottom: 60px;
+        }
+
+        .pay-button {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<!-- 3D фон в iframe -->
+<div class="background">
+    <iframe id="bg-iframe" src="/2b2t/dd"></iframe>
+</div>
+
+<!-- Основной контейнер -->
+<div class="main-container">
+    <!-- Основной контент страницы -->
+    <div class="header">
+        <div class="back-icon" onclick="window.location.href='/9b9t/cart'">
+            <i class="fas fa-arrow-left"></i>
+        </div>
+        <div class="language-selector">
+            <select id="language-select">
+                <option value="ru">Русский</option>
+                <option value="uk">Українська</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="checkout-container">
+        <div class="checkout-content">
+            <h1 data-lang="ru">Оформление заказа</h1>
+            <h1 data-lang="uk">Оформлення замовлення</h1>
+            <h1 data-lang="en">Checkout</h1>
+
+            <div class="min-order-warning" id="min-order-warning">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p data-lang="ru">Минимальная общая цена $2. Добавьте еще несколько товаров в корзину и возвращайтесь!</p>
+                <p data-lang="uk">Мінімальна загальна ціна $2. Додайте ще кілька товарів у кошик і повертайтесь!</p>
+                <p data-lang="en">Minimum total price is $2. Add more items to your cart and come back!</p>
+            </div>
+
+            <div class="checkout-main" id="checkout-main">
+                <div class="contact-info">
+                    <h2 data-lang="ru">Контактная информация</h2>
+                    <h2 data-lang="uk">Контактна інформація</h2>
+                    <h2 data-lang="en">Contact Information</h2>
+
+                    <form id="contact-form">
+                        <label for="username" data-lang="ru">Имя Пользователя:</label>
+                        <label for="username" data-lang="uk">Ім'я Користувача:</label>
+                        <label for="username" data-lang="en">Username:</label>
+                        <input type="text" id="username" name="username" required>
+
+                        <label for="discord" data-lang="ru">Ник Discord:</label>
+                        <label for="discord" data-lang="uk">Нік Discord:</label>
+                        <label for="discord" data-lang="en">Discord Nickname:</label>
+                        <input type="text" id="discord" name="discord" required>
+
+                        <label for="email" data-lang="ru">Электронная почта:</label>
+                        <label for="email" data-lang="uk">Електронна пошта:</label>
+                        <label for="email" data-lang="en">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                    </form>
+
+                    <div class="contact-notice">
+                        <p data-lang="ru">Нам нужна некоторая информация, чтобы мы могли уведомить вас о завершении заказа и связаться с вами в случае возникновения каких-либо проблем.</p>
+                        <p data-lang="uk">Нам потрібна деяка інформація, щоб ми могли повідомити вас про завершення замовлення та зв'язатися з вами у разі виникнення будь-яких проблем.</p>
+                        <p data-lang="en">We need some information so we can notify you when your order is complete and contact you if there are any issues.</p>
+                    </div>
+                </div>
+
+                <div class="delivery-method">
+                    <h2 data-lang="ru">Способ доставки</h2>
+                    <h2 data-lang="uk">Спосіб доставки</h2>
+                    <h2 data-lang="en">Delivery Method</h2>
+
+                    <select id="delivery-select">
+                        <option value="random" data-lang="ru">Рандомный</option>
+                        <option value="random" data-lang="uk">Випадковий</option>
+                        <option value="random" data-lang="en">Random</option>
+
+                        <option value="specific" data-lang="ru">Указанным</option>
+                        <option value="specific" data-lang="uk">Вказаний</option>
+                        <option value="specific" data-lang="en">Specific</option>
+                    </select>
+
+                    <div class="delivery-description" id="delivery-description">
+                        <p data-lang="ru" data-delivery="random">Мы доставим ваши вещи в случайное место недалеко от места возрождения, а затем отправим вам координаты по электронной почте.</p>
+                        <p data-lang="uk" data-delivery="random">Ми доставимо ваші речі у випадкове місце неподалік від місця відродження, а потім надішлемо вам координати електронною поштою.</p>
+                        <p data-lang="en" data-delivery="random">We will deliver your items to a random location near the spawn point and then send you the coordinates via email.</p>
+
+                        <p data-lang="ru" data-delivery="specific">Мы доставим ваши товары по указанным вами координатам, а затем отправим вам электронное письмо, когда закончим. Мы доставляем только по координатам надземного мира, и плата увеличивается по мере удаления ваших координат от спауна.</p>
+                        <p data-lang="uk" data-delivery="specific">Ми доставимо ваші товари за вказаними вами координатами, а потім надішлемо вам електронного листа, коли закінчимо. Ми доставляємо лише за координатами надземного світу, і плата збільшується в міру віддалення ваших координат від спауну.</p>
+                        <p data-lang="en" data-delivery="specific">We will deliver your items to the coordinates you specify and then send you an email when we're done. We only deliver to overworld coordinates, and the fee increases as your coordinates move further from spawn.</p>
+                    </div>
+                    <div class="promo-code-container">
+                        <div class="promo-input-wrapper">
+                            <input type="text" id="promo-code-input"
+                                   placeholder="Введите промокод (необязательно)" data-lang="ru"
+                                   class="promo-code-input">
+                            <input type="text" id="promo-code-input"
+                                   placeholder="Введіть промокод (необов'язково)" data-lang="uk"
+                                   class="promo-code-input">
+                            <input type="text" id="promo-code-input"
+                                   placeholder="Enter promo code (optional)" data-lang="en"
+                                   class="promo-code-input">
+                            <button id="apply-promo-btn" data-lang="ru" class="promo-code-btn">Применить</button>
+                            <button id="apply-promo-btn" data-lang="uk" class="promo-code-btn">Застосувати</button>
+                            <button id="apply-promo-btn" data-lang="en" class="promo-code-btn">Apply</button>
+                        </div>
+                        <p id="promo-message" class="promo-message"></p>
+                    </div>
+
+                    <div class="coordinates-input" id="coordinates-input" style="display: none;">
+                        <label for="x-coord" data-lang="ru">Координата X:</label>
+                        <label for="x-coord" data-lang="uk">Координата X:</label>
+                        <label for="x-coord" data-lang="en">X Coordinate:</label>
+                        <input type="number" id="x-coord" name="x-coord" step="1" required>
+
+                        <label for="z-coord" data-lang="ru">Координата Z:</label>
+                        <label for="z-coord" data-lang="uk">Координата Z:</label>
+                        <label for="z-coord" data-lang="en">Z Coordinate:</label>
+                        <input type="number" id="z-coord" name="z-coord" step="1" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-summary">
+                <h2 data-lang="ru">Ваш заказ:</h2>
+                <h2 data-lang="uk">Ваше замовлення:</h2>
+                <h2 data-lang="en">Your Order:</h2>
+                <ul class="order-items"></ul>
+                <p class="discount" data-lang="ru">Промокод: -$<span id="discount-amount">0.00</span></p>
+                <p class="discount" data-lang="uk">Промокод: -$<span id="discount-amount">0.00</span></p>
+                <p class="discount" data-lang="en">Promo code: -$<span id="discount-amount">0.00</span></p>
+                <p class="order-total" data-lang="ru">Общая сумма: $<span id="order-total">0</span></p>
+                <p class="order-total" data-lang="uk">Загальна сума: $<span id="order-total">0</span></p>
+                <p class="order-total" data-lang="en">Total: $<span id="order-total">0</span></p>
+                <p class="delivery-fee" data-lang="ru">Доставка: $<span id="delivery-fee">0.00</span></p>
+                <p class="delivery-fee" data-lang="uk">Доставка: $<span id="delivery-fee">0.00</span></p>
+                <p class="delivery-fee" data-lang="en">Delivery Fee: $<span id="delivery-fee">0.00</span></p>
+            </div>
+
+            <button class="pay-button" id="pay-button" data-lang="ru" style="display: none;">Оплатить</button>
+            <button class="pay-button" id="pay-button" data-lang="uk" style="display: none;">Оплатити</button>
+            <button class="pay-button" id="pay-button" data-lang="en" style="display: none;">Pay</button>
+        </div>
+    </div>
+
+    <!-- Компактный футер с многоязычной поддержкой -->
+    <footer class="compact-footer">
+        <div class="footer-links">
+            <!-- главная -->
+            <a href="/">
+                <span data-lang="ru">Главная</span>
+                <span data-lang="uk">Головна</span>
+                <span data-lang="en">Home</span>
+            </a>
+
+            <!-- Контакты -->
+            <a href="/info/contact">
+                <span data-lang="ru">Контакты</span>
+                <span data-lang="uk">Контакти</span>
+                <span data-lang="en">Contacts</span>
+            </a>
+
+            <!-- О нас -->
+            <a href="/info/about">
+                <span data-lang="ru">О нас</span>
+                <span data-lang="uk">Про нас</span>
+                <span data-lang="en">About us</span>
+            </a>
+
+            <!-- Политика конфиденциальности -->
+            <a href="/info/privacy">
+                <span data-lang="ru">Политика конфиденциальности</span>
+                <span data-lang="uk">Політика конфіденційності</span>
+                <span data-lang="en">Privacy policy</span>
+            </a>
+
+            <!-- FAQ -->
+            <a href="/info/faq">
+                <span data-lang="ru">FAQ</span>
+                <span data-lang="uk">Часті питання</span>
+                <span data-lang="en">FAQ</span>
+            </a>
+        </div>
+
+        <div class="footer-copyright">
+            <span data-lang="ru">© 2025 endles.fun. Все права защищены.</span>
+            <span data-lang="uk">© 2025 endles.fun. Всі права захищені.</span>
+            <span data-lang="en">© 2025 endles.fun. All rights reserved.</span>
+        </div>
+    </footer>
+</div>
+
+<!-- Маленькая иконка Discord внизу -->
+<a href="https://discord.gg/Sc4v7nr" class="discord-icon-bottom" target="_blank">
+    <i class="fab fa-discord"></i>
+</a>
+
+<script src="/9b9t/js/checkout.js"></script>
+
+<script>
+    // Скрипт для взаимодействия с 3D фоном
+    document.addEventListener('mousemove', (e) => {
+        const iframe = document.getElementById('bg-iframe');
+        if (iframe.contentWindow) {
+            const mouseEvent = new MouseEvent('mousemove', {
+                clientX: e.clientX,
+                clientY: e.clientY,
+                view: window
+            });
+            iframe.contentWindow.dispatchEvent(mouseEvent);
+        }
+    });
+
+    window.addEventListener('resize', function() {
+        const iframe = document.getElementById('bg-iframe');
+        if (iframe.contentWindow && iframe.contentWindow.onWindowResize) {
+            iframe.contentWindow.onWindowResize();
+        }
+    });
+
+    // Инициализация языка
+    document.addEventListener('DOMContentLoaded', function() {
+        const languageSelect = document.getElementById('language-select');
+        const savedLanguage = localStorage.getItem('selectedLanguage') || 'ru';
+        languageSelect.value = savedLanguage;
+        updateLanguage(savedLanguage);
+
+        languageSelect.addEventListener('change', function() {
+            const selectedLanguage = this.value;
+            localStorage.setItem('selectedLanguage', selectedLanguage);
+            updateLanguage(selectedLanguage);
+        });
+
+        function updateLanguage(lang) {
+            // Обновление контента страницы
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                if (el.classList.contains('pay-button') || el.classList.contains('promo-code-input') || el.classList.contains('promo-code-btn')) {
+                    el.style.display = el.getAttribute('data-lang') === lang ? 'inline-block' : 'none';
+                } else {
+                    el.style.display = el.getAttribute('data-lang') === lang ? 'block' : 'none';
+                }
+            });
+
+            // Обновление описания способа доставки
+            const deliveryMethod = document.getElementById('delivery-select').value;
+            document.querySelectorAll('#delivery-description [data-delivery]').forEach(el => {
+                el.style.display = (el.getAttribute('data-lang') === lang && el.getAttribute('data-delivery') === deliveryMethod) ? 'block' : 'none';
+            });
+
+            // Обновление футера
+            document.querySelectorAll('.footer-links span, .footer-copyright span').forEach(el => {
+                el.style.display = el.getAttribute('data-lang') === lang ? 'inline' : 'none';
+            });
+        }
+
+        // Обработчик изменения способа доставки
+        document.getElementById('delivery-select').addEventListener('change', function() {
+            const method = this.value;
+            const lang = document.getElementById('language-select').value;
+
+            // Показываем/скрываем поле ввода координат
+            document.getElementById('coordinates-input').style.display = method === 'specific' ? 'block' : 'none';
+
+            // Обновляем описание способа доставки
+            document.querySelectorAll('#delivery-description [data-delivery]').forEach(el => {
+                el.style.display = (el.getAttribute('data-lang') === lang && el.getAttribute('data-delivery') === method) ? 'block' : 'none';
+            });
+        });
+    });
+</script>
+</body>
+</html>

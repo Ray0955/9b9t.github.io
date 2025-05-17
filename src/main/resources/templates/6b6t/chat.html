@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment & Chat | 6b6t.shop</title>
+    <link rel="stylesheet" href="/6b6t/css/chat.css">
+    <link rel="icon" type="image/png" href="images/ic.png">
+    <style>
+        .payeer-button {
+            display: block;
+            width: 80%;
+            max-width: 300px;
+            margin: 40px auto;
+            padding: 15px 20px;
+            background-color: #00a0e3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .payeer-button:hover {
+            background-color: #0088c7;
+        }
+
+        .payeer-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .payeer-logo {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="language-switcher">
+        <button class="lang-btn active" data-lang="ru">Русский</button>
+        <button class="lang-btn" data-lang="en">English</button>
+        <button class="lang-btn" data-lang="uk">Українська</button>
+    </div>
+    <div class="view-switcher">
+        <button class="view-btn" data-view="payeer">Payeer</button>
+        <button class="view-btn" data-view="chat">Чат</button>
+    </div>
+</div>
+
+<div class="payment-container" id="payeer-view">
+    <div class="payeer-header">
+        <img src="https://payeer.com/favicon.ico" alt="Payeer" class="payeer-logo">
+        <h1 data-translate="payeer_payment">Оплатить через Payeer</h1>
+    </div>
+
+    <form id="payeer-form" method="post" action="https://payeer.com/merchant/">
+        <input type="hidden" name="m_shop" value="2222645984">
+        <input type="hidden" name="m_orderid" id="payeer-order-id">
+        <input type="hidden" name="m_amount" id="payeer-amount-input">
+        <input type="hidden" name="m_curr" value="USD">
+        <input type="hidden" name="m_desc" id="payeer-desc">
+        <input type="hidden" name="m_sign" id="payeer-sign">
+        <button type="submit" class="payeer-button" data-translate="payeer_button">Оплатить через Payeer</button>
+    </form>
+</div>
+
+<div class="chat-container" id="chat-view">
+    <h2 data-translate="chat_title">Чат поддержки</h2>
+    <div id="chat-messages"></div>
+    <div class="input-container">
+        <input type="text" id="chat-input" data-translate="chat_placeholder" placeholder="Введите ваше сообщение...">
+        <button id="send-button" data-translate="send_button">Отправить</button>
+    </div>
+    <div id="admin-tag"></div>
+</div>
+
+<script>
+    // Получаем параметры из URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const uuid = urlParams.get('orderId');
+    const orderAmount = urlParams.get('amount');
+
+    // Проверяем UUID
+    const uuidPattern = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+    if (!uuid || !uuidPattern.test(uuid)) {
+        console.error('Invalid UUID:', uuid);
+        alert('Invalid order ID. Please check the URL.');
+    }
+
+    // Переводы
+    const translations = {
+        ru: {
+            payeer_payment: "Оплатить через Payeer",
+            payeer_button: "Оплатить через Payeer",
+            chat_title: "Чат поддержки",
+            chat_placeholder: "Введите ваше сообщение...",
+            send_button: "Отправить",
+            admin: "Админ",
+            moderator: "Модератор",
+            payeer_view: "Payeer",
+            chat_view: "Чат",
+            copied: "Скопировано!"
+        },
+        en: {
+            payeer_payment: "Pay with Payeer",
+            payeer_button: "Pay with Payeer",
+            chat_title: "Support Chat",
+            chat_placeholder: "Type your message...",
+            send_button: "Send",
+            admin: "Admin",
+            moderator: "Moderator",
+            payeer_view: "Payeer",
+            chat_view: "Chat",
+            copied: "Copied!"
+        },
+        uk: {
+            payeer_payment: "Оплатити через Payeer",
+            payeer_button: "Оплатити через Payeer",
+            chat_title: "Чат підтримки",
+            chat_placeholder: "Введіть ваше повідомлення...",
+            send_button: "Надіслати",
+            admin: "Адмін",
+            moderator: "Модератор",
+            payeer_view: "Payeer",
+            chat_view: "Чат",
+            copied: "Скопійовано!"
+        }
+    };
+
+    // Функция для копирования в буфер обмена
+    function copyToClipboard(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+
+        // Показываем уведомление
+        const lang = document.querySelector('.lang-btn.active')?.dataset.lang || 'ru';
+        const notification = document.createElement('div');
+        notification.className = 'copy-notification';
+        notification.textContent = translations[lang]['copied'];
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.remove();
+        }, 2000);
+    }
+
+    // Установка языка
+    function setLanguage(lang) {
+        // Обновляем кнопки переключения языка
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.lang === lang) btn.classList.add('active');
+        });
+
+        // Обновляем все переводимые элементы
+        document.querySelectorAll('[data-translate]').forEach(el => {
+            const key = el.dataset.translate;
+            let translation = translations[lang][key];
+
+            if (el.hasAttribute('data-translate')) {
+                if (el.tagName === 'INPUT') {
+                    el.placeholder = translation;
+                } else {
+                    el.innerHTML = translation;
+                }
+            }
+        });
+
+        // Обновляем кнопки переключения вида
+        document.querySelector('[data-view="payeer"]').textContent = translations[lang]['payeer_view'];
+        document.querySelector('[data-view="chat"]').textContent = translations[lang]['chat_view'];
+
+        // Обновляем тег роли в чате
+        updateRoleTag();
+
+        // Обновляем сумму заказа при смене языка
+        updateOrderAmount(lang);
+    }
+
+    // Переключение языка
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const lang = this.dataset.lang;
+            setLanguage(lang);
+        });
+    });
+
+    // Переключение между Payeer и чатом
+    document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const view = this.dataset.view;
+
+            // Обновляем активную кнопку
+            document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            // Плавное переключение между видами
+            const payerView = document.getElementById('payeer-view');
+            const chatView = document.getElementById('chat-view');
+
+            // Скрываем все вкладки
+            payerView.classList.remove('active-view');
+            chatView.classList.remove('active-view');
+
+            // Показываем нужную вкладку
+            setTimeout(() => {
+                if (view === 'payeer') {
+                    payerView.classList.add('active-view');
+                } else {
+                    chatView.classList.add('active-view');
+                }
+            }, 50);
+        });
+    });
+
+    // Обновление тега роли
+    function updateRoleTag() {
+        const role = localStorage.getItem('role');
+        const adminTag = document.getElementById('admin-tag');
+        const currentLang = document.querySelector('.lang-btn.active')?.dataset.lang || 'ru';
+
+        if (role === 'Admin') {
+            adminTag.innerHTML = `<span class="admin-tag">${translations[currentLang]['admin']}</span>`;
+        } else if (role === 'Moderator') {
+            adminTag.innerHTML = `<span class="moderator-tag">${translations[currentLang]['moderator']}</span>`;
+        } else {
+            adminTag.innerHTML = '';
+        }
+    }
+
+    // Функция для получения суммы заказа
+    async function fetchOrderAmount() {
+        try {
+            const response = await fetch(`https://endles.fun/api/6b6t/orders/${uuid}`);
+            if (!response.ok) throw new Error('Failed to fetch order');
+
+            const orderData = await response.json();
+            return orderData.totalPrice || 0;
+        } catch (error) {
+            console.error('Error fetching order amount:', error);
+            return 0;
+        }
+    }
+
+    // Обновление суммы заказа
+    async function updateOrderAmount(lang = null) {
+        if (!lang) {
+            lang = document.querySelector('.lang-btn.active')?.dataset.lang || 'ru';
+        }
+
+        // Получаем сумму заказа
+        let amount = orderAmount;
+        if (!amount) {
+            amount = await fetchOrderAmount();
+        }
+
+        // Форматируем сумму
+        const formattedAmount = amount ? parseFloat(amount).toFixed(2) : '0.00';
+
+        // Обновляем Payeer данные
+        const payeerAmountInput = document.getElementById('payeer-amount-input');
+        const payeerOrderId = document.getElementById('payeer-order-id');
+        const payeerDesc = document.getElementById('payeer-desc');
+
+        if (payeerAmountInput) {
+            payeerAmountInput.value = formattedAmount;
+        }
+        if (payeerOrderId) {
+            payeerOrderId.value = uuid;
+        }
+        if (payeerDesc) {
+            payeerDesc.value = btoa(`Order ${uuid}`);
+        }
+
+        generatePayeerSignature();
+    }
+
+    // Генерация подписи для Payeer
+    function generatePayeerSignature() {
+        const m_shop = '2222645984';
+        const m_orderid = uuid;
+        const m_amount = document.getElementById('payeer-amount-input').value;
+        const m_curr = 'USD';
+        const m_desc = document.getElementById('payeer-desc').value;
+        const m_key = '127419';
+
+        // Формируем массив для генерации подписи
+        const arHash = [
+            m_shop,
+            m_orderid,
+            m_amount,
+            m_curr,
+            m_desc,
+            m_key
+        ];
+
+        // Формируем подпись
+        const sign = CryptoJS.SHA256(arHash.join(':')).toString().toUpperCase();
+        document.getElementById('payeer-sign').value = sign;
+    }
+
+    // Инициализация чата
+    async function initChat() {
+        const chatInput = document.getElementById('chat-input');
+        const sendButton = document.getElementById('send-button');
+        const chatMessages = document.getElementById('chat-messages');
+
+        // Инициализируем сумму заказа
+        await updateOrderAmount();
+
+        // Функция загрузки сообщений
+        async function loadMessages() {
+            try {
+                const response = await fetch(`https://endles.fun/api/6b6t/orders/${uuid}`);
+                if (!response.ok) throw new Error('Failed to load messages');
+
+                const data = await response.json();
+                const messages = data.messages || {};
+
+                // Форматирование времени
+                const formatTime = timestamp => {
+                    return new Date(Number(timestamp)).toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                };
+
+                // Отображение сообщений
+                chatMessages.innerHTML = Object.entries(messages)
+                    .map(([timestamp, msg]) => {
+                        const currentLang = document.querySelector('.lang-btn.active')?.dataset.lang || 'ru';
+                        let authorDisplay = msg.author;
+
+                        if (msg.author === 'Admin') {
+                            authorDisplay = translations[currentLang]['admin'];
+                        } else if (msg.author === 'Moderator') {
+                            authorDisplay = translations[currentLang]['moderator'];
+                        }
+
+                        return `
+                            <div class="message ${msg.author === 'Admin' ? 'admin' :
+                                               msg.author === 'Moderator' ? 'moderator' : 'user'}">
+                                <strong>${authorDisplay}</strong>
+                                <span class="time">(${formatTime(timestamp)})</span>:
+                                ${msg.message}
+                            </div>
+                        `;
+                    })
+                    .join('');
+
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            } catch (error) {
+                console.error('Error loading messages:', error);
+            }
+        }
+
+        // Функция отправки сообщения
+        async function sendMessage() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            try {
+                // Получаем текущий заказ
+                const response = await fetch(`https://endles.fun/api/6b6t/orders/${uuid}`);
+                if (!response.ok) throw new Error('Failed to load order');
+
+                const order = await response.json();
+                const username = order.info.username;
+
+                // Определяем автора
+                let author;
+                const role = localStorage.getItem('role');
+                if (role === 'Admin') author = 'Admin';
+                else if (role === 'Moderator') author = 'Moderator';
+                else author = username;
+
+                // Добавляем сообщение
+                order.messages = order.messages || {};
+                order.messages[Date.now()] = { author, message: text };
+
+                // Сохраняем изменения
+                const putResponse = await fetch(`https://endles.fun/api/6b6t/orders/${uuid}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(order)
+                });
+
+                if (!putResponse.ok) throw new Error('Failed to send message');
+
+                chatInput.value = '';
+                loadMessages();
+            } catch (error) {
+                console.error('Error sending message:', error);
+                alert('Message sending failed. Please try again.');
+            }
+        }
+
+        // Обработчики событий
+        sendButton.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', e => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        // Загружаем сообщения сразу и каждые 2 секунды
+        loadMessages();
+        setInterval(loadMessages, 2000);
+
+        // Инициализация роли пользователя
+        if (!localStorage.getItem('role')) {
+            localStorage.setItem('role', 'User');
+        }
+        updateRoleTag();
+    }
+
+    // Инициализация
+    document.addEventListener('DOMContentLoaded', () => {
+        // Подключаем CryptoJS для генерации подписи Payeer
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js';
+        script.onload = () => {
+            setLanguage('ru');
+            initChat();
+
+            // По умолчанию показываем Payeer view
+            document.getElementById('payeer-view').classList.add('active-view');
+        };
+        document.head.appendChild(script);
+    });
+</script>
+</body>
+</html>

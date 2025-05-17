@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-lang="ru">О нас | endles.fun</title>
+    <title data-lang="uk">Про нас | endles.fun</title>
+    <title data-lang="en">About us | endles.fun</title>
+    <style>
+        /* Основные стили */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            flex: 1;
+        }
+
+        header {
+            background-color: #222;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+
+        h1 {
+            color: #ff6600;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #444;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin: 30px 0;
+        }
+
+        .feature {
+            width: 30%;
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .cta {
+            background-color: #ff6600;
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            border-radius: 5px;
+            margin: 40px 0;
+            font-size: 1.2em;
+        }
+
+        .language-switcher {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            background: white;
+            padding: 5px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        #language-selector {
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+        /* Стили для компактного футера */
+        .compact-footer {
+            background-color: #222;
+            color: white;
+            padding: 10px 0;
+            margin-top: 40px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+        }
+
+        .footer-links {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px 30px;
+            padding: 0 20px;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+            white-space: nowrap;
+        }
+
+        .footer-links a:hover {
+            color: #ff6600;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .feature {
+                width: 100%;
+            }
+    </style>
+</head>
+<body>
+<!-- Языковой переключатель -->
+<div class="language-switcher">
+    <select id="language-selector" onchange="changeLanguage(this.value)">
+        <option value="ru">Русский</option>
+        <option value="uk">Українська</option>
+        <option value="en">English</option>
+    </select>
+</div>
+
+<header>
+    <h1 data-lang="ru">Добро пожаловать на endles.fun</h1>
+    <h1 data-lang="uk">Ласкаво просимо на endles.fun</h1>
+    <h1 data-lang="en">Welcome to endles.fun</h1>
+
+    <p data-lang="ru">Ваша универсальная площадка для торговли на анархических серверах Minecraft</p>
+    <p data-lang="uk">Ваша універсальна платформа для торгівлі на анархічних серверах Minecraft</p>
+    <p data-lang="en">Your ultimate marketplace for trading on anarchic Minecraft servers</p>
+</header>
+
+<section>
+    <h2 data-lang="ru">О нашей платформе</h2>
+    <h2 data-lang="uk">Про нашу платформу</h2>
+    <h2 data-lang="en">About our platform</h2>
+
+    <p data-lang="ru"><strong>Endles.fun</strong> гордится тем, что официально открыл свои двери в марте 2025 года. С тех пор мы стали площадкой для игроков, предлагающей уникальную возможность не только покупать, но и продавать различные товары для серверов Minecraft и для анархических серверов.</p>
+    <p data-lang="uk"><strong>Endles.fun</strong> пишається тим, що офіційно відкрив свої двері у березні 2025 року. З того часу ми стали платформою для гравців, яка пропонує унікальну можливість не лише купувати, а й продавати різні товари для серверів Minecraft і перш за все для інших анархічних серверів.</p>
+    <p data-lang="en"><strong>Endles.fun</strong> is proud to have officially opened its doors in March 2025. Since then, we have become a platform for players, offering a unique opportunity to not only buy but also sell various items for Minecraft and for anarchy servers.</p>
+
+    <p data-lang="ru">Благодаря нашему акценту на удовлетворенность клиентов, endles.fun зарекомендовал себя как надежная платформа для всех ваших потребностей в виртуальной торговле.</p>
+    <p data-lang="uk">Завдяки нашому акценту на задоволенні клієнтів, endles.fun зарекомендував себе як надійна платформа для всіх ваших потреб у віртуальній торгівлі.</p>
+    <p data-lang="en">With our focus on customer satisfaction, endles.fun has established itself as a reliable platform for all your virtual trading needs.</p>
+</section>
+
+<section>
+    <h2 data-lang="ru">Что делает нас особенными?</h2>
+    <h2 data-lang="uk">Що робить нас особливими?</h2>
+    <h2 data-lang="en">What makes us special?</h2>
+
+    <div class="features">
+        <div class="feature">
+            <h3 data-lang="ru">🚀 Уникальная торговая площадка</h3>
+            <h3 data-lang="uk">🚀 Унікальна торгова платформа</h3>
+            <h3 data-lang="en">🚀 Unique marketplace</h3>
+            <p data-lang="ru">Мы предлагаем не просто магазин, а полноценную платформу, где каждый пользователь может купить страницу и продавать любые товары для Minecraft серверов.</p>
+            <p data-lang="uk">Ми пропонуємо не просто магазин, а повноцінну платформу, де кожен користувач може купити сторінку та продавати будь-які товари для Minecraft серверів.</p>
+            <p data-lang="en">We offer not just a store, but a full-fledged platform where each user can buy a page and sell any goods for Minecraft servers</p>
+        </div>
+
+        <div class="feature">
+            <h3 data-lang="ru">⚡ Быстрая и надежная система</h3>
+            <h3 data-lang="uk">⚡ Швидка та надійна система</h3>
+            <h3 data-lang="en">⚡ Fast and reliable system</h3>
+            <p data-lang="ru">Понимая важность своевременных сделок в быстро развивающейся игровой среде, мы внедрили эффективные системы и процессы, чтобы все операции проходили максимально гладко и без задержек.</p>
+            <p data-lang="uk">Розуміючи важливість своєчасних угод у швидко розвиваючомуся ігровому середовищі, ми впровадили ефективні системи та процеси, щоб усі операції проходили максимально гладко та без затримок.</p>
+            <p data-lang="en">Understanding the importance of timely transactions in a rapidly evolving gaming environment, we have implemented efficient systems and processes to ensure all operations run as smoothly as possible without delays.</p>
+        </div>
+
+        <div class="feature">
+            <h3 data-lang="ru">🛍️ Безграничный ассортимент</h3>
+            <h3 data-lang="uk">🛍️ Необмежений асортимент</h3>
+            <h3 data-lang="en">🛍️ Unlimited assortment</h3>
+            <p data-lang="ru">От инструментов и оружия до уникальных услуг и построек - на нашей платформе вы найдете или сможете предложить все, что может понадобиться игроку на анархических серверах.</p>
+            <p data-lang="uk">Від інструментів та зброї до унікальних послуг та споруд - на нашій платформі ви знайдете або зможете запропонувати все, що може знадобитися гравцю на анархічних серверах.</p>
+            <p data-lang="en">From tools and weapons to unique services and builds - on our platform you will find or can offer everything a player might need on anarchic servers.</p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2 data-lang="ru">Возможности для продавцов</h2>
+    <h2 data-lang="uk">Можливості для продавців</h2>
+    <h2 data-lang="en">Opportunities for sellers</h2>
+
+    <p data-lang="ru">На endles.fun каждый может стать продавцом! Мы предоставляем:</p>
+    <p data-lang="uk">На endles.fun кожен може стати продавцем! Ми надаємо:</p>
+    <p data-lang="en">On endles.fun, anyone can become a seller! We provide:</p>
+
+    <ul>
+
+        <li>
+            <span data-lang="ru">Гибкую систему управления товарами</span>
+            <span data-lang="uk">Гнучку систему управління товарами</span>
+            <span data-lang="en">Flexible product management system</span>
+        </li>
+
+
+        <li>
+            <span data-lang="ru">Безопасные способы проведения сделок</span>
+            <span data-lang="uk">Безпечні способи проведення угод</span>
+            <span data-lang="en">Secure transaction methods</span>
+        </li>
+
+        <li>
+            <span data-lang="ru">Широкую аудиторию потенциальных покупателей</span>
+            <span data-lang="uk">Широку аудиторію потенційних покупців</span>
+            <span data-lang="en">Wide audience of potential buyers</span>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h2 data-lang="ru">Наше будущее</h2>
+    <h2 data-lang="uk">Наше майбутнє</h2>
+    <h2 data-lang="en">Our future</h2>
+
+    <p data-lang="ru">Мы постоянно работаем над улучшением нашей платформы, расширением функционала и обеспечением лучшего сервиса для всех участников сообщества. Независимо от того, являетесь ли вы опытным торговцем или только начинаете свой путь, endles.fun предоставит вам все необходимые инструменты для успешной торговли в сложном мире анархических серверов.</p>
+    <p data-lang="uk">Ми постійно працюємо над покращенням нашої платформи, розширенням функціоналу та забезпеченням кращого сервісу для всіх учасників спільноти. Незалежно від того, чи ви досвідчений торговець, чи тільки починаєте свій шлях, endles.fun надасть вам усі необхідні інструменти для успішної торгівлі у складному світі анархічних серверів.</p>
+    <p data-lang="en">We are constantly working to improve our platform, expand functionality and provide better service for all community members. Whether you're an experienced trader or just starting out, endles.fun will provide you with all the tools you need to trade successfully in the complex world of anarchic servers.</p>
+
+    <div class="cta">
+        <span data-lang="ru">Присоединяйтесь к endles.fun сегодня и откройте новые возможности для торговли в Minecraft!</span>
+        <span data-lang="uk">Приєднуйтесь до endles.fun сьогодні та відкрийте нові можливості для торгівлі в Minecraft!</span>
+        <span data-lang="en">Join endles.fun today and discover new trading opportunities in Minecraft!</span>
+    </div>
+</section>
+
+<!-- Компактный футер с многоязычной поддержкой -->
+<footer class="compact-footer">
+    <div class="footer-links">
+
+        <!-- главная -->
+        <a href="/">
+            <span data-lang="ru">Главная</span>
+            <span data-lang="uk">Головна</span>
+            <span data-lang="en">Home</span>
+        </a>
+
+        <!-- Контакты -->
+        <a href="contact">
+            <span data-lang="ru">Контакты</span>
+            <span data-lang="uk">Контакти</span>
+            <span data-lang="en">Contacts</span>
+        </a>
+
+        <!-- О нас -->
+        <a href="about">
+            <span data-lang="ru">О нас</span>
+            <span data-lang="uk">Про нас</span>
+            <span data-lang="en">About us</span>
+        </a>
+
+
+        <!-- Политика конфиденциальности -->
+        <a href="privacy">
+            <span data-lang="ru">Политика конфиденциальности</span>
+            <span data-lang="uk">Політика конфіденційності</span>
+            <span data-lang="en">Privacy policy</span>
+        </a>
+
+
+
+        <!-- FAQ -->
+        <a href="faq">
+            <span data-lang="ru">FAQ</span>
+            <span data-lang="uk">Часті питання</span>
+            <span data-lang="en">FAQ</span>
+        </a>
+    </div>
+
+    <div class="footer-copyright">
+        <span data-lang="ru">© 2025 endles.fun. Все права защищены.</span>
+        <span data-lang="uk">© 2025 endles.fun. Всі права захищені.</span>
+        <span data-lang="en">© 2025 endles.fun. All rights reserved.</span>
+    </div>
+</footer>
+
+<script>
+    // Функция для изменения языка
+    function changeLanguage(lang) {
+        // Устанавливаем язык документа
+        document.documentElement.lang = lang;
+
+        // Скрываем все языковые варианты
+        document.querySelectorAll('[data-lang]').forEach(el => {
+            el.style.display = 'none';
+        });
+
+        // Показываем только выбранный язык
+        document.querySelectorAll(`[data-lang="${lang}"]`).forEach(el => {
+            el.style.display = 'block';
+        });
+
+        // Для элементов списка и других inline-элементов
+        document.querySelectorAll(`li[data-lang="${lang}"], span[data-lang="${lang}"]`).forEach(el => {
+            el.style.display = 'inline';
+        });
+
+        // Сохраняем выбор языка в localStorage
+        localStorage.setItem('selectedLanguage', lang);
+
+        // Обновляем title страницы
+        document.title = document.querySelector(`title[data-lang="${lang}"]`).textContent;
+    }
+
+    // При загрузке страницы устанавливаем сохраненный язык или русский по умолчанию
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedLang = localStorage.getItem('selectedLanguage') || 'ru';
+        document.getElementById('language-selector').value = savedLang;
+        changeLanguage(savedLang);
+    });
+</script>
+</body>
+</html>

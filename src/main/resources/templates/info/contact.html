@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-lang="ru">Контакты | endles.fun</title>
+    <title data-lang="uk">Контакти | endles.fun</title>
+    <title data-lang="en">Contacts | endles.fun</title>
+    <style>
+        /* Основные стили */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+        }
+
+        .main-container {
+            flex: 1;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Шапка */
+        header {
+            background-color: #222;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+
+        h1 {
+            color: #ff6600;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #444;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+
+        /* Контактная информация */
+        .contact-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .contact-info {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .contact-method {
+            margin-bottom: 20px;
+        }
+
+        .contact-method h3 {
+            color: #ff6600;
+            margin-bottom: 10px;
+        }
+
+        /* FAQ */
+        .faq-section {
+            background: white;
+            padding: 25px;
+            border-radius: 5px;
+            margin-top: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Языковой переключатель */
+        .language-switcher {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            background: white;
+            padding: 5px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        #language-selector {
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+        /* Ссылки */
+        a {
+            color: #ff6600;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            color: #e55c00;
+            text-decoration: underline;
+        }
+
+        /* Футер */
+        .compact-footer {
+            background-color: #222;
+            color: white;
+            padding: 20px 0;
+            margin-top: 40px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px 30px;
+            margin-bottom: 15px;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+            white-space: nowrap;
+        }
+
+        .footer-links a:hover {
+            color: #ff6600;
+            text-decoration: none;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            color: #777;
+            font-size: 13px;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .footer-links {
+                gap: 10px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer-links {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+        }
+
+        /* Скрытие языковых вариантов */
+        [data-lang] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<!-- Языковой переключатель -->
+<div class="language-switcher">
+    <select id="language-selector" onchange="changeLanguage(this.value)">
+        <option value="ru">Русский</option>
+        <option value="uk">Українська</option>
+        <option value="en">English</option>
+    </select>
+</div>
+
+<div class="main-container">
+    <header>
+        <h1 data-lang="ru">Свяжитесь с нами</h1>
+        <h1 data-lang="uk">Зв'яжіться з нами</h1>
+        <h1 data-lang="en">Contact us</h1>
+
+        <p data-lang="ru">Мы всегда рады вашим вопросам и предложениям</p>
+        <p data-lang="uk">Ми завжди раді вашим питанням та пропозиціям</p>
+        <p data-lang="en">We're always happy to hear your questions and suggestions</p>
+    </header>
+
+    <div class="contact-container">
+        <div class="contact-info">
+            <h2 data-lang="ru">Контактная информация</h2>
+            <h2 data-lang="uk">Контактна інформація</h2>
+            <h2 data-lang="en">Contact information</h2>
+
+            <div class="contact-method">
+                <h3 data-lang="ru">📧 Электронная почта</h3>
+                <h3 data-lang="uk">📧 Електронна пошта</h3>
+                <h3 data-lang="en">📧 Email</h3>
+                <p data-lang="ru">Основная поддержка: <a href="mailto:shops.endles@gmail.com">shops.endles@gmail.com</a></p>
+                <p data-lang="uk">Основна підтримка: <a href="mailto:shops.endles@gmail.com">shops.endles@gmail.com</a></p>
+                <p data-lang="en">Main support: <a href="mailto:shops.endles@gmail.com">shops.endles@gmail.com</a></p>
+            </div>
+
+            <div class="contact-method">
+                <h3 data-lang="ru">💬 Discord сервер</h3>
+                <h3 data-lang="uk">💬 Discord сервер</h3>
+                <h3 data-lang="en">💬 Discord server</h3>
+                <p data-lang="ru">Присоединяйтесь к нашему сообществу:</p>
+                <p data-lang="uk">Приєднуйтесь до нашої спільноти:</p>
+                <p data-lang="en">Join our community:</p>
+                <p><a href="https://discord.com/invite/Sc4v7nr" target="_blank">discord.gg/endlesfun</a></p>
+                <p data-lang="ru">Онлайн поддержка: 24/7</p>
+                <p data-lang="uk">Онлайн підтримка: 24/7</p>
+                <p data-lang="en">Online support: 24/7</p>
+            </div>
+
+            <div class="contact-method">
+                <h3 data-lang="ru">🕒 Время работы поддержки</h3>
+                <h3 data-lang="uk">🕒 Час роботи підтримки</h3>
+                <h3 data-lang="en">🕒 Support working hours</h3>
+                <p data-lang="ru">Понедельник - Пятница: 10:00 - 20:00 (МСК)</p>
+                <p data-lang="uk">Понеділок - П'ятниця: 10:00 - 20:00 (Київський час)</p>
+                <p data-lang="en">Monday - Friday: 10:00 - 20:00 (UTC+3)</p>
+                <p data-lang="ru">Суббота - Воскресенье: 12:00 - 18:00 (МСК)</p>
+                <p data-lang="uk">Субота - Неділя: 12:00 - 18:00 (Київський час)</p>
+                <p data-lang="en">Saturday - Sunday: 12:00 - 18:00 (UTC+3)</p>
+            </div>
+
+            <div class="contact-method">
+                <h3 data-lang="ru">📌 Для продавцов</h3>
+                <h3 data-lang="uk">📌 Для продавців</h3>
+                <h3 data-lang="en">📌 For sellers</h3>
+                <p data-lang="ru">Техническая поддержка: <a href="mailto:shops.endles@gmail.com">shops.endles@gmail.com</a></p>
+                <p data-lang="uk">Технічна підтримка: <a href="mailto:shops.endles@gmail.com">shops.endles@gmail.com</a></p>
+                <p data-lang="en">Technical support: <a href="mailto:shops.endles@gmail.com">shops.endles@gmail.com</a></p>
+                <p data-lang="ru">Ответ в течение 24 часов</p>
+                <p data-lang="uk">Відповідь протягом 24 годин</p>
+                <p data-lang="en">Response within 24 hours</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-section">
+        <h2 data-lang="ru">Часто задаваемые вопросы</h2>
+        <h2 data-lang="uk">Часті питання</h2>
+        <h2 data-lang="en">Frequently asked questions</h2>
+
+        <div class="faq-item">
+            <h3 data-lang="ru">Как быстро я получу ответ?</h3>
+            <h3 data-lang="uk">Як швидко я отримаю відповідь?</h3>
+            <h3 data-lang="en">How quickly will I get a response?</h3>
+            <p data-lang="ru">Мы стремимся отвечать на все обращения в течение 24 часов в рабочее время.</p>
+            <p data-lang="uk">Ми прагнемо відповідати на всі звернення протягом 24 годин у робочий час.</p>
+            <p data-lang="en">We aim to respond to all inquiries within 24 hours during working hours.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3 data-lang="ru">Как стать продавцом на платформе?</h3>
+            <h3 data-lang="uk">Як стати продавцем на платформі?</h3>
+            <h3 data-lang="en">How to become a seller on the platform?</h3>
+            <p data-lang="ru">Если страница стоит на продаже вы сможете ее купить и получить полный доступ к ней..</p>
+            <p data-lang="uk">Якщо сторінка стоїть на продажу, ви зможете її купити та отримати повний доступ до неї.</p>
+            <p data-lang="en">If the page is for sale, you will be able to buy it and get full access to it.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3 data-lang="ru">Где я могу узнать статус своего обращения?</h3>
+            <h3 data-lang="uk">Де я можу дізнатися статус мого звернення?</h3>
+            <h3 data-lang="en">Where can I check the status of my request?</h3>
+            <p data-lang="ru">Все ответы приходят на указанный вами email.</p>
+            <p data-lang="uk">Всі відповіді надходять на вказаний вами email.</p>
+            <p data-lang="en">All responses are sent to the email you specified.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Футер -->
+<footer class="compact-footer">
+    <div class="footer-content">
+        <div class="footer-links">
+            <a href="/">
+                <span data-lang="ru">Главная</span>
+                <span data-lang="uk">Головна</span>
+                <span data-lang="en">Home</span>
+            </a>
+            <a href="contact">
+                <span data-lang="ru">Контакты</span>
+                <span data-lang="uk">Контакти</span>
+                <span data-lang="en">Contacts</span>
+            </a>
+            <a href="about">
+                <span data-lang="ru">О нас</span>
+                <span data-lang="uk">Про нас</span>
+                <span data-lang="en">About us</span>
+            </a>
+            <a href="privacy">
+                <span data-lang="ru">Политика конфиденциальности</span>
+                <span data-lang="uk">Політика конфіденційності</span>
+                <span data-lang="en">Privacy policy</span>
+            </a>
+            <a href="faq">
+                <span data-lang="ru">FAQ</span>
+                <span data-lang="uk">Часті питання</span>
+                <span data-lang="en">FAQ</span>
+            </a>
+        </div>
+        <div class="footer-copyright">
+            <span data-lang="ru">© 2025 endles.fun. Все права защищены.</span>
+            <span data-lang="uk">© 2025 endles.fun. Всі права захищені.</span>
+            <span data-lang="en">© 2025 endles.fun. All rights reserved.</span>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Функция для изменения языка
+    function changeLanguage(lang) {
+        // Устанавливаем язык документа
+        document.documentElement.lang = lang;
+
+        // Скрываем все языковые варианты
+        document.querySelectorAll('[data-lang]').forEach(el => {
+            el.style.display = 'none';
+        });
+
+        // Показываем только выбранный язык
+        document.querySelectorAll(`[data-lang="${lang}"]`).forEach(el => {
+            el.style.display = 'block';
+        });
+
+        // Для элементов списка и других inline-элементов
+        document.querySelectorAll(`span[data-lang="${lang}"], option[data-lang="${lang}"]`).forEach(el => {
+            el.style.display = 'inline';
+        });
+
+        // Для option в select
+        document.querySelectorAll('option').forEach(option => {
+            option.selected = false;
+        });
+        document.querySelector(`option[value="${lang}"]`).selected = true;
+
+        // Сохраняем выбор языка в localStorage
+        localStorage.setItem('selectedLanguage', lang);
+
+        // Обновляем title страницы
+        document.title = document.querySelector(`title[data-lang="${lang}"]`).textContent;
+    }
+
+    // При загрузке страницы устанавливаем сохраненный язык или русский по умолчанию
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedLang = localStorage.getItem('selectedLanguage') || 'ru';
+        document.getElementById('language-selector').value = savedLang;
+        changeLanguage(savedLang);
+    });
+</script>
+</body>
+</html>

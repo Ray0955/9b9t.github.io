@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="background"></div>
+<div class="login-container" id="login-container">
+    <h1>Admin Panel</h1>
+    <form id="login-form">
+        <div class="input-group">
+            <label for="username">Логин:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div class="input-group">
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit">Войти</button>
+    </form>
+    <p id="error-message" style="color: red; display: none;">Неверный логин или пароль!</p>
+</div>
+
+<div class="admin-container" id="admin-container" style="display: none;">
+    <div class="admin-header">
+        <h1>Управление заказами и товарами</h1>
+        <div class="button-group">
+            <button id="theme-toggle" class="theme-toggle-button">
+                <svg class="theme-icon moon-icon" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1-8.313-12.454z" />
+                </svg>
+                <svg class="theme-icon sun-icon" viewBox="0 0 24 24" width="24" height="24" style="display: none;">
+                    <path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z" />
+                </svg>
+            </button>
+            <button id="add-product-button" class="add-product-button">Добавить товар</button>
+            <button id="refresh-button" class="refresh-button">
+                <span class="refresh-icon">🔄</span> Обновить
+            </button>
+        </div>
+    </div>
+
+    <!-- Вкладки -->
+    <div class="tabs">
+        <button class="tab-button active" data-tab="orders">Заказы</button>
+        <button class="tab-button" data-tab="products">Товары</button>
+
+        <button class="tab-button" data-tab="promocodes">Промокоды</button>
+    </div>
+
+    <!-- Контейнер для аналитики -->
+    <div class="table-wrapper" data-tab="analytics">
+        <h2>Аналитика продаж</h2>
+        <div class="analytics-container">
+            <!-- График популярности товаров -->
+            <div class="chart-container">
+                <h3>Популярные товары</h3>
+                <canvas id="popular-products-chart"></canvas>
+            </div>
+
+            <!-- График продаж по времени -->
+            <div class="chart-container">
+                <h3>Продажи по времени</h3>
+                <canvas id="sales-by-time-chart"></canvas>
+            </div>
+
+            <!-- Статистика по категориям -->
+            <div class="chart-container">
+                <h3>Продажи по категориям</h3>
+                <canvas id="sales-by-category-chart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Таблица заказов -->
+    <div class="table-wrapper active" data-tab="orders">
+        <h2>Заказы</h2>
+        <table id="orders-table">
+            <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Discord</th>
+                <th>Email</th>
+                <th>Товары</th>
+                <th>Сумма</th>
+                <th>Способ доставки</th>
+                <th>Координаты</th>
+                <th>Дата</th>
+                <th>Чат</th>
+                <th>Удалить заказ</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Сюда будут вставляться заказы -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Таблица товаров -->
+    <div class="table-wrapper" data-tab="products">
+        <h2>Товары</h2>
+        <table id="products-table">
+            <thead>
+            <tr>
+                <th>Название</th>
+                <th>Категория</th>
+                <th>Цена</th>
+                <th>Описание</th>
+                <th>Изображение</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Сюда будут вставляться товары -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Управление промокодами -->
+    <div class="table-wrapper" data-tab="promocodes">
+        <h2>Управление промокодами</h2>
+
+        <div class="promo-controls-container">
+            <div class="promo-generator">
+                <button id="generate-promo-btn">🎰 Сгенерировать</button>
+                <div class="promo-input-container">
+                    <input type="text" id="promo-code" placeholder="RAYFADE" required>
+                    <button id="copy-promo-btn" class="copy-btn" title="Копировать промокод">📋</button>
+                </div>
+            </div>
+
+            <div class="promo-controls">
+                <select id="promo-type">
+                    <option value="percentage">Процентная скидка</option>
+                    <option value="fixed">Фиксированная скидка</option>
+                    <option value="free_shipping">Бесплатная доставка</option>
+                    <option value="item_discount">Скидка на товар</option>
+                    <option value="delivery_discount">Скидка на доставку</option>
+                </select>
+
+                <div id="promo-value-container">
+                    <input type="number" id="promo-value" placeholder="Значение" min="1" required>
+                    <span id="promo-value-suffix">%</span>
+                </div>
+
+                <select id="promo-target" style="display:none;">
+                    <!-- Товары будут загружены динамически -->
+                </select>
+
+                <input type="number" id="promo-min-order" placeholder="Мин. сумма заказа" min="0">
+
+                <button id="add-promo-btn">💾 Сохранить</button>
+            </div>
+
+            <div id="promo-message" class="message"></div>
+
+            <table id="promo-table">
+                <thead>
+                <tr>
+                    <th>Промокод</th>
+                    <th>Тип</th>
+                    <th>Значение</th>
+                    <th>Мин. заказ</th>
+                    <th>Цель</th>
+                    <th>Использовано</th>
+                    <th>Статус</th>
+                    <th>Действия</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для добавления товара -->
+<div id="add-product-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Добавить товар</h2>
+        <form id="add-product-form">
+            <div class="input-group">
+                <label for="product-category">Категория:</label>
+                <input type="text" id="product-category" name="category" required>
+            </div>
+            <div class="input-group">
+                <label for="product-title-ru">Название (RU):</label>
+                <input type="text" id="product-title-ru" name="title-ru" required>
+            </div>
+            <div class="input-group">
+                <label for="product-title-uk">Название (UK):</label>
+                <input type="text" id="product-title-uk" name="title-uk" required>
+            </div>
+            <div class="input-group">
+                <label for="product-title-en">Название (EN):</label>
+                <input type="text" id="product-title-en" name="title-en" required>
+            </div>
+            <div class="input-group">
+                <label for="product-description-ru">Описание (RU):</label>
+                <textarea id="product-description-ru" name="description-ru" required></textarea>
+            </div>
+            <div class="input-group">
+                <label for="product-description-uk">Описание (UK):</label>
+                <textarea id="product-description-uk" name="description-uk" required></textarea>
+            </div>
+            <div class="input-group">
+                <label for="product-description-en">Описание (EN):</label>
+                <textarea id="product-description-en" name="description-en" required></textarea>
+            </div>
+            <div class="input-group">
+                <label for="product-is-new">Новый товар:</label>
+                <input type="checkbox" id="product-is-new" name="is-new">
+            </div>
+            <div class="input-group">
+                <label for="product-price">Цена:</label>
+                <input type="number" id="product-price" name="price" min="0.01" step="0.01" required>
+            </div>
+            <div class="input-group">
+                <label for="product-image-url">Ссылка на изображение:</label>
+                <input type="url" id="product-image-url" name="image-url" required>
+            </div>
+            <button type="submit">Добавить</button>
+        </form>
+    </div>
+</div>
+
+<!-- Модальное окно для редактирования товара -->
+<div id="edit-product-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Редактировать товар</h2>
+        <form id="edit-product-form">
+            <div class="input-group">
+                <label for="edit-product-category">Категория:</label>
+                <input type="text" id="edit-product-category" name="category" required>
+            </div>
+            <div class="input-group">
+                <label for="edit-product-title-ru">Название (RU):</label>
+                <input type="text" id="edit-product-title-ru" name="title-ru" required>
+            </div>
+            <div class="input-group">
+                <label for="edit-product-title-uk">Название (UK):</label>
+                <input type="text" id="edit-product-title-uk" name="title-uk" required>
+            </div>
+            <div class="input-group">
+                <label for="edit-product-title-en">Название (EN):</label>
+                <input type="text" id="edit-product-title-en" name="title-en" required>
+            </div>
+            <div class="input-group">
+                <label for="edit-product-description-ru">Описание (RU):</label>
+                <textarea id="edit-product-description-ru" name="description-ru" required></textarea>
+            </div>
+            <div class="input-group">
+                <label for="edit-product-description-uk">Описание (UK):</label>
+                <textarea id="edit-product-description-uk" name="description-uk" required></textarea>
+            </div>
+            <div class="input-group">
+                <label for="edit-product-description-en">Описание (EN):</label>
+                <textarea id="edit-product-description-en" name="description-en" required></textarea>
+            </div>
+            <div class="input-group">
+                <label for="edit-product-is-new">Новый товар:</label>
+                <input type="checkbox" id="edit-product-is-new" name="is-new">
+            </div>
+            <div class="input-group">
+                <label for="edit-product-price">Цена:</label>
+                <input type="number" id="edit-product-price" name="price" min="0.01" step="0.01" required>
+            </div>
+            <div class="input-group">
+                <label for="edit-product-image-url">Ссылка на изображение:</label>
+                <input type="url" id="edit-product-image-url" name="image-url" required>
+            </div>
+            <button type="submit">Сохранить изменения</button>
+        </form>
+    </div>
+</div>
+
+<!-- Лоадер -->
+<div class="loader" id="loader">
+    <div class="loader-spinner"></div>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-lang="ru">Политика конфиденциальности | endles.fun</title>
+    <title data-lang="uk">Політика конфіденційності | endles.fun</title>
+    <title data-lang="en">Privacy Policy | endles.fun</title>
+    <style>
+        /* Основные стили */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            flex: 1;
+        }
+
+        header {
+            background-color: #222;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+
+        h1 {
+            color: #ff6600;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #444;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .document-container {
+            background: white;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        ul, ol {
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        a {
+            color: #ff6600;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        a:hover {
+            color: #e55c00;
+            text-decoration: underline;
+        }
+
+        .last-updated {
+            font-style: italic;
+            color: #666;
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .highlight-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #ff6600;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .warning-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* Языковой переключатель */
+        .language-switcher {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #ddd;
+        }
+
+        #language-selector {
+            padding: 5px;
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* Футер */
+        .compact-footer {
+            background-color: #222;
+            color: white;
+            padding: 25px 0 15px;
+            margin-top: 40px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .footer-links {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px 30px;
+            padding: 0 20px;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+            white-space: nowrap;
+            font-size: 14px;
+        }
+
+        .footer-links a:hover {
+            color: #ff6600;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            margin-top: 20px;
+            color: #aaa;
+            font-size: 13px;
+            padding: 0 20px;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .document-container {
+                padding: 20px;
+            }
+
+            .footer-links {
+                gap: 12px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Языковой переключатель -->
+<div class="language-switcher">
+    <select id="language-selector" onchange="changeLanguage(this.value)">
+        <option value="ru">Русский</option>
+        <option value="uk">Українська</option>
+        <option value="en">English</option>
+    </select>
+</div>
+
+<header>
+    <h1 data-lang="ru">Политика конфиденциальности и пользовательское соглашение</h1>
+    <h1 data-lang="uk">Політика конфіденційності та користувацька угода</h1>
+    <h1 data-lang="en">Privacy Policy and User Agreement</h1>
+
+    <p data-lang="ru">endles.fun — торговая площадка для анархических серверов Minecraft</p>
+    <p data-lang="uk">endles.fun — торгова платформа для анархічних серверів Minecraft</p>
+    <p data-lang="en">endles.fun — marketplace for anarchic Minecraft servers</p>
+</header>
+
+<div class="document-container">
+    <div class="last-updated">
+        <span data-lang="ru">Последнее обновление: 1 мая 2025 года</span>
+        <span data-lang="uk">Останнє оновлення: 1 травня 2025 року</span>
+        <span data-lang="en">Last updated: May 1, 2025</span>
+    </div>
+
+    <div class="highlight-box">
+        <p data-lang="ru">Перед использованием нашей платформы, пожалуйста, внимательно ознакомьтесь с нашей Политикой конфиденциальности и Пользовательским соглашением.</p>
+        <p data-lang="uk">Перед використанням нашої платформи, будь ласка, уважно ознайомтеся з нашою Політикою конфіденційності та Користувацькою угодою.</p>
+        <p data-lang="en">Before using our platform, please carefully read our Privacy Policy and User Agreement.</p>
+    </div>
+
+    <h2 data-lang="ru">1. Политика конфиденциальности</h2>
+    <h2 data-lang="uk">1. Політика конфіденційності</h2>
+    <h2 data-lang="en">1. Privacy Policy</h2>
+
+    <div class="section">
+        <h3 data-lang="ru">1.1. Какие данные мы собираем</h3>
+        <h3 data-lang="uk">1.1. Які дані ми збираємо</h3>
+        <h3 data-lang="en">1.1. What data we collect</h3>
+
+        <p data-lang="ru">При использовании нашей платформы мы можем собирать следующую информацию:</p>
+        <p data-lang="uk">При використанні нашої платформи ми можемо збирати таку інформацію:</p>
+        <p data-lang="en">When using our platform, we may collect the following information:</p>
+
+        <ul>
+            <li>
+                <span data-lang="ru">Персональные данные: Discord ID, адрес электронной почты</span>
+                <span data-lang="uk">Персональні дані: Discord ID, електронна пошта</span>
+                <span data-lang="en">Personal data: Discord ID, email address</span>
+            </li>
+
+            <li>
+                <span data-lang="ru">Финансовые данные: история транзакций, платежные реквизиты</span>
+                <span data-lang="uk">Фінансові дані: історія транзакцій, платіжні реквізити</span>
+                <span data-lang="en">Financial data: transaction history, payment details</span>
+            </li>
+
+            <li>
+                <span data-lang="ru">Технические данные: IP-адрес, тип браузера, данные cookies</span>
+                <span data-lang="uk">Технічні дані: IP-адреса, тип браузера, дані cookies</span>
+                <span data-lang="en">Technical data: IP address, browser type, cookies data</span>
+            </li>
+
+            <li>
+                <span data-lang="ru">Данные об активности: история посещений, совершенные действия</span>
+                <span data-lang="uk">Дані про активність: історія відвідувань, виконані дії</span>
+                <span data-lang="en">Activity data: visit history, actions taken</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3 data-lang="ru">1.2. Как мы используем ваши данные</h3>
+        <h3 data-lang="uk">1.2. Як ми використовуємо ваші дані</h3>
+        <h3 data-lang="en">1.2. How we use your data</h3>
+
+        <p data-lang="ru">Собранная информация используется исключительно для следующих целей:</p>
+        <p data-lang="uk">Зібрана інформація використовується виключно для таких цілей:</p>
+        <p data-lang="en">The collected information is used solely for the following purposes:</p>
+
+        <ul>
+            <li>
+                <span data-lang="ru">Обеспечение работоспособности и безопасности платформы</span>
+                <span data-lang="uk">Забезпечення працездатності та безпеки платформи</span>
+                <span data-lang="en">Ensuring platform functionality and security</span>
+            </li>
+
+            <li>
+                <span data-lang="ru">Обработка транзакций и выполнение обязательств</span>
+                <span data-lang="uk">Обробка транзакцій та виконання зобов'язань</span>
+                <span data-lang="en">Processing transactions and fulfilling obligations</span>
+            </li>
+
+            <li>
+                <span data-lang="ru">Улучшение пользовательского опыта и функционала</span>
+                <span data-lang="uk">Покращення користувацького досвіду та функціоналу</span>
+                <span data-lang="en">Improving user experience and functionality</span>
+            </li>
+
+            <li>
+                <span data-lang="ru">Предотвращение мошенничества и злоупотреблений</span>
+                <span data-lang="uk">Запобігання шахрайству та зловживанням</span>
+                <span data-lang="en">Preventing fraud and abuse</span>
+            </li>
+
+            <li>
+                <span data-lang="ru">Обеспечение связи с пользователями</span>
+                <span data-lang="uk">Забезпечення зв'язку з користувачами</span>
+                <span data-lang="en">Maintaining communication with users</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3 data-lang="ru">1.3. Защита данных</h3>
+        <h3 data-lang="uk">1.3. Захист даних</h3>
+        <h3 data-lang="en">1.3. Data Protection</h3>
+
+        <p data-lang="ru">Мы применяем комплексные меры для защиты ваших данных:</p>
+        <p data-lang="uk">Ми застосовуємо комплексні заходи для захисту ваших даних:</p>
+        <p data-lang="en">We implement comprehensive measures to protect your data:</p>
+
+        <ul>
+            <li>
+                <span data-lang="ru">Шифрование всех передаваемых данных (TLS 1.2+)</span>
+                <span data-lang="uk">Шифрування всіх переданих даних (TLS 1.2+)</span>
+                <span data-lang="en">Encryption of all transmitted data (TLS 1.2+)</span>
+            </li>
+
+            <li>
+                <span data-lang="ru">Строгий контроль доступа к персональным данным</span>
+                <span data-lang="uk">Суворий контроль доступу до персональних даних</span>
+                <span data-lang="en">Strict access control to personal data</span>
+            </li>
+
+            <li>
+                <span data-lang="ru">Регулярные аудиты безопасности системы</span>
+                <span data-lang="uk">Регулярні аудити безпеки системи</span>
+                <span data-lang="en">Regular system security audits</span>
+            </li>
+
+            <li>
+                <span data-lang="ru">Хранение данных на защищенных серверах</span>
+                <span data-lang="uk">Зберігання даних на захищених серверах</span>
+                <span data-lang="en">Data storage on secured servers</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="warning-box">
+        <h3 data-lang="ru">Важная информация</h3>
+        <h3 data-lang="uk">Важлива інформація</h3>
+        <h3 data-lang="en">Important Information</h3>
+
+        <p data-lang="ru">Мы никогда не запрашиваем ваши пароли от Minecraft или Discord. Будьте бдительны и не сообщайте свои учетные данные третьим лицам.</p>
+        <p data-lang="uk">Ми ніколи не просимо ваші паролі від Minecraft або Discord. Будьте пильні та не повідомляйте свої облікові дані третім особам.</p>
+        <p data-lang="en">We will never ask for your Minecraft or Discord passwords. Please be careful not to share your login information with anyone.</p>
+    </div>
+
+    <h2 data-lang="ru">2. Пользовательское соглашение</h2>
+    <h2 data-lang="uk">2. Користувацька угода</h2>
+    <h2 data-lang="en">2. User Agreement</h2>
+
+    <div class="section">
+        <h3 data-lang="ru">2.1. Основные условия</h3>
+        <h3 data-lang="uk">2.1. Основні умови</h3>
+        <h3 data-lang="en">2.1. General Terms</h3>
+
+        <p data-lang="ru">2.1.1. Используя платформу endles.fun, вы подтверждаете, что:</p>
+        <p data-lang="uk">2.1.1. Використовуючи платформу endles.fun, ви підтверджуєте, що:</p>
+        <p data-lang="en">2.1.1. By using the endles.fun platform, you confirm that:</p>
+
+        <ul>
+            <li>
+                <span data-lang="ru">Вам исполнилось 16 лет (либо вы получили согласие родителей)</span>
+                <span data-lang="uk">Вам виповнилося 16 років (або ви отримали згоду батьків)</span>
+                <span data-lang="en">You are at least 16 years old (or have parental consent)</span>
+            </li>
+
+            <li>
+                <span data-lang="ru">Вы ознакомились и согласны с условиями данного соглашения</span>
+                <span data-lang="uk">Ви ознайомилися та згодні з умовами цієї угоди</span>
+                <span data-lang="en">You have read and agree to the terms of this agreement</span>
+            </li>
+
+            <li>
+                <span data-lang="ru">Вы несете ответственность за все действия под вашим аккаунтом</span>
+                <span data-lang="uk">Ви несете відповідальність за всі дії під вашим обліковим записом</span>
+                <span data-lang="en">You are responsible for all actions under your account</span>
+            </li>
+        </ul>
+
+        <p data-lang="ru">2.1.2. Мы оставляем за собой право изменять условия соглашения, публикуя обновленную версию на сайте.</p>
+        <p data-lang="uk">2.1.2. Ми залишаємо за собою право змінювати умови угоди, публікуючи оновлену версію на сайті.</p>
+        <p data-lang="en">2.1.2. We reserve the right to change the terms of the agreement by posting an updated version on the website.</p>
+    </div>
+
+    <div class="section">
+        <h3 data-lang="ru">2.2. Обязанности пользователей</h3>
+        <h3 data-lang="uk">2.2. Обов'язки користувачів</h3>
+        <h3 data-lang="en">2.2. User Responsibilities</h3>
+
+        <p data-lang="ru">Пользователям запрещается:</p>
+        <p data-lang="uk">Користувачам забороняється:</p>
+        <p data-lang="en">Users are prohibited from:</p>
+
+        <ul>
+            <li>
+                <span data-lang="ru">Продажа запрещенных или незаконных товаров/услуг</span>
+                <span data-lang="uk">Продаж заборонених або незаконних товарів/послуг</span>
+                <span data-lang="en">Selling prohibited or illegal goods/services</span>
+            </li>
+
+            <li>
+                <span data-lang="ru">Обман или введение других пользователей в заблуждение</span>
+                <span data-lang="uk">Обман або введення інших користувачів в оману</span>
+                <span data-lang="en">Deceiving or misleading other users</span>
+            </li>
+
+            <li>
+                <span data-lang="ru">Нарушение прав интеллектуальной собственности</span>
+                <span data-lang="uk">Порушення прав інтелектуальної власності</span>
+                <span data-lang="en">Violation of intellectual property rights</span>
+            </li>
+
+            <li>
+                <span data-lang="ru">Использование платформы для мошенничества</span>
+                <span data-lang="uk">Використання платформи для шахрайства</span>
+                <span data-lang="en">Using the platform for fraud</span>
+            </li>
+
+            <li>
+                <span data-lang="ru">Создание фейковых аккаунтов или сделок</span>
+                <span data-lang="uk">Створення фейкових акаунтів або угод</span>
+                <span data-lang="en">Creating fake accounts or transactions</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3 data-lang="ru">3. Контактная информация</h3>
+        <h3 data-lang="uk">3. Контактна інформація</h3>
+        <h3 data-lang="en">3. Contact Information</h3>
+
+        <p data-lang="ru">По всем вопросам, связанным с политикой конфиденциальности и пользовательским соглашением:</p>
+        <p data-lang="uk">З усіма питаннями, пов'язаними з політикою конфіденційності та користувацькою угодою:</p>
+        <p data-lang="en">For all questions regarding the privacy policy and user agreement:</p>
+
+        <p>Email: <a href="mailto:shops.endles@gmail.com">shops.endles@gmail.com</a></p>
+
+        <p data-lang="ru">Время ответа: в течение 3 рабочих дней</p>
+        <p data-lang="uk">Час відповіді: протягом 3 робочих днів</p>
+        <p data-lang="en">Response time: within 3 business days</p>
+    </div>
+</div>
+
+<!-- Компактный футер с многоязычной поддержкой -->
+<footer class="compact-footer">
+    <div class="footer-links">
+        <!-- Главная -->
+        <a href="/">
+            <span data-lang="ru">Главная</span>
+            <span data-lang="uk">Головна</span>
+            <span data-lang="en">Home</span>
+        </a>
+
+        <!-- Контакты -->
+        <a href="contact">
+            <span data-lang="ru">Контакты</span>
+            <span data-lang="uk">Контакти</span>
+            <span data-lang="en">Contacts</span>
+        </a>
+
+        <!-- О нас -->
+        <a href="about">
+            <span data-lang="ru">О нас</span>
+            <span data-lang="uk">Про нас</span>
+            <span data-lang="en">About us</span>
+        </a>
+
+        <!-- Политика конфиденциальности -->
+        <a href="privacy">
+            <span data-lang="ru">Политика конфиденциальности</span>
+            <span data-lang="uk">Політика конфіденційності</span>
+            <span data-lang="en">Privacy policy</span>
+        </a>
+
+        <!-- FAQ -->
+        <a href="faq">
+            <span data-lang="ru">FAQ</span>
+            <span data-lang="uk">Часті питання</span>
+            <span data-lang="en">FAQ</span>
+        </a>
+    </div>
+
+    <div class="footer-copyright">
+        <span data-lang="ru">© 2025 endles.fun. Все права защищены.</span>
+        <span data-lang="uk">© 2025 endles.fun. Всі права захищені.</span>
+        <span data-lang="en">© 2025 endles.fun. All rights reserved.</span>
+    </div>
+</footer>
+
+<script>
+    // Функция для изменения языка
+    function changeLanguage(lang) {
+        // Устанавливаем язык документа
+        document.documentElement.lang = lang;
+
+        // Скрываем все языковые варианты
+        document.querySelectorAll('[data-lang]').forEach(el => {
+            el.style.display = 'none';
+        });
+
+        // Показываем только выбранный язык
+        document.querySelectorAll(`[data-lang="${lang}"]`).forEach(el => {
+            el.style.display = 'block';
+        });
+
+        // Для элементов списка и других inline-элементов
+        document.querySelectorAll(`li[data-lang="${lang}"], span[data-lang="${lang}"]`).forEach(el => {
+            el.style.display = 'inline';
+        });
+
+        // Сохраняем выбор языка в localStorage
+        localStorage.setItem('selectedLanguage', lang);
+
+        // Обновляем title страницы
+        document.title = document.querySelector(`title[data-lang="${lang}"]`).textContent;
+    }
+
+    // При загрузке страницы устанавливаем сохраненный язык или русский по умолчанию
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedLang = localStorage.getItem('selectedLanguage') || 'ru';
+        document.getElementById('language-selector').value = savedLang;
+        changeLanguage(savedLang);
+    });
+</script>
+</body>
+</html>

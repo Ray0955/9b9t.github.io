@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Выберите сервер</title>
+    <link rel="icon" type="image/png" href="9b9t/images/ic.png">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Стили для компактного футера */
+        .compact-footer {
+            background-color: #222;
+            color: white;
+            padding: 10px 0;
+            margin-top: 40px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+        }
+
+        .footer-links {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px 30px;
+            padding: 0 20px;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+            white-space: nowrap;
+        }
+
+        .footer-links a:hover {
+            color: #ff6600;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
+            font-size: 13px;
+        }
+
+        /* Основные стили для контента */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+<div class="background"></div>
+<!-- Выбор языка в правом верхнем углу -->
+<div class="language-selector">
+    <select id="language-select">
+        <option value="ru">Русский</option>
+        <option value="uk">Українська</option>
+        <option value="en">English</option>
+    </select>
+</div>
+<div class="container">
+    <h1 data-lang=ru>Выберите сервер</h1>
+    <h1 data-lang="uk">Оберіть сервер</h1>
+    <h1 data-lang="en">Choose a server</h1>
+    <div class="servers">
+        <div class="server" data-server="2b2t">
+            <img src="images/2b.jpeg" alt="2b2t">
+        </div>
+        <div class="server" data-server="9b9t">
+            <img src="images/33.png" alt="9b9t">
+        </div>
+            <div class="server" data-server="6b6t">
+                <img src="images/6.png" alt="6b6t">
+        </div>
+    </div>
+</div>
+
+<!-- Компактный футер с многоязычной поддержкой -->
+<footer class="compact-footer">
+    <div class="footer-links">
+
+        <!-- главная -->
+        <a href="/">
+            <span data-lang="ru">Главная</span>
+            <span data-lang="uk">Головна</span>
+            <span data-lang="en">Home</span>
+        </a>
+
+        <!-- Контакты -->
+        <a href="../../../../../../DataRay095/src/main/resources/templates/info/contact">
+            <span data-lang="ru">Контакты</span>
+            <span data-lang="uk">Контакти</span>
+            <span data-lang="en">Contacts</span>
+        </a>
+
+        <!-- О нас -->
+        <a href="../../../../../../DataRay095/src/main/resources/templates/info/about">
+            <span data-lang="ru">О нас</span>
+            <span data-lang="uk">Про нас</span>
+            <span data-lang="en">About us</span>
+        </a>
+
+
+        <!-- Политика конфиденциальности -->
+        <a href="../../../../../../DataRay095/src/main/resources/templates/info/privacy">
+            <span data-lang="ru">Политика конфиденциальности</span>
+            <span data-lang="uk">Політика конфіденційності</span>
+            <span data-lang="en">Privacy policy</span>
+        </a>
+
+
+
+        <!-- FAQ -->
+        <a href="../../../../../../DataRay095/src/main/resources/templates/info/faq">
+            <span data-lang="ru">FAQ</span>
+            <span data-lang="uk">Часті питання</span>
+            <span data-lang="en">FAQ</span>
+        </a>
+    </div>
+
+    <div class="footer-copyright">
+        <span data-lang="ru">© 2025 endles.fun. Все права защищены.</span>
+        <span data-lang="uk">© 2025 endles.fun. Всі права захищені.</span>
+        <span data-lang="en">© 2025 endles.fun. All rights reserved.</span>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
