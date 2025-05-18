@@ -17,6 +17,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoutButton = document.getElementById('logout-button');
     const ordersTableBody = document.querySelector('#orders-table tbody');
     const usernameLabel = document.querySelector('label[for="username"]');
+
+
+
+
     // Элементы для управления промокодами
     const generatePromoBtn = document.getElementById('generate-promo-btn');
     const promoCodeInput = document.getElementById('promo-code');
@@ -40,6 +44,14 @@ document.addEventListener('DOMContentLoaded', () => {
     promoMaxUsesInput.value = '0';
     promoMaxUsesInput.className = 'promo-control-input';
     document.querySelector('.promo-controls').insertBefore(promoMaxUsesInput, addPromoBtn);
+
+    // Секретный ключ для авторизации (должен совпадать с API_SECRET в ProductController)
+    const API_SECRET = "55sss2P";
+
+    // Получаем authToken из localStorage или генерируем новый
+    function getAuthToken() {
+        return `Bearer ${API_SECRET}`;
+    }
 
     // Хешированные данные для авторизации
     const users = [
@@ -83,6 +95,8 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loginAdmin(login, password) {
         const loginHash = await hashSHA256(login);
         const passwordHash = await hashSHA256(password);
+        localStorage.setItem('adminLogin', login); // сохраняем оригинальный логин
+        localStorage.setItem('adminPassword', password); // сохраняем оригинальный пароль
         localStorage.setItem('adminLoginHash', loginHash);
         localStorage.setItem('adminPasswordHash', passwordHash);
     }
@@ -90,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Функция для получения базового URL API в зависимости от сервера
     function getApiBaseUrl() {
         const server = localStorage.getItem('server') || '9b9t';
-        return `https://9b9t.shop/api/${server}`;
+        return `https://endles.fun/api/${server}`;
     }
 
     // Обработчик авторизации
@@ -201,15 +215,55 @@ document.addEventListener('DOMContentLoaded', () => {
                 button.title = '';
                 button.classList.remove('disabled-button');
             });
+
+            // Добавляем кнопку технических работ для администратора
+            const maintenanceButton = document.createElement('button');
+            maintenanceButton.id = 'maintenance-toggle';
+            maintenanceButton.textContent = 'Технические работы: ВЫКЛ';
+            maintenanceButton.classList.add('maintenance-button');
+
+            const isMaintenance = localStorage.getItem('maintenanceMode') === 'true';
+            if (isMaintenance) {
+                maintenanceButton.textContent = 'Технические работы: ВКЛ';
+                maintenanceButton.classList.add('active');
+            }
+
+            const adminHeader = document.querySelector('.admin-header');
+            if (adminHeader) {
+                adminHeader.appendChild(maintenanceButton);
+            }
+
+            maintenanceButton.addEventListener('click', () => {
+                const currentMode = localStorage.getItem('maintenanceMode') === 'true';
+                const newMode = !currentMode;
+
+                localStorage.setItem('maintenanceMode', newMode.toString());
+
+                if (newMode) {
+                    maintenanceButton.textContent = 'Технические работы: ВКЛ';
+                    maintenanceButton.classList.add('active');
+                    alert('Технические работы включены! Сайт теперь недоступен для пользователей.');
+                } else {
+                    maintenanceButton.textContent = 'Технические работы: ВЫКЛ';
+                    maintenanceButton.classList.remove('active');
+                    alert('Технические работы выключены! Сайт снова доступен.');
+                }
+            });
+
+            // Добавляем кнопку блокировки модератора
+            addModeratorBlockButton();
         }
     }
 
-    //  блок модер для адм
+    // Блокировка/разблокировка модератора
     function addModeratorBlockButton() {
         const adminHeader = document.querySelector('.admin-header');
         if (!adminHeader) return;
 
-        // кнопк
+        // Проверяем, существует ли кнопка уже
+        const existingButton = document.getElementById('block-moderator-button');
+        if (existingButton) return; // Если кнопка уже есть, выходим из функции
+
         const blockButton = document.createElement('button');
         blockButton.id = 'block-moderator-button';
 
@@ -221,7 +275,6 @@ document.addEventListener('DOMContentLoaded', () => {
             : 'Заблокировать модератора';
         blockButton.classList.add('block-moderator-button');
 
-        // Обработчик для кнопки
         blockButton.addEventListener('click', () => {
             const isBlocked = localStorage.getItem(serverBlockKey);
 
@@ -769,154 +822,158 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==================== Остальные функции ====================
+    // Функции для работы с заказами
+async function loadOrders() {
+    loader.style.display = "flex";
+    try {
+        const login = document.getElementById('username').value; // Берем оригинальный логин
+        const password = document.getElementById('password').value; // Берем оригинальный пароль
+        const server = localStorage.getItem('server') || '9b9t';
 
-    // Загрузка заказов с авторизацией
-    async function loadOrders() {
-        loader.style.display = "flex";
-        try {
-            const loginHash = localStorage.getItem('adminLoginHash');
-            const passwordHash = localStorage.getItem('adminPasswordHash');
-            const server = localStorage.getItem('server') || '9b9t';
-
-            if (!loginHash || !passwordHash) {
-                alert('Авторизация не выполнена');
-                return;
-            }
-
-            const response = await fetch(`${getApiBaseUrl()}/orders?login=${loginHash}&password=${passwordHash}`);
-
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-            const orders = await response.json();
-            await renderOrders(orders);
-
-        } catch (error) {
-            console.error("Ошибка загрузки заказов:", error);
-            alert("Не удалось загрузить заказы");
-        } finally {
-            loader.style.display = "none";
+        if (!login || !password) {
+            alert('Авторизация не выполнена');
+            return;
         }
+
+        const response = await fetch(`${getApiBaseUrl()}/orders?login=${encodeURIComponent(login)}&password=${encodeURIComponent(password)}`);
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+        }
+
+        const orders = await response.json();
+        await renderOrders(orders);
+    } catch (error) {
+        console.error("Ошибка загрузки заказов:", error);
+        alert("Не удалось загрузить заказы: " + error.message);
+    } finally {
+        loader.style.display = "none";
     }
+}
 
 
-async function renderOrders(orders) {
-    const tbody = ordersTable.querySelector('tbody');
-    tbody.innerHTML = '';
+    async function renderOrders(orders) {
+        const tbody = ordersTable.querySelector('tbody');
+        tbody.innerHTML = '';
 
-    const role = localStorage.getItem('role'); // Получаем роль пользователя
-    const currentServer = localStorage.getItem('server') || '9b9t'; // Получаем текущий сервер (с fallback на 9b9t)
+        const role = localStorage.getItem('role');
+        const currentServer = localStorage.getItem('server') || '9b9t';
 
-    for (const orderId in orders) {
-        const order = orders[orderId];
-        const products = order.products ? Object.entries(order.products) : [];
-
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${order.info.username}</td>
-            <td>${order.info.discord}</td>
-            <td>${order.info.email}</td>
-            <td>
-                <div class="order-products">
-                    <button class="toggle-products">Показать товары</button>
-                    <ul class="products-list" style="display: none;">
-                        ${products.map(([productId, quantity]) => `
-                            <li id="product-${productId}">Товар загружается...</li>
-                        `).join('')}
-                    </ul>
-                </div>
-            </td>
-            <td>$${order.totalPrice.toFixed(2)}</td>
-            <td>${order.info.deliveryMethod}</td>
-            <td>${order.coordinates ? `X: ${order.coordinates.x}<br>Y: ${order.coordinates.y}<br>Z: ${order.coordinates.z}` : 'Нет данных'}</td>
-            <td>${order.info.formattedISO || 'Нет данных'}</td>
-            <td>
-                <a href="/${localStorage.getItem('server') || '9b9t'}/chat?orderId=${orderId}" class="chat-button">Чат</a>
-            </td>
-            <td>
-                <button class="delete-order-button ${role === 'moderator' ? 'disabled-button' : ''}"
-                        data-order-id="${orderId}"
-                        ${role === 'moderator' ? 'disabled' : ''}
-                        title="${role === 'moderator' ? 'Доступно для Администрации' : ''}">
-                    Удалить заказ
-                </button>
-            </td>
-        `;
-        tbody.appendChild(row);
-
-            // Загружаем данные о товарах
-            for (const [productId, quantity] of products) {
-                fetchProductById(productId).then(product => {
-                    const productElement = document.getElementById(`product-${productId}`);
-                    if (product) {
-                        productElement.innerHTML = `
-                            <img src="${product.imageUrl}" width="50" alt="${product.title?.RU || 'Нет названия'}">
-                            ${product.title?.RU || product.title?.EN || 'Нет названия'}
-                            x${quantity} ($${product.price || 0})
-                        `;
-                    } else {
-                        productElement.innerText = `Товар с ID ${productId} не найден`;
-                    }
-                }).catch(error => {
-                    console.error(`Ошибка загрузки товара ${productId}:`, error);
-                });
-            }
+        if (typeof orders !== 'object' || orders === null) {
+            console.error("Invalid orders data:", orders);
+            tbody.innerHTML = '<tr><td colspan="9">Нет данных о заказах</td></tr>';
+            return;
         }
 
-        // Добавляем обработчики событий (скрытие/показ товаров)
-        document.querySelectorAll('.toggle-products').forEach(button => {
-            button.addEventListener('click', () => {
-                const productsList = button.nextElementSibling;
-                productsList.style.display = productsList.style.display === 'none' ? 'block' : 'none';
-                button.textContent = productsList.style.display === 'none' ? 'Показать товары' : 'Скрыть товары';
+        for (const orderId in orders) {
+            const order = orders[orderId];
+            if (!order || !order.info) continue;
+
+            const products = order.products ? Object.entries(order.products) : [];
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+                <td>${order.info.username || 'Нет данных'}</td>
+                <td>${order.info.discord || 'Нет данных'}</td>
+                <td>${order.info.email || 'Нет данных'}</td>
+                <td>
+                    <div class="order-products">
+                        <button class="toggle-products">Показать товары</button>
+                        <ul class="products-list" style="display: none;">
+                            ${products.map(([productId]) => `<li id="product-${productId}">Загрузка...</li>`).join('')}
+                        </ul>
+                    </div>
+                </td>
+                <td>$${order.totalPrice?.toFixed(2) || '0.00'}</td>
+                <td>${order.info.deliveryMethod || 'Нет данных'}</td>
+                <td>${order.coordinates ? `X: ${order.coordinates.x}<br>Y: ${order.coordinates.y}<br>Z: ${order.coordinates.z}` : 'Нет данных'}</td>
+                <td>${order.info.formattedISO || 'Нет данных'}</td>
+                <td><a href="/${currentServer}/chat?orderId=${orderId}" class="chat-button">Чат</a></td>
+                <td>
+                    <button class="delete-order-button ${role === 'moderator' ? 'disabled-button' : ''}"
+                            data-order-id="${orderId}"
+                            ${role === 'moderator' ? 'disabled' : ''}
+                            title="${role === 'moderator' ? 'Доступно для Администрации' : ''}">
+                        Удалить
+                    </button>
+                </td>
+            `;
+
+            tbody.appendChild(row);
+
+            // Загрузка информации о товарах
+            for (const [productId, quantity] of products) {
+                try {
+                    const product = await fetchProductById(productId);
+                    const element = document.getElementById(`product-${productId}`);
+                    if (element) {
+                        element.innerHTML = product ? `
+                            <img src="${product.imageUrl || 'https://via.placeholder.com/50'}" width="50"
+                                 alt="${product.title?.RU || product.title?.EN || productId}">
+                            ${product.title?.RU || product.title?.EN || productId}
+                            x${quantity} ($${(product.price || 0).toFixed(2)})
+                        ` : `Товар ${productId} не найден`;
+                    }
+                } catch (error) {
+                    console.error(`Ошибка загрузки товара ${productId}:`, error);
+                }
+            }
+        }
+        // Обработчики событий
+    document.querySelectorAll('.toggle-products').forEach(button => {
+        button.addEventListener('click', () => {
+            const list = button.nextElementSibling;
+            list.style.display = list.style.display === 'none' ? 'block' : 'none';
+            button.textContent = list.style.display === 'none' ? 'Показать товары' : 'Скрыть товары';
+        });
+    });
+
+    if (localStorage.getItem('role') === 'admin') {
+        document.querySelectorAll('.delete-order-button').forEach(button => {
+            button.addEventListener('click', async () => {
+                const orderId = button.getAttribute('data-order-id');
+                if (confirm(`Удалить заказ ${orderId}?`)) {
+                    await deleteOrder(orderId);
+                }
             });
         });
-
-        // Добавляем обработчики для удаления заказов (только для администратора)
-        if (role === 'admin') {
-            document.querySelectorAll('.delete-order-button').forEach(button => {
-                button.addEventListener('click', async () => {
-                    const orderId = button.getAttribute('data-order-id');
-                    await deleteOrder(orderId);
-                });
-            });
-        }
     }
+}
 
-    // Удаление заказа
     async function deleteOrder(orderId) {
         loader.style.display = 'flex';
         try {
-            const response = await fetch(`${getApiBaseUrl()}/orders/${orderId}`, {
+            const loginHash = localStorage.getItem('adminLoginHash');
+            const passwordHash = localStorage.getItem('adminPasswordHash');
+
+            const response = await fetch(`${getApiBaseUrl()}/orders/${orderId}?login=${loginHash}&password=${passwordHash}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
 
-            if (!response.ok) throw new Error('Ошибка при удалении заказа');
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Ошибка при удалении заказа');
+            }
 
-            const result = await response.json();
-            console.log('Заказ удален:', result);
-
-            // Обновляем список заказов
             await loadOrders();
         } catch (error) {
             console.error('Ошибка:', error);
-            alert('Не удалось удалить заказ');
+            alert('Не удалось удалить заказ: ' + error.message);
         } finally {
             loader.style.display = 'none';
         }
     }
-
     // Загрузка товаров
     async function loadProducts() {
         loader.style.display = "flex";
         try {
             const response = await fetch(`${getApiBaseUrl()}/products`);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-            const products = await response.json();
-            renderProducts(products);
+            renderProducts(await response.json());
         } catch (error) {
             console.error("Ошибка загрузки товаров:", error);
             alert("Не удалось загрузить товары");
@@ -933,6 +990,7 @@ async function renderOrders(orders) {
         for (const productId in products) {
             const product = products[productId];
             const row = document.createElement('tr');
+
             row.innerHTML = `
                 <td>${product.title?.RU || 'Нет названия'}</td>
                 <td>${product.category || 'Нет категории'}</td>
@@ -944,8 +1002,19 @@ async function renderOrders(orders) {
                     <button class="delete-button" data-id="${productId}">Удалить</button>
                 </td>
             `;
+
             tbody.appendChild(row);
         }
+
+        // Обработчики для кнопок
+        document.querySelectorAll('.edit-button').forEach(button => {
+            button.addEventListener('click', () => openEditModal(button.dataset.id));
+        });
+
+        document.querySelectorAll('.delete-button').forEach(button => {
+            button.addEventListener('click', () => deleteProduct(button.dataset.id));
+        });
+    }
 
         // Обработчики для кнопок редактирования
         const editButtons = document.querySelectorAll('.edit-button');
@@ -963,27 +1032,46 @@ async function renderOrders(orders) {
                 const productId = button.getAttribute('data-id');
                 await deleteProduct(productId);
             });
-        });
-    }
+    });
 
     // Удаление товара
     async function deleteProduct(productId) {
+        if (!confirm('Вы уверены, что хотите удалить этот товар?')) return;
+
         loader.style.display = "flex";
         try {
             const response = await fetch(`${getApiBaseUrl()}/products/${productId}`, {
                 method: 'DELETE',
+                headers: {
+                    'Authorization': getAuthToken()
+                }
             });
 
-            if (!response.ok) throw new Error('Ошибка при удалении товара');
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Ошибка при удалении товара');
+            }
 
             await loadProducts(); // Обновляем список товаров после удаления
         } catch (error) {
             console.error('Ошибка:', error);
-            alert('Не удалось удалить товар');
+            alert('Не удалось удалить товар: ' + error.message);
         } finally {
             loader.style.display = "none";
         }
     }
+
+    // Список категорий для выпадающего меню (можно вынести в глобальную область)
+    const PRODUCT_CATEGORIES = [
+        'Еда',
+        'Броня',
+        'Инструменты',
+        'Механизмы',
+        'Строительные блоки',
+        'Стеши',
+        'Расходники',
+        'Разное'
+    ];
 
     // Открытие модального окна для редактирования товара
     async function openEditModal(productId) {
@@ -993,9 +1081,19 @@ async function renderOrders(orders) {
             if (!response.ok) throw new Error('Ошибка загрузки данных товара');
 
             const product = await response.json();
+            const categorySelect = document.getElementById('edit-product-category');
+
+            // Заполняем выпадающий список категориями
+            categorySelect.innerHTML = '';
+            PRODUCT_CATEGORIES.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categorySelect.appendChild(option);
+            });
 
             // Заполняем форму данными товара
-            document.getElementById('edit-product-category').value = product.category || '';
+            categorySelect.value = product.category || '';
             document.getElementById('edit-product-title-ru').value = product.title?.RU || '';
             document.getElementById('edit-product-title-uk').value = product.title?.UK || '';
             document.getElementById('edit-product-title-en').value = product.title?.EN || '';
@@ -1025,15 +1123,22 @@ async function renderOrders(orders) {
         loader.style.display = 'flex';
 
         const price = parseFloat(document.getElementById('edit-product-price').value);
-        if (price < 0.1) {
-            alert('Минимальная цена товара — 0.1$');
+        if (price < 0.01) {
+            alert('Минимальная цена товара — 0.01$');
+            loader.style.display = 'none';
+            return;
+        }
+
+        const category = document.getElementById('edit-product-category').value;
+        if (!category) {
+            alert('Пожалуйста, выберите категорию товара');
             loader.style.display = 'none';
             return;
         }
 
         const productId = editProductForm.getAttribute('data-id');
         const updatedProduct = {
-            category: document.getElementById('edit-product-category').value,
+            category: category,
             title: {
                 RU: document.getElementById('edit-product-title-ru').value,
                 UK: document.getElementById('edit-product-title-uk').value,
@@ -1055,11 +1160,15 @@ async function renderOrders(orders) {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': getAuthToken()
                 },
                 body: JSON.stringify(updatedProduct),
             });
 
-            if (!response.ok) throw new Error('Ошибка при сохранении изменений');
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Ошибка при сохранении изменений');
+            }
 
             const result = await response.json();
             console.log('Товар обновлен:', result);
@@ -1069,20 +1178,19 @@ async function renderOrders(orders) {
             await loadProducts();
         } catch (error) {
             console.error('Ошибка:', error);
-            alert('Не удалось сохранить изменения');
+            alert('Не удалось сохранить изменения: ' + error.message);
         } finally {
             loader.style.display = 'none';
         }
     });
-
     // Добавление товара
     addProductForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         loader.style.display = 'flex';
 
         const price = parseFloat(document.getElementById('product-price').value);
-        if (price < 0.1) {
-            alert('Минимальная цена товара — 0.1$');
+        if (price < 0.01) {
+            alert('Минимальная цена товара — 0.01$');
             loader.style.display = 'none';
             return;
         }
@@ -1110,6 +1218,7 @@ async function renderOrders(orders) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': getAuthToken()
                 },
                 body: JSON.stringify({
                     products: {
@@ -1118,15 +1227,19 @@ async function renderOrders(orders) {
                 }),
             });
 
-            if (!response.ok) throw new Error('Ошибка при добавлении товара');
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Ошибка при добавлении товара');
+            }
 
             const result = await response.json();
             console.log('Товар добавлен:', result);
             addProductModal.style.display = 'none';
+            addProductForm.reset();
             await loadProducts();
         } catch (error) {
             console.error('Ошибка:', error);
-            alert('Не удалось добавить товар');
+            alert('Не удалось добавить товар: ' + error.message);
         } finally {
             loader.style.display = 'none';
         }

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Server Status</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .status-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .status-item {
+            margin-bottom: 10px;
+        }
+        .status-label {
+            font-weight: bold;
+            display: inline-block;
+            width: 120px;
+        }
+    </style>
+</head>
+<body>
+<div class="status-container">
+    <h1>Server Status</h1>
+
+    <div class="status-item">
+        <span class="status-label">Status:</span>
+        <span th:text="${status}">N/A</span>
+    </div>
+
+    <div class="status-item">
+        <span class="status-label">Server Time:</span>
+        <!-- Исправленный формат отображения даты -->
+        <span th:text="${#dates.format(serverTime, 'yyyy-MM-dd HH:mm:ss')}">N/A</span>
+    </div>
+
+    <div class="status-item">
+        <span class="status-label">Version:</span>
+        <span th:text="${version}">N/A</span>
+    </div>
+</div>
+</body>
+</html>

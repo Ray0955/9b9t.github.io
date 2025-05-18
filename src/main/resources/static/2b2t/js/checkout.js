@@ -251,7 +251,7 @@ async function applyPromoCode(e) {
     }
 
     try {
-        const response = await fetch(`https://endles.fun/api/2b2t/promocodes/${promoCode}`);
+        const response = await fetch(`http://endles.fun/api/2b2t/promocodes/${promoCode}`);
 
         if (!response.ok) {
             throw new Error(messages.promo_not_found[currentLang] || messages.promo_not_found.ru);
@@ -395,7 +395,7 @@ async function applyPromoCode(e) {
         console.log("Sending order data:", JSON.stringify(orderData, null, 2)); // Логируем данные
 
         try {
-            const response = await fetch('https://endles.fun/api/2b2t/orders', {
+            const response = await fetch('http://endles.fun/api/2b2t/orders', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(orderData)
@@ -415,7 +415,7 @@ async function applyPromoCode(e) {
             localStorage.removeItem('activePromo');
 
             // Перенаправляем пользователя на страницу чата
-            window.location.href = "https://endles.fun/2b2t/chat?orderId=" + orderId;
+            window.location.href = "http://endles.fun/2b2t/chat?orderId=" + orderId;
         } catch (error) {
             console.error('Ошибка:', error);
             alert('Ошибка соединения с сервером.');

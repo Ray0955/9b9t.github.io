@@ -43,8 +43,6 @@
             <version>${spring-boot.version}</version>
         </dependency>
 
-
-
         <dependency>
             <groupId>com.github.javafaker</groupId>
             <artifactId>javafaker</artifactId>
@@ -86,6 +84,7 @@
             <version>5.10.1</version> <!-- Укажите последнюю стабильную версию -->
             <scope>test</scope>
         </dependency>
+
 
 
         <dependency>

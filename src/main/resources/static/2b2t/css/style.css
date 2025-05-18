@@ -670,15 +670,16 @@ body, html {
 }
 
 .card__description {
-    max-height: 85px; /* Ограничиваем максимальную высоту */
-    overflow-y: auto; /* Добавляем вертикальную прокрутку при необходимости */
-    margin: 0.5rem 0;
-    padding: 0.2rem;
-    font-size: 0.9rem;
-    line-height: 1.4;
-    color: #ccc;
-    scrollbar-width: thin; /* Для Firefox */
-    scrollbar-color: #555 #333; /* Для Firefox */
+    font-size: 16px;
+    color: rgb(255, 255, 255);
+    text-align: center;
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    bottom: 10.5rem; /* Статичное положение */
+    transition: opacity 0.5s ease;
 }
 
 .card__price {
@@ -1056,17 +1057,3 @@ html, body {
 .promo-message.error {
     color: #f44336;
 }
-<style>
-    #paypal-button-container {
-        margin: 20px 0;
-        width: 100%;
-        max-width: 500px;
-    }
-
-    /* Для мобильных устройств */
-    @media (max-width: 768px) {
-        #paypal-button-container {
-            width: 100%;
-        }
-    }
-</style>

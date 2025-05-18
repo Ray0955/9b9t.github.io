@@ -184,8 +184,17 @@
         <h2>Добавить товар</h2>
         <form id="add-product-form">
             <div class="input-group">
-                <label for="product-category">Категория:</label>
-                <input type="text" id="product-category" name="category" required>
+                <select id="product-category" class="form-control" required>
+                    <option value="" disabled selected>Выберите категорию</option>
+                    <option value="Еда">Еда</option>
+                    <option value="Броня">Броня</option>
+                    <option value="Инструменты">Инструменты</option>
+                    <option value="Механизмы">Механизмы</option>
+                    <option value="Строительные блоки">Строительные блоки</option>
+                    <option value="Стеши">Стеши</option>
+                    <option value="Расходники">Расходники</option>
+                    <option value="Разное">Разное</option>
+                </select>
             </div>
             <div class="input-group">
                 <label for="product-title-ru">Название (RU):</label>
@@ -235,8 +244,10 @@
         <h2>Редактировать товар</h2>
         <form id="edit-product-form">
             <div class="input-group">
-                <label for="edit-product-category">Категория:</label>
-                <input type="text" id="edit-product-category" name="category" required>
+                <select id="edit-product-category" class="form-control" required>
+                    <option value="" disabled selected>Выберите категорию</option>
+                    <!-- Варианты будут заполняться динамически через JavaScript -->
+                </select>
             </div>
             <div class="input-group">
                 <label for="edit-product-title-ru">Название (RU):</label>
