@@ -16,7 +16,7 @@ public class ProductController {
     private Map<UUID, Product.ProductContent> products = new HashMap<>();
 
     // Секретный ключ для проверки (лучше вынести в конфигурацию)
-    private static final String API_SECRET = "55sss2P";
+    private static final String API_SECRET = "";
 
     @GetMapping
     public String getProducts(@PathVariable("server") String server) {
