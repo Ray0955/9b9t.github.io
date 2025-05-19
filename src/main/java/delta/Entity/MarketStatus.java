@@ -1,5 +1,6 @@
 package delta.Entity;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,3 +38,18 @@ public class MarketStatus {
         this.protectedPaths = protectedPaths;
     }
 }
+=======
+public class MarketStatus {
+    public boolean work = true;
+    public MarketStatus() {}
+    public MarketStatus(boolean work) {
+        this.work = work;
+    }
+    public void setWork(boolean work) {
+        this.work = work;
+    }
+    public boolean isWork() {
+        return work;
+    }
+}
+>>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1

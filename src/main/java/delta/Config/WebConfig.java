@@ -1,14 +1,23 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
 package delta.Config;
 
 import delta.Interceptors.MaintenanceInterceptor;
 import org.springframework.context.annotation.Configuration;
+<<<<<<< HEAD
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.beans.factory.annotation.Value;
+=======
+import org.springframework.web.servlet.config.annotation.*;
+>>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+<<<<<<< HEAD
     @Value("${maintenance.protected.paths:/9b9t,/9b9t/cart,/9b9t/checkout,/9b9t/chat}")
     private String[] protectedPaths;
 
@@ -39,3 +48,12 @@ public class WebConfig implements WebMvcConfigurer {
         System.out.println("=========================================\n");
     }
 }
+=======
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new MaintenanceInterceptor())
+                .addPathPatterns("/**")
+                .excludePathPatterns("/maintenance", "/css/**", "/js/**", "/images/**");
+    }
+}
+>>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
