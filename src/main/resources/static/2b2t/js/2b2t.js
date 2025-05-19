@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Загрузка товаров с API
-    fetch("https://9b9t.shop:8443/api/9b9t/products")
+    fetch("http://endles.fun/api/2b2t/products")
         .then(response => response.json())
         .then(products => {
             if (!products || Object.keys(products).length === 0) {
@@ -237,3 +237,4 @@ if (typeof gsap === 'undefined') {
 // Инициализация Chroma.js (если не подключен)
 if (typeof chroma === 'undefined') {
     console.warn('Chroma.js не подключен. Эффекты свечения не будут работать.');
+}

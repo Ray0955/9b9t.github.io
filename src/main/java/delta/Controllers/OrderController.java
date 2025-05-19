@@ -27,25 +27,17 @@ public class OrderController {
 
         User[] users = new User[]{
                 new User("14019953baaf598284741f15d39ebad14c09e2e7d70e14240d22e09f1a542181",
-                        "3e46859fa2e5dd9fbc5b3236db82df934ad3c015a76788374e1ac66e44b3e705",
+                        "724ee8525fd528b8ac5ede40fd9fb15048b5c00e4c86a828b3641f80c27e3064",
                         "admin", "9b9t"),
                 new User("3d56b9501bd6167bfdb96f72e2ffb09776c0678428ef3ed6b6b9e536447ebb56",
-                        "8d67604ed0513c8dd462ae6e8af9660ff228c42f47bd274f84792860da7ff38f",
+                        "e30bca7e270c84f10c531f8f999034f28799ef6a660d35e4cdb86a0246769474",
                         "moderator", "9b9t"),
-
                 new User("0316c5640787d0af725750c238d04b0c00001adc741770c7addf40dec63b897f",
-                        "5ffb5169712025e5ba4ab31080c1d0cee7e4276a6eefd83e14a8414e9fde7957",
+                        "1ba119d21891c4d219ca2216845cbb3e2fc6654dd3c73b62a70c91459ed54826",
                         "admin", "2b2t"),
                 new User("adbacbf2fea81a2159eb2af9e2170fd018b85af23b4f3e06e3301b5af780f5b3",
-                        "f99f0ebff2e737110b18a67c2d2dfca460f65803b48a925cec2f720acf272680",
-                        "moderator", "2b2t"),
-
-                new User("adc32ec674a8e58e9b661856beb0db36ae2b542388800829700097ee5f37a3a1",
-                        "fdfb9bd8baee856cb224e684949703502c65882408448fab07fe800356e0ccd3",
-                        "admin", "6b6t"),
-                new User("57b90d4355574b11a27abc7ae75417e3158106d730a74f86f47441681484c46b",
-                        "a5fc5a09d1845c023b90cd1c7553b10be6e439a6660a0309a75e0289cbb6222e",
-                        "moderator", "6b6t")
+                        "443def92e889d868bfc7a3df83bd610907bec5182c8c2a34f710724c48cb13de",
+                        "moderator", "2b2t")
         };
 
         try {

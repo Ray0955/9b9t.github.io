@@ -40,6 +40,26 @@ public class PageController {
     public String getSuccess(Model model) {
         return "su/success";
     }
+    // 6b6t раздел
+    @GetMapping("/6b6t")
+    public String get6b6t(Model model) {
+        return "6b6t/6b6t";
+    }
+
+    @GetMapping("/6b6t/cart")
+    public String get6b6(Model model) {
+        return "6b6t/cart";
+    }
+
+    @GetMapping("/6b6t/checkout")
+    public String get6b(Model model) {
+        return "6b6t/checkout";
+    }
+
+    @GetMapping("/6b6t/chat")
+    public String get6bt(Model model) {
+        return "6b6t/chat";
+    }
 
     // 9b9t раздел
     @GetMapping("/9b9t")
@@ -60,50 +80,6 @@ public class PageController {
     @GetMapping("/9b9t/chat")
     public String get9b9tChat(Model model) {
         return "9b9t/chat";
-    }
-    // 6b6t раздел
-    @GetMapping("/6b6t")
-    public String get6b6tMain(Model model) {
-        return "6b6t/6b6t";
-    }
-    @GetMapping("/6b6t/cart")
-    public String get6b6tCart(Model model) {
-        return "6b6t/cart";
-    }
-
-    @GetMapping("/6b6t/checkout")
-    public String get6b6tCheckout(Model model) {
-        return "6b6t/checkout";
-    }
-
-    @GetMapping("/6b6t/chat")
-    public String get6b6tChat(Model model) {
-        return "6b6t/chat";
-    }
-
-
-
-
-
-    // 2b2t раздел
-    @GetMapping("/2b2t")
-    public String get2b2tMain(Model model) {
-        return "2b2t/2b2t";
-    }
-
-    @GetMapping("/2b2t/cart")
-    public String get2b2tCart(Model model) {
-        return "2b2t/cart";
-    }
-
-    @GetMapping("/2b2t/checkout")
-    public String get2b2tCheckout(Model model) {
-        return "2b2t/checkout";
-    }
-
-    @GetMapping("/2b2t/chat")
-    public String get2b2tChat(Model model) {
-        return "2b2t/chat";
     }
 
     @GetMapping("/2b2t/dd")

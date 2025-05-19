@@ -29,82 +29,13 @@
             pointer-events: auto;
         }
 
+
         .cart-content {
             padding: 20px;
-            margin-bottom: 120px; /* Добавлено для футера */
         }
 
-        /* Стили для футера */
-        .compact-footer {
-            background-color: rgba(34, 34, 34, 0.8);
-            color: white;
-            padding: 15px 0;
-            text-align: center;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            z-index: 90;
-            backdrop-filter: blur(5px);
-        }
 
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px 30px;
-            margin-bottom: 10px;
-        }
 
-        .footer-links a {
-            color: #ddd;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .footer-links a:hover {
-            color: #ff6600;
-        }
-
-        .footer-copyright {
-            color: #777;
-            font-size: 13px;
-        }
-
-        /* Скрываем неактивные языки */
-        [data-lang] {
-            display: none;
-        }
-        [data-lang="ru"] {
-            display: block;
-        }
-
-        /* Стили для иконки Discord */
-        .discord-icon-bottom {
-            position: fixed;
-            bottom: 90px;
-            right: 20px;
-            z-index: 100;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #5865F2;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .discord-icon-bottom:hover {
-            transform: scale(1.1);
-            background-color: #4752C4;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .discord-icon-bottom i {
-            color: white;
-            font-size: 20px;
-        }
     </style>
 </head>
 <body>
@@ -149,53 +80,9 @@
         <p class="total-amount" data-lang="en">Total: $<span class="total">0</span></p>
 
         <!-- Кнопка "Перейти к оформлению" -->
-        <div class="checkout-button-container">
-            <button class="checkout-button" data-lang="ru">Перейти к оформлению</button>
-            <button class="checkout-button" data-lang="uk">Перейти до оформлення</button>
-            <button class="checkout-button" data-lang="en">Proceed to checkout</button>
-        </div>
+        <button class="checkout-button">Перейти к оформлению</button>
+    </div>
 </div>
-
-<!-- Футер -->
-<footer class="compact-footer">
-    <div class="footer-links">
-        <a href="/">
-            <span data-lang="ru">Главная</span>
-            <span data-lang="uk">Головна</span>
-            <span data-lang="en">Home</span>
-        </a>
-        <a href="/info/contact">
-            <span data-lang="ru">Контакты</span>
-            <span data-lang="uk">Контакти</span>
-            <span data-lang="en">Contacts</span>
-        </a>
-        <a href="/info/about">
-            <span data-lang="ru">О нас</span>
-            <span data-lang="uk">Про нас</span>
-            <span data-lang="en">About us</span>
-        </a>
-        <a href="/info/privacy">
-            <span data-lang="ru">Политика конфиденциальности</span>
-            <span data-lang="uk">Політика конфіденційності</span>
-            <span data-lang="en">Privacy policy</span>
-        </a>
-        <a href="/info/faq">
-            <span data-lang="ru">FAQ</span>
-            <span data-lang="uk">Часті питання</span>
-            <span data-lang="en">FAQ</span>
-        </a>
-    </div>
-    <div class="footer-copyright">
-        <span data-lang="ru">© 2025 endles.fun. Все права защищены.</span>
-        <span data-lang="uk">© 2025 endles.fun. Всі права захищені.</span>
-        <span data-lang="en">© 2025 endles.fun. All rights reserved.</span>
-    </div>
-</footer>
-
-<!-- Иконка Discord -->
-<a href="https://discord.gg/Sc4v7nr" class="discord-icon-bottom" target="_blank">
-    <i class="fab fa-discord"></i>
-</a>
 
 <script src="/2b2t/js/cart.js"></script>
 
@@ -236,8 +123,7 @@
 
         function updateLanguage(lang) {
             document.querySelectorAll('[data-lang]').forEach(el => {
-                el.style.display = el.getAttribute('data-lang') === lang ?
-                    (el.tagName === 'SPAN' ? 'inline' : 'block') : 'none';
+                el.style.display = el.getAttribute('data-lang') === lang ? 'block' : 'none';
             });
         }
     });

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сайт на техническом обслуживании</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #f0f0f0;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            max-width: 600px;
+            padding: 40px;
+            background: rgba(30, 30, 46, 0.9);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: relative;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 0.8s ease-out;
+        }
+        h1 {
+            color: #ff6b6b;
+            margin-bottom: 25px;
+            font-size: 2.2em;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        p {
+            font-size: 1.1em;
+            line-height: 1.7;
+            margin-bottom: 30px;
+            color: #e0e0e0;
+        }
+        .icon {
+            font-size: 80px;
+            margin-bottom: 25px;
+            color: #ff6b6b;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s infinite;
+        }
+        .language-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .language-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-left: 8px;
+            color: #f0f0f0;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .language-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .language-btn.active {
+            background: #ff6b6b;
+            color: white;
+            border-color: #ff6b6b;
+            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
+            opacity: 0;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: var(--opacity); }
+        }
+    </style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<div class="container">
+    <div class="language-switcher">
+        <button class="language-btn active" onclick="switchLanguage('ru')">RU</button>
+        <button class="language-btn" onclick="switchLanguage('en')">EN</button>
+    </div>
+
+    <div class="icon">🔧</div>
+
+    <div id="ru-content">
+        <h1>Сайт на техническом обслуживании</h1>
+        <p>В настоящее время на сайте проводятся технические работы. Приносим извинения за временные неудобства.</p>
+        <p>Мы работаем над улучшением сервиса для вас!</p>
+    </div>
+
+    <div id="en-content" style="display: none;">
+        <h1>Website Under Maintenance</h1>
+        <p>We are currently performing technical maintenance on the website. We apologize for the temporary inconvenience.</p>
+        <p>We're working to improve the service for you!</p>
+    </div>
+</div>
+
+<script>
+    // Полный URL для блокировки
+    const blockedUrl = 'https://endles.fun/9b9t';
+
+    // Проверяем текущий URL
+    function checkBlockedURL() {
+        const currentUrl = window.location.href.toLowerCase();
+
+        // Если текущий URL совпадает с заблокированным (или начинается с него)
+        if (currentUrl === blockedUrl.toLowerCase() ||
+            currentUrl.startsWith(blockedUrl.toLowerCase() + '/')) {
+            // Перенаправляем на страницу технического обслуживания
+            // (в данном случае остаемся на этой же странице)
+            document.title = "Доступ ограничен | Сайт на техническом обслуживании";
+
+            // Можно также очистить историю браузера, чтобы нельзя было вернуться назад
+            window.history.replaceState(null, null, window.location.origin);
+
+            // Дополнительно: полностью запрещаем переход по любым ссылкам
+            document.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    e.preventDefault();
+                    alert('Доступ временно ограничен из-за технических работ. Пожалуйста, попробуйте позже.');
+                }
+            }, true);
+
+            return;
+        }
+    }
+
+    // Проверяем URL при загрузке страницы
+    checkBlockedURL();
+
+    // Также проверяем при изменении URL (на случай SPA)
+    window.addEventListener('popstate', checkBlockedURL);
+    window.addEventListener('hashchange', checkBlockedURL);
+
+    // Блокируем любые попытки перехода на заблокированный URL
+    const originalPushState = window.history.pushState;
+    const originalReplaceState = window.history.replaceState;
+
+    window.history.pushState = function() {
+        originalPushState.apply(this, arguments);
+        checkBlockedURL();
+    };
+
+    window.history.replaceState = function() {
+        originalReplaceState.apply(this, arguments);
+        checkBlockedURL();
+    };
+
+    function switchLanguage(lang) {
+        document.getElementById('ru-content').style.display = lang === 'ru' ? 'block' : 'none';
+        document.getElementById('en-content').style.display = lang === 'en' ? 'block' : 'none';
+
+        document.querySelectorAll('.language-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        event.target.classList.add('active');
+    }
+
+    // Создаем звездный фон
+    function createStars() {
+        const starsContainer = document.getElementById('stars');
+        const starsCount = 100;
+
+        for (let i = 0; i < starsCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+
+            // Случайные параметры для звезд
+            const size = Math.random() * 3;
+            const posX = Math.random() * 100;
+            const posY = Math.random() * 100;
+            const opacity = Math.random() * 0.7 + 0.1;
+            const duration = Math.random() * 5 + 3 + 's';
+            const delay = Math.random() * 5 + 's';
+
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.left = `${posX}%`;
+            star.style.top = `${posY}%`;
+            star.style.setProperty('--opacity', opacity);
+            star.style.setProperty('--duration', duration);
+            star.style.animationDelay = delay;
+
+            starsContainer.appendChild(star);
+        }
+    }
+
+    // Инициализируем звезды при загрузке
+    window.onload = createStars;
+</script>
+</body>
+</html>

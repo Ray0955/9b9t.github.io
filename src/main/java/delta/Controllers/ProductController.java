@@ -15,6 +15,9 @@ public class ProductController {
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private Map<UUID, Product.ProductContent> products = new HashMap<>();
 
+    // Секретный ключ для проверки (лучше вынести в конфигурацию)
+    private static final String API_SECRET = "";
+
     @GetMapping
     public String getProducts(@PathVariable("server") String server) {
         loadProducts(server);
@@ -29,7 +32,14 @@ public class ProductController {
     }
 
     @PostMapping
-    public String addProduct(@PathVariable("server") String server, @RequestBody Product product) {
+    public String addProduct(@PathVariable("server") String server,
+                             @RequestBody Product product,
+                             @RequestHeader(value = "Authorization", required = false) String authHeader) {
+
+        if (!isAuthorized(authHeader)) {
+            return "{\"error\": \"Неавторизованный доступ\"}";
+        }
+
         if (product.getProducts().isEmpty()) {
             return "{\"error\": \"Продукт должен содержать хотя бы один элемент\"}";
         }
@@ -41,7 +51,15 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public String updateProduct(@PathVariable("server") String server, @PathVariable("id") UUID id, @RequestBody Product.ProductContent updatedProduct) {
+    public String updateProduct(@PathVariable("server") String server,
+                                @PathVariable("id") UUID id,
+                                @RequestBody Product.ProductContent updatedProduct,
+                                @RequestHeader(value = "Authorization", required = false) String authHeader) {
+
+        if (!isAuthorized(authHeader)) {
+            return "{\"error\": \"Неавторизованный доступ\"}";
+        }
+
         loadProducts(server);
         if (!products.containsKey(id)) {
             return "{\"error\": \"Товар с таким ID не найден\"}";
@@ -52,7 +70,14 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteProduct(@PathVariable("server") String server, @PathVariable("id") UUID id) {
+    public String deleteProduct(@PathVariable("server") String server,
+                                @PathVariable("id") UUID id,
+                                @RequestHeader(value = "Authorization", required = false) String authHeader) {
+
+        if (!isAuthorized(authHeader)) {
+            return "{\"error\": \"Неавторизованный доступ\"}";
+        }
+
         loadProducts(server);
         if (products.remove(id) != null) {
             saveProducts(server);
@@ -62,6 +87,12 @@ public class ProductController {
         }
     }
 
+    private boolean isAuthorized(String authHeader) {
+        // Проверяем, что заголовок Authorization содержит наш секретный ключ
+        return authHeader != null && authHeader.equals("Bearer " + API_SECRET);
+    }
+
+    // Остальные методы остаются без изменений
     private void loadProducts(String server) {
         String jsonFilePath = getJsonFilePath(server);
         File file = new File(jsonFilePath);
@@ -92,7 +123,7 @@ public class ProductController {
         String directoryPath = "data/" + server;
         File directory = new File(directoryPath);
         if (!directory.exists()) {
-            directory.mkdirs(); // Создать папку, если её нет
+            directory.mkdirs();
         }
         return directoryPath + "/products.json";
     }

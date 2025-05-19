@@ -297,52 +297,10 @@ body, html {
     margin-top: 20px;
 }
 
-.checkout-button {
-    background: linear-gradient(90deg, #28a745, #17a2b8, #28a745); /* Градиентный фон */
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
-    font-size: 16px;
-    display: none; /* Скрыта по умолчанию */
-    background-size: 200% 100%; /* Увеличиваем размер фона для анимации */
-    transition: background-position 0.5s ease, transform 0.2s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень для объема */
-}
 
-.checkout-button:hover {
-    background-position: -100% 0; /* Анимация градиента */
-    transform: scale(1.05); /* Увеличение кнопки при наведении */
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Увеличенная тень при наведении */
-}
-
-.checkout-button:active {
-    transform: scale(0.95); /* Эффект нажатия */
-    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1); /* Уменьшенная тень при нажатии */
-}
-
-@keyframes gradientShift {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-.checkout-button {
-    animation: gradientShift 3s infinite ease-in-out; /* Бесконечная анимация градиента */
-}
 
 .min-order-warning {
     display: none;
-    background: #fff3cd;
-    color: #666666c5;
     padding: 10px;
     border-radius: 5px;
     margin-top: 20px;

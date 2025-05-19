@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>6B6T SHOP</title>
+    <title>9B9T SHOP</title>
     <link rel="icon" type="image/png" href="images/ic.png">
     <link rel="stylesheet" href="/9b9t/css/style.css">
     <!-- Иконка корзины из FontAwesome -->
@@ -131,9 +131,140 @@
         .footer-copyright span[data-lang="ru"] {
             display: inline;
         }
+
+        /* Стили для страницы технического обслуживания */
+        .maintenance-page {
+            display: none;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #f0f0f0;
+            padding: 0;
+            margin: 0;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+        }
+        .maintenance-container {
+            max-width: 600px;
+            padding: 40px;
+            background: rgba(30, 30, 46, 0.9);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: relative;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 0.8s ease-out;
+        }
+        .maintenance-page h1 {
+            color: #ff6b6b;
+            margin-bottom: 25px;
+            font-size: 2.2em;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .maintenance-page p {
+            font-size: 1.1em;
+            line-height: 1.7;
+            margin-bottom: 30px;
+            color: #e0e0e0;
+        }
+        .maintenance-icon {
+            font-size: 80px;
+            margin-bottom: 25px;
+            color: #ff6b6b;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s infinite;
+        }
+        .language-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .language-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-left: 8px;
+            color: #f0f0f0;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .language-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .language-btn.active {
+            background: #ff6b6b;
+            color: white;
+            border-color: #ff6b6b;
+            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .maintenance-stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .maintenance-star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
+            opacity: 0;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: var(--opacity); }
+        }
     </style>
 </head>
+
 <body>
+<!-- Страница технического обслуживания (изначально скрыта) -->
+<div class="maintenance-page" id="maintenance-page">
+    <div class="maintenance-stars" id="maintenance-stars"></div>
+
+    <div class="maintenance-container">
+        <div class="language-switcher">
+            <button class="language-btn active" onclick="switchMaintenanceLanguage('ru')">RU</button>
+            <button class="language-btn" onclick="switchMaintenanceLanguage('en')">EN</button>
+        </div>
+
+        <div class="maintenance-icon">🔧</div>
+
+        <div id="maintenance-ru-content">
+            <h1>Сайт на техническом обслуживании</h1>
+            <p>В настоящее время на сайте проводятся технические работы. Приносим извинения за временные неудобства.</p>
+            <p>Мы работаем над улучшением сервиса для вас!</p>
+        </div>
+
+        <div id="maintenance-en-content" style="display: none;">
+            <h1>Website Under Maintenance</h1>
+            <p>We are currently performing technical maintenance on the website. We apologize for the temporary inconvenience.</p>
+            <p>We're working to improve the service for you!</p>
+        </div>
+    </div>
+</div>
+
 <!-- 3D фон в iframe -->
 <div class="background">
     <iframe id="bg-iframe" src="/2b2t/dd"></iframe>
@@ -206,9 +337,12 @@
                         <div class="filter-option" data-filter="all">Все</div>
                         <div class="filter-option" data-filter="Еда">Еда/Food</div>
                         <div class="filter-option" data-filter="Броня">Броня/Armor</div>
+                        <div class="filter-option" data-filter="Инструменты">Инструменты/Tools</div>
+                        <div class="filter-option" data-filter="Механизмы">Механизмы/Mechanisms</div>
                         <div class="filter-option" data-filter="Строительные блоки">Строительные блоки/Building blocks</div>
                         <div class="filter-option" data-filter="Стеши">Стеши/Stashes</div>
                         <div class="filter-option" data-filter="Расходники">Расходники/Consumables</div>
+                        <div class="filter-option" data-filter="Разное">Разное/Miscellaneous</div>
                     </div>
                 </div>
             </form>
@@ -275,6 +409,57 @@
 <script src="9b9t/js/script.js"></script>
 
 <script>
+    // Проверка режима технического обслуживания
+    function checkMaintenanceMode() {
+        const isMaintenance = localStorage.getItem('maintenanceMode') === 'true';
+        if (isMaintenance) {
+            document.getElementById('maintenance-page').style.display = 'flex';
+            document.querySelector('.content-wrapper').style.display = 'none';
+            document.querySelector('.discord-icon-bottom').style.display = 'none';
+            createMaintenanceStars();
+        }
+    }
+
+    // Создаем звездный фон для страницы техобслуживания
+    function createMaintenanceStars() {
+        const starsContainer = document.getElementById('maintenance-stars');
+        const starsCount = 100;
+
+        for (let i = 0; i < starsCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('maintenance-star');
+
+            // Случайные параметры для звезд
+            const size = Math.random() * 3;
+            const posX = Math.random() * 100;
+            const posY = Math.random() * 100;
+            const opacity = Math.random() * 0.7 + 0.1;
+            const duration = Math.random() * 5 + 3 + 's';
+            const delay = Math.random() * 5 + 's';
+
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.left = `${posX}%`;
+            star.style.top = `${posY}%`;
+            star.style.setProperty('--opacity', opacity);
+            star.style.setProperty('--duration', duration);
+            star.style.animationDelay = delay;
+
+            starsContainer.appendChild(star);
+        }
+    }
+
+    // Переключение языка на странице техобслуживания
+    function switchMaintenanceLanguage(lang) {
+        document.getElementById('maintenance-ru-content').style.display = lang === 'ru' ? 'block' : 'none';
+        document.getElementById('maintenance-en-content').style.display = lang === 'en' ? 'block' : 'none';
+
+        document.querySelectorAll('.maintenance-container .language-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        event.target.classList.add('active');
+    }
+
     // Передача движения мыши во фрейм с фоном
     document.addEventListener('mousemove', (e) => {
         const iframe = document.getElementById('bg-iframe');
@@ -310,6 +495,9 @@
             el.style.display = 'inline';
         });
     });
+
+    // Проверяем режим технического обслуживания при загрузке
+    window.addEventListener('DOMContentLoaded', checkMaintenanceMode);
 </script>
 </body>
 </html>

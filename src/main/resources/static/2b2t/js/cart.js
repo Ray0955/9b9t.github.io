@@ -3,82 +3,72 @@ document.addEventListener('DOMContentLoaded', () => {
     const cartList = document.querySelector('.cart-items');
     const totalElement = document.querySelector('.total');
     const emptyCartMessage = document.querySelector('.empty-cart-message');
+    const checkoutButton = document.querySelector('.checkout-button');
     const languageSelect = document.getElementById('language-select');
-    const checkoutContainer = document.querySelector('.checkout-button-container');
-    const allCheckoutButtons = document.querySelectorAll('.checkout-button');
 
-    // Загрузка выбранного языка
+    // Загрузка выбранного языка из localStorage
     const savedLanguage = localStorage.getItem('selectedLanguage') || 'ru';
     languageSelect.value = savedLanguage;
 
-    // Применяем язык при загрузке
+    // Применяем язык ДО отображения товаров
     changeLanguage(savedLanguage);
 
-    // Обработчик изменения языка
+    // Обработчик для выбора языка
     languageSelect.addEventListener('change', (event) => {
         const selectedLang = event.target.value;
         localStorage.setItem('selectedLanguage', selectedLang);
         changeLanguage(selectedLang);
     });
 
-    // Функция смены языка
+    // Функция для переключения языка
     function changeLanguage(lang) {
-        // Обновляем текст кнопки
-        updateCheckoutButtonText(lang);
+        console.log('Применяем язык:', lang);
 
-        // Обновляем видимость элементов
+        // Обновляем текст кнопки "Перейти к оформлению"
+        if (lang === 'ru') {
+            checkoutButton.innerText = 'Перейти к оформлению';
+        } else if (lang === 'uk') {
+            checkoutButton.innerText = 'Перейти до оформлення';
+        } else if (lang === 'en') {
+            checkoutButton.innerText = 'Proceed to Checkout';
+        }
+
+        // Обновляем видимость элементов с data-lang
         document.querySelectorAll('[data-lang]').forEach(element => {
-            element.style.display = element.getAttribute('data-lang') === lang ?
-                (element.tagName === 'SPAN' ? 'inline' : 'block') : 'none';
+            if (element.getAttribute('data-lang') === lang) {
+                element.style.display = 'block';
+            } else {
+                element.style.display = 'none';
+            }
         });
 
         // Перерисовываем корзину
         renderCart();
     }
 
-    // Обновление текста кнопки
-    function updateCheckoutButtonText(lang) {
-        allCheckoutButtons.forEach(button => {
-            if (button.getAttribute('data-lang') === lang) {
-                if (lang === 'ru') button.textContent = 'Перейти к оформлению';
-                else if (lang === 'uk') button.textContent = 'Перейти до оформлення';
-                else if (lang === 'en') button.textContent = 'Proceed to checkout';
-            }
-        });
-    }
-
     // Отображение товаров в корзине
     function renderCart() {
         cartList.innerHTML = '';
         let total = 0;
-        const currentLang = languageSelect.value;
 
         if (cartItems.length === 0) {
-            // Корзина пуста
-            checkoutContainer.style.display = 'none';
-
-            // Показываем сообщение для текущего языка
-            document.querySelectorAll('.empty-cart-message').forEach(el => {
-                el.style.display = el.getAttribute('data-lang') === currentLang ? 'block' : 'none';
+            // Если корзина пуста, показываем сообщение
+            document.querySelectorAll('.empty-cart-message').forEach(element => {
+                if (element.getAttribute('data-lang') === languageSelect.value) {
+                    element.style.display = 'block';
+                } else {
+                    element.style.display = 'none';
+                }
             });
-
-            // Скрываем все кнопки
-            allCheckoutButtons.forEach(btn => btn.style.display = 'none');
+            checkoutButton.style.display = 'none';
         } else {
-            // Корзина не пуста
-            checkoutContainer.style.display = 'block';
-
-            // Скрываем сообщение
-            document.querySelectorAll('.empty-cart-message').forEach(el => {
-                el.style.display = 'none';
+            // Если в корзине есть товары, скрываем сообщение
+            document.querySelectorAll('.empty-cart-message').forEach(element => {
+                element.style.display = 'none';
             });
+            checkoutButton.style.display = 'block';
 
-            // Показываем только кнопку текущего языка
-            allCheckoutButtons.forEach(btn => {
-                btn.style.display = btn.getAttribute('data-lang') === currentLang ? 'block' : 'none';
-            });
-
-            // Отрисовываем товары
+            // Отображаем товары
             cartItems.forEach((item, index) => {
                 const li = document.createElement('li');
                 li.innerHTML = `
@@ -94,17 +84,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 cartList.appendChild(li);
                 total += item.price * item.quantity;
             });
-        }
 
-        // Обновляем общую сумму
-        document.querySelectorAll('.total-amount').forEach(el => {
-            if (el.getAttribute('data-lang') === currentLang) {
-                el.style.display = 'block';
-                el.querySelector('.total').textContent = total.toFixed(2);
-            } else {
-                el.style.display = 'none';
-            }
-        });
+            // Обновляем общую сумму
+            document.querySelectorAll('.total-amount').forEach(element => {
+                if (element.getAttribute('data-lang') === languageSelect.value) {
+                    element.style.display = 'block';
+                    element.querySelector('.total').innerText = total.toFixed(2);
+                } else {
+                    element.style.display = 'none';
+                }
+            });
+        }
     }
 
     // Изменение количества товара
@@ -122,11 +112,9 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCart();
     };
 
-    // Обработчик клика по кнопке оформления
-    document.addEventListener('click', (e) => {
-        if (e.target.classList.contains('checkout-button')) {
-            window.location.href = '/2b2t/checkout';
-        }
+    // Переход к оформлению заказа
+    checkoutButton.addEventListener('click', () => {
+        window.location.href = '/2b2t/checkout';
     });
 
     // Инициализация корзины
