@@ -725,7 +725,152 @@ body.dark-theme .refresh-button:hover {
     background-color: #cc0000; /* Темно-красный цвет при наведении */
     transform: translateY(-2px);
 }
+/* Кнопка технических работ */
+.maintenance-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  margin-left: 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  position: relative;
+  overflow: hidden;
+}
 
+.maintenance-button:hover {
+  background-color: #45a049;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.maintenance-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 3px rgba(0,0,0,0.2);
+}
+
+.maintenance-button.active {
+  background-color: #f44336;
+}
+
+.maintenance-button.active:hover {
+  background-color: #d32f2f;
+}
+
+/* Иконка */
+.maintenance-icon {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  transition: transform 0.3s ease;
+}
+
+.maintenance-button:hover .maintenance-icon {
+  transform: rotate(15deg);
+}
+
+.maintenance-button.active .maintenance-icon {
+  animation: pulse 1.5s infinite;
+}
+
+/* Текст кнопки */
+.maintenance-text {
+  white-space: nowrap;
+  position: relative;
+}
+
+/* Эффект волны при клике */
+.maintenance-button::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.8) 10%, transparent 10.01%) no-repeat 50%;
+  transform: scale(10,10);
+  opacity: 0;
+  transition: transform 0.5s, opacity 1s;
+}
+
+.maintenance-button:active::after {
+  transform: scale(0,0);
+  opacity: 0.3;
+  transition: 0s;
+}
+
+/* Уведомления */
+#admin-notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #333;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  z-index: 1000;
+  max-width: 300px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  opacity: 1;
+  transition: opacity 0.5s ease;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+#admin-notification::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background-color: #4CAF50;
+  border-radius: 8px 0 0 8px;
+}
+
+#admin-notification.error {
+  background-color: #d32f2f;
+}
+
+#admin-notification.error::before {
+  background-color: #ffeb3b;
+}
+
+/* Анимации */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .maintenance-button {
+    padding: 8px 12px;
+    font-size: 12px;
+    margin-left: 10px;
+  }
+
+  .maintenance-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  #admin-notification {
+    max-width: 250px;
+    font-size: 13px;
+    padding: 12px 16px;
+  }
+}
 .reset-icon {
     font-size: 16px;
 }

@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="/9b9t/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Стили для фона */
         .background {
             position: fixed;
             top: 0;
@@ -25,111 +24,10 @@
             pointer-events: none;
         }
 
-        /* Стили для страницы технического обслуживания */
-        .maintenance-page {
-            display: none;
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #f0f0f0;
-            padding: 0;
-            margin: 0;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 9999;
-        }
-        .maintenance-container {
-            max-width: 600px;
-            padding: 40px;
-            background: rgba(30, 30, 46, 0.9);
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            position: relative;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: fadeIn 0.8s ease-out;
-        }
-        .maintenance-page h1 {
-            color: #ff6b6b;
-            margin-bottom: 25px;
-            font-size: 2.2em;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-        .maintenance-page p {
-            font-size: 1.1em;
-            line-height: 1.7;
-            margin-bottom: 30px;
-            color: #e0e0e0;
-        }
-        .maintenance-icon {
-            font-size: 80px;
-            margin-bottom: 25px;
-            color: #ff6b6b;
-            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            animation: pulse 2s infinite;
-        }
-        .language-switcher {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
-        .language-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 6px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            margin-left: 8px;
-            color: #f0f0f0;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        .language-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .language-btn.active {
-            background: #ff6b6b;
-            color: white;
-            border-color: #ff6b6b;
-            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        .maintenance-stars {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-        .maintenance-star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle var(--duration) infinite ease-in-out;
-            opacity: 0;
-        }
-        @keyframes twinkle {
-            0%, 100% { opacity: 0; }
-            50% { opacity: var(--opacity); }
+        .interactive {
+            pointer-events: auto;
         }
 
-        /* Остальные стили корзины */
         .cart-content {
             padding: 20px;
             margin-bottom: 120px;
@@ -301,102 +199,83 @@
         }
 
         .checkout-button {
-            padding: 14px 32px;
-            background: #1a252f;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1.1rem;
-            font-weight: 600;
-            transition: all 0.4s ease;
-            position: relative;
-            z-index: 1;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
+    padding: 14px 32px;
+    background: #1a252f; /* Темный фон кнопки */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: all 0.4s ease;
+    position: relative;
+    z-index: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
 
-        .checkout-button::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg,
-                #ff0000,
-                #ff00ff,
-                #0000ff,
-                #ff00ff,
-                #ff0000);
-            background-size: 300%;
-            border-radius: 10px;
-            z-index: -1;
-            opacity: 0.8;
-            animation: rainbow-border 3s linear infinite;
-        }
+/* Контейнер для градиентной границы */
+.checkout-button::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg,
+        #ff0000,  /* Красный */
+        #ff00ff,  /* Фиолетовый */
+        #0000ff,  /* Синий */
+        #ff00ff,  /* Фиолетовый */
+        #ff0000); /* Красный */
+    background-size: 300%;
+    border-radius: 10px; /* Чуть больше, чем у кнопки */
+    z-index: -1;
+    opacity: 0.8;
+    animation: rainbow-border 3s linear infinite;
+}
 
-        .checkout-button::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: #1a252f;
-            border-radius: 8px;
-            z-index: -1;
-        }
+/* Темная "маска" внутри (чтобы градиент был только по краям) */
+.checkout-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #1a252f; /* Совпадает с фоном кнопки */
+    border-radius: 8px;
+    z-index: -1;
+}
 
-        @keyframes rainbow-border {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
-        }
+/* Анимация градиента */
+@keyframes rainbow-border {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
 
-        .checkout-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-        }
+/* Эффекты при наведении */
+.checkout-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
 
-        .checkout-button:hover::before {
-            opacity: 1;
-            animation-duration: 1.5s;
-        }
+.checkout-button:hover::before {
+    opacity: 1;
+    animation-duration: 1.5s;
+}
 
-        .checkout-button:active {
-            transform: translateY(0);
-        }
+.checkout-button:active {
+    transform: translateY(0);
+}
     </style>
 </head>
-
 <body>
-<!-- Страница технического обслуживания -->
-<div class="maintenance-page" id="maintenance-page">
-    <div class="maintenance-stars" id="maintenance-stars"></div>
-
-    <div class="maintenance-container">
-        <div class="language-switcher">
-            <button class="language-btn active" onclick="switchMaintenanceLanguage('ru')">RU</button>
-            <button class="language-btn" onclick="switchMaintenanceLanguage('en')">EN</button>
-        </div>
-
-        <div class="maintenance-icon">🔧</div>
-
-        <div id="maintenance-ru-content">
-            <h1>Сайт на техническом обслуживании</h1>
-            <p>В настоящее время на сайте проводятся технические работы. Приносим извинения за временные неудобства.</p>
-            <p>Мы работаем над улучшением сервиса для вас!</p>
-        </div>
-
-        <div id="maintenance-en-content" style="display: none;">
-            <h1>Website Under Maintenance</h1>
-            <p>We are currently performing technical maintenance on the website. We apologize for the temporary inconvenience.</p>
-            <p>We're working to improve the service for you!</p>
-        </div>
-    </div>
-</div>
-
 <div class="background">
     <iframe id="bg-iframe" src="/2b2t/dd"></iframe>
 </div>
@@ -482,70 +361,6 @@
 <script src="/9b9t/js/cart.js"></script>
 
 <script>
-    // Проверка режима технического обслуживания
-    function checkMaintenanceMode() {
-        const isMaintenance = localStorage.getItem('maintenanceMode') === 'true';
-        if (isMaintenance) {
-            document.getElementById('maintenance-page').style.display = 'flex';
-            document.querySelector('.cart-container').style.display = 'none';
-            document.querySelector('.discord-icon-bottom').style.display = 'none';
-            createMaintenanceStars();
-
-            // Блокируем любые попытки перехода
-            document.addEventListener('click', function(e) {
-                if (e.target.tagName === 'A') {
-                    e.preventDefault();
-                    const lang = document.getElementById('language-select').value;
-                    alert(lang === 'ru' ?
-                        'Доступ временно ограничен из-за технических работ. Пожалуйста, попробуйте позже.' :
-                        'Access is temporarily limited due to maintenance. Please try again later.');
-                }
-            }, true);
-        }
-    }
-
-    // Создаем звездный фон для страницы техобслуживания
-    function createMaintenanceStars() {
-        const starsContainer = document.getElementById('maintenance-stars');
-        const starsCount = 100;
-
-        for (let i = 0; i < starsCount; i++) {
-            const star = document.createElement('div');
-            star.classList.add('maintenance-star');
-
-            const size = Math.random() * 3;
-            const posX = Math.random() * 100;
-            const posY = Math.random() * 100;
-            const opacity = Math.random() * 0.7 + 0.1;
-            const duration = Math.random() * 5 + 3 + 's';
-            const delay = Math.random() * 5 + 's';
-
-            star.style.width = `${size}px`;
-            star.style.height = `${size}px`;
-            star.style.left = `${posX}%`;
-            star.style.top = `${posY}%`;
-            star.style.setProperty('--opacity', opacity);
-            star.style.setProperty('--duration', duration);
-            star.style.animationDelay = delay;
-
-            starsContainer.appendChild(star);
-        }
-    }
-
-    // Переключение языка на странице техобслуживания
-    function switchMaintenanceLanguage(lang) {
-        document.getElementById('maintenance-ru-content').style.display = lang === 'ru' ? 'block' : 'none';
-        document.getElementById('maintenance-en-content').style.display = lang === 'en' ? 'block' : 'none';
-
-        document.querySelectorAll('.maintenance-container .language-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        event.target.classList.add('active');
-    }
-
-    // Проверяем режим технического обслуживания при загрузке
-    window.addEventListener('DOMContentLoaded', checkMaintenanceMode);
-
     document.addEventListener('mousemove', (e) => {
         const iframe = document.getElementById('bg-iframe');
         if (iframe.contentWindow) {
