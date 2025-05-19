@@ -13,6 +13,10 @@ public class PageController {
     public String home(Model model) {
         return "index";
     }
+    @GetMapping("/maintenance")
+    public String maintenance() {
+        return "maintenance";
+    }
     @GetMapping("/admin/admin")
     public String getAdmin(Model model) {
         return "admin/admin";
@@ -31,8 +35,6 @@ public class PageController {
         model.addAttribute("version", "1.0.0");
         return "status";
     }
-
-
 
     @GetMapping("/su/success")
     public String getSuccess(Model model) {

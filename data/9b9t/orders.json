@@ -1,1 +1,3 @@
-{"orders":{"5c42e230-23a9-4b1f-9696-c7f5f73f450a":{"totalPrice":150.0,"info":{"discord":"test#1234","formattedISO":"2023-01-01T00:00:00Z","deliveryMethod":"random","email":"test@example.com","username":"testuser"},"messages":{},"coordinates":{"x":100,"z":200},"products":{"4204f85f-0e2d-41b9-a650-1d5a41122016":1}},"d2bd3b78-e4ed-4227-9f75-4e844e91a5f2":{"totalPrice":100.0,"info":{"discord":"test#1234","formattedISO":"2023-01-01T00:00:00Z","deliveryMethod":"random","email":"test@example.com","username":"testuser"},"messages":{},"coordinates":{"x":100,"z":200},"products":{"37b85335-f28f-469d-8fda-b7a9fcd0ff9c":1}},"455fde73-3ccd-49a8-a65f-8f92aeeae25a":{"totalPrice":100.0,"info":{"discord":"test#1234","formattedISO":"2023-01-01T00:00:00Z","deliveryMethod":"random","email":"test@example.com","username":"testuser"},"messages":{},"coordinates":{"x":100,"z":200},"products":{"fddbd3d6-bbd4-4f12-9f6b-b066778cc831":1}}}}
+{
+  "orders": {}
+}

@@ -1,6 +1,7 @@
 package delta.Controllers;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import delta.Entity.Order;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +14,7 @@ import java.util.UUID;
 @CrossOrigin(origins = "*") // Разрешаем запросы с фронтенда
 public class OrderController {
 
-    private final Gson gson = new Gson();
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     @GetMapping
     public String getOrders(
