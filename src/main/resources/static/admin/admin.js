@@ -17,13 +17,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoutButton = document.getElementById('logout-button');
     const ordersTableBody = document.querySelector('#orders-table tbody');
     const usernameLabel = document.querySelector('label[for="username"]');
-<<<<<<< HEAD
 
 
 
 
-=======
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
     // Элементы для управления промокодами
     const generatePromoBtn = document.getElementById('generate-promo-btn');
     const promoCodeInput = document.getElementById('promo-code');
@@ -48,17 +45,14 @@ document.addEventListener('DOMContentLoaded', () => {
     promoMaxUsesInput.className = 'promo-control-input';
     document.querySelector('.promo-controls').insertBefore(promoMaxUsesInput, addPromoBtn);
 
-<<<<<<< HEAD
     // Секретный ключ для авторизации (должен совпадать с API_SECRET в ProductController и MaintenanceController)
-    const API_SECRET = "";
+    const API_SECRET = "test";
 
     // Получаем authToken из localStorage или генерируем новый
     function getAuthToken() {
         return `Bearer ${API_SECRET}`;
     }
 
-=======
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
     // Хешированные данные для авторизации
     const users = [
         {
@@ -74,16 +68,16 @@ document.addEventListener('DOMContentLoaded', () => {
             server: '9b9t'
         },
         {
-            usernameHash: '0316c5640787d0af725750c238d04b0c00001adc741770c7addf40dec63b897f',
-            passwordHash: '1ba119d21891c4d219ca2216845cbb3e2fc6654dd3c73b62a70c91459ed54826',
+            usernameHash: 'adc32ec674a8e58e9b661856beb0db36ae2b542388800829700097ee5f37a3a1',
+            passwordHash: 'de4455aa92230d8a2e8f061ac4170a0885c25c68f1684011a65fc88f9609f473',
             role: 'admin',
-            server: '2b2t'
+            server: '6b6t'
         },
         {
             usernameHash: 'adbacbf2fea81a2159eb2af9e2170fd018b85af23b4f3e06e3301b5af780f5b3',
             passwordHash: '443def92e889d868bfc7a3df83bd610907bec5182c8c2a34f710724c48cb13de',
             role: 'moderator',
-            server: '2b2t'
+            server: '6b6t'
         }
     ];
 
@@ -101,11 +95,8 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loginAdmin(login, password) {
         const loginHash = await hashSHA256(login);
         const passwordHash = await hashSHA256(password);
-<<<<<<< HEAD
         localStorage.setItem('adminLogin', login); // сохраняем оригинальный логин
         localStorage.setItem('adminPassword', password); // сохраняем оригинальный пароль
-=======
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
         localStorage.setItem('adminLoginHash', loginHash);
         localStorage.setItem('adminPasswordHash', passwordHash);
     }
@@ -113,11 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Функция для получения базового URL API в зависимости от сервера
     function getApiBaseUrl() {
         const server = localStorage.getItem('server') || '9b9t';
-<<<<<<< HEAD
         return `https://endles.fun/api/${server}`;
-=======
-        return `https://9b9t.shop/api/${server}`;
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
     }
 
     // Обработчик авторизации
@@ -228,7 +215,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 button.title = '';
                 button.classList.remove('disabled-button');
             });
-<<<<<<< HEAD
 
             // Добавляем кнопку технических работ для администратора
             const maintenanceButton = document.createElement('button');
@@ -270,15 +256,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 // Обработчик клика по кнопке
+                // В функции configureUI для админа:
                 maintenanceButton.addEventListener('click', () => {
                     const currentMode = maintenanceButton.classList.contains('active');
                     const newMode = !currentMode;
+                    const server = localStorage.getItem('server') || '9b9t';
 
-                    fetch('/api/maintenance/toggle', {
+                    fetch('/api/maintenance/toggle?server=' + server, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                                        'X-API-Secret': API_SECRET
+                            'X-API-Secret': API_SECRET
                         },
                         body: JSON.stringify({ work: !newMode })
                     })
@@ -291,9 +279,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         updateMaintenanceButton(newMode);
 
                         if (newMode) {
-                            showAdminNotification('Технические работы включены! Сайт теперь недоступен для пользователей.');
+                            showAdminNotification('Технические работы включены для сервера ' + server + '!');
                         } else {
-                            showAdminNotification('Технические работы выключены! Сайт снова доступен.');
+                            showAdminNotification('Технические работы выключены для сервера ' + server + '!');
                         }
                     })
                     .catch(error => {
@@ -301,6 +289,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         alert('Не удалось изменить режим техработ');
                     });
                 });
+
+                // При загрузке статуса:
+                fetch('/api/maintenance/status?server=' + (localStorage.getItem('server') || '9b9t'))
+                    .then(response => response.json())
+                    .then(data => {
+                        const isMaintenance = !data.work;
+                        updateMaintenanceButton(isMaintenance);
+                        localStorage.setItem('maintenanceMode', isMaintenance.toString());
+                    });
 
                 // Добавляем кнопку блокировки модератора
                 addModeratorBlockButton();
@@ -340,24 +337,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // Блокировка/разблокировка модератора
-=======
-        }
-    }
-
-    //  блок модер для адм
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
     function addModeratorBlockButton() {
         const adminHeader = document.querySelector('.admin-header');
         if (!adminHeader) return;
 
-<<<<<<< HEAD
         // Проверяем, существует ли кнопка уже
         const existingButton = document.getElementById('block-moderator-button');
         if (existingButton) return; // Если кнопка уже есть, выходим из функции
 
-=======
-        // кнопк
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
         const blockButton = document.createElement('button');
         blockButton.id = 'block-moderator-button';
 
@@ -369,10 +356,6 @@ document.addEventListener('DOMContentLoaded', () => {
             : 'Заблокировать модератора';
         blockButton.classList.add('block-moderator-button');
 
-<<<<<<< HEAD
-=======
-        // Обработчик для кнопки
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
         blockButton.addEventListener('click', () => {
             const isBlocked = localStorage.getItem(serverBlockKey);
 
@@ -920,7 +903,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==================== Остальные функции ====================
-<<<<<<< HEAD
     // Функции для работы с заказами
 async function loadOrders() {
     loader.style.display = "flex";
@@ -1047,133 +1029,12 @@ async function loadOrders() {
             const passwordHash = localStorage.getItem('adminPasswordHash');
 
             const response = await fetch(`${getApiBaseUrl()}/orders/${orderId}?login=${loginHash}&password=${passwordHash}`, {
-=======
-
-    // Загрузка заказов с авторизацией
-    async function loadOrders() {
-        loader.style.display = "flex";
-        try {
-            const loginHash = localStorage.getItem('adminLoginHash');
-            const passwordHash = localStorage.getItem('adminPasswordHash');
-            const server = localStorage.getItem('server') || '9b9t';
-
-            if (!loginHash || !passwordHash) {
-                alert('Авторизация не выполнена');
-                return;
-            }
-
-            const response = await fetch(`${getApiBaseUrl()}/orders?login=${loginHash}&password=${passwordHash}`);
-
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-            const orders = await response.json();
-            await renderOrders(orders);
-
-        } catch (error) {
-            console.error("Ошибка загрузки заказов:", error);
-            alert("Не удалось загрузить заказы");
-        } finally {
-            loader.style.display = "none";
-        }
-    }
-
-
-async function renderOrders(orders) {
-    const tbody = ordersTable.querySelector('tbody');
-    tbody.innerHTML = '';
-
-    const role = localStorage.getItem('role'); // Получаем роль пользователя
-    const currentServer = localStorage.getItem('server') || '9b9t'; // Получаем текущий сервер (с fallback на 9b9t)
-
-    for (const orderId in orders) {
-        const order = orders[orderId];
-        const products = order.products ? Object.entries(order.products) : [];
-
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${order.info.username}</td>
-            <td>${order.info.discord}</td>
-            <td>${order.info.email}</td>
-            <td>
-                <div class="order-products">
-                    <button class="toggle-products">Показать товары</button>
-                    <ul class="products-list" style="display: none;">
-                        ${products.map(([productId, quantity]) => `
-                            <li id="product-${productId}">Товар загружается...</li>
-                        `).join('')}
-                    </ul>
-                </div>
-            </td>
-            <td>$${order.totalPrice.toFixed(2)}</td>
-            <td>${order.info.deliveryMethod}</td>
-            <td>${order.coordinates ? `X: ${order.coordinates.x}<br>Y: ${order.coordinates.y}<br>Z: ${order.coordinates.z}` : 'Нет данных'}</td>
-            <td>${order.info.formattedISO || 'Нет данных'}</td>
-            <td>
-                <a href="/${localStorage.getItem('server') || '9b9t'}/chat?orderId=${orderId}" class="chat-button">Чат</a>
-            </td>
-            <td>
-                <button class="delete-order-button ${role === 'moderator' ? 'disabled-button' : ''}"
-                        data-order-id="${orderId}"
-                        ${role === 'moderator' ? 'disabled' : ''}
-                        title="${role === 'moderator' ? 'Доступно для Администрации' : ''}">
-                    Удалить заказ
-                </button>
-            </td>
-        `;
-        tbody.appendChild(row);
-
-            // Загружаем данные о товарах
-            for (const [productId, quantity] of products) {
-                fetchProductById(productId).then(product => {
-                    const productElement = document.getElementById(`product-${productId}`);
-                    if (product) {
-                        productElement.innerHTML = `
-                            <img src="${product.imageUrl}" width="50" alt="${product.title?.RU || 'Нет названия'}">
-                            ${product.title?.RU || product.title?.EN || 'Нет названия'}
-                            x${quantity} ($${product.price || 0})
-                        `;
-                    } else {
-                        productElement.innerText = `Товар с ID ${productId} не найден`;
-                    }
-                }).catch(error => {
-                    console.error(`Ошибка загрузки товара ${productId}:`, error);
-                });
-            }
-        }
-
-        // Добавляем обработчики событий (скрытие/показ товаров)
-        document.querySelectorAll('.toggle-products').forEach(button => {
-            button.addEventListener('click', () => {
-                const productsList = button.nextElementSibling;
-                productsList.style.display = productsList.style.display === 'none' ? 'block' : 'none';
-                button.textContent = productsList.style.display === 'none' ? 'Показать товары' : 'Скрыть товары';
-            });
-        });
-
-        // Добавляем обработчики для удаления заказов (только для администратора)
-        if (role === 'admin') {
-            document.querySelectorAll('.delete-order-button').forEach(button => {
-                button.addEventListener('click', async () => {
-                    const orderId = button.getAttribute('data-order-id');
-                    await deleteOrder(orderId);
-                });
-            });
-        }
-    }
-
-    // Удаление заказа
-    async function deleteOrder(orderId) {
-        loader.style.display = 'flex';
-        try {
-            const response = await fetch(`${getApiBaseUrl()}/orders/${orderId}`, {
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
 
-<<<<<<< HEAD
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.error || 'Ошибка при удалении заказа');
@@ -1183,39 +1044,17 @@ async function renderOrders(orders) {
         } catch (error) {
             console.error('Ошибка:', error);
             alert('Не удалось удалить заказ: ' + error.message);
-=======
-            if (!response.ok) throw new Error('Ошибка при удалении заказа');
-
-            const result = await response.json();
-            console.log('Заказ удален:', result);
-
-            // Обновляем список заказов
-            await loadOrders();
-        } catch (error) {
-            console.error('Ошибка:', error);
-            alert('Не удалось удалить заказ');
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
         } finally {
             loader.style.display = 'none';
         }
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
     // Загрузка товаров
     async function loadProducts() {
         loader.style.display = "flex";
         try {
             const response = await fetch(`${getApiBaseUrl()}/products`);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-<<<<<<< HEAD
             renderProducts(await response.json());
-=======
-
-            const products = await response.json();
-            renderProducts(products);
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
         } catch (error) {
             console.error("Ошибка загрузки товаров:", error);
             alert("Не удалось загрузить товары");
@@ -1232,10 +1071,7 @@ async function renderOrders(orders) {
         for (const productId in products) {
             const product = products[productId];
             const row = document.createElement('tr');
-<<<<<<< HEAD
 
-=======
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
             row.innerHTML = `
                 <td>${product.title?.RU || 'Нет названия'}</td>
                 <td>${product.category || 'Нет категории'}</td>
@@ -1247,7 +1083,6 @@ async function renderOrders(orders) {
                     <button class="delete-button" data-id="${productId}">Удалить</button>
                 </td>
             `;
-<<<<<<< HEAD
 
             tbody.appendChild(row);
         }
@@ -1262,11 +1097,6 @@ async function renderOrders(orders) {
         });
     }
 
-=======
-            tbody.appendChild(row);
-        }
-
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
         // Обработчики для кнопок редактирования
         const editButtons = document.querySelectorAll('.edit-button');
         editButtons.forEach(button => {
@@ -1283,25 +1113,16 @@ async function renderOrders(orders) {
                 const productId = button.getAttribute('data-id');
                 await deleteProduct(productId);
             });
-<<<<<<< HEAD
     });
 
     // Удаление товара
     async function deleteProduct(productId) {
         if (!confirm('Вы уверены, что хотите удалить этот товар?')) return;
 
-=======
-        });
-    }
-
-    // Удаление товара
-    async function deleteProduct(productId) {
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
         loader.style.display = "flex";
         try {
             const response = await fetch(`${getApiBaseUrl()}/products/${productId}`, {
                 method: 'DELETE',
-<<<<<<< HEAD
                 headers: {
                     'Authorization': getAuthToken()
                 }
@@ -1311,26 +1132,16 @@ async function renderOrders(orders) {
                 const errorData = await response.json();
                 throw new Error(errorData.error || 'Ошибка при удалении товара');
             }
-=======
-            });
-
-            if (!response.ok) throw new Error('Ошибка при удалении товара');
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
 
             await loadProducts(); // Обновляем список товаров после удаления
         } catch (error) {
             console.error('Ошибка:', error);
-<<<<<<< HEAD
             alert('Не удалось удалить товар: ' + error.message);
-=======
-            alert('Не удалось удалить товар');
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
         } finally {
             loader.style.display = "none";
         }
     }
 
-<<<<<<< HEAD
     // Список категорий для выпадающего меню (можно вынести в глобальную область)
     const PRODUCT_CATEGORIES = [
         'Еда',
@@ -1343,8 +1154,6 @@ async function renderOrders(orders) {
         'Разное'
     ];
 
-=======
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
     // Открытие модального окна для редактирования товара
     async function openEditModal(productId) {
         loader.style.display = 'flex';
@@ -1353,7 +1162,6 @@ async function renderOrders(orders) {
             if (!response.ok) throw new Error('Ошибка загрузки данных товара');
 
             const product = await response.json();
-<<<<<<< HEAD
             const categorySelect = document.getElementById('edit-product-category');
 
             // Заполняем выпадающий список категориями
@@ -1367,11 +1175,6 @@ async function renderOrders(orders) {
 
             // Заполняем форму данными товара
             categorySelect.value = product.category || '';
-=======
-
-            // Заполняем форму данными товара
-            document.getElementById('edit-product-category').value = product.category || '';
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
             document.getElementById('edit-product-title-ru').value = product.title?.RU || '';
             document.getElementById('edit-product-title-uk').value = product.title?.UK || '';
             document.getElementById('edit-product-title-en').value = product.title?.EN || '';
@@ -1401,7 +1204,6 @@ async function renderOrders(orders) {
         loader.style.display = 'flex';
 
         const price = parseFloat(document.getElementById('edit-product-price').value);
-<<<<<<< HEAD
         if (price < 0.01) {
             alert('Минимальная цена товара — 0.01$');
             loader.style.display = 'none';
@@ -1411,21 +1213,13 @@ async function renderOrders(orders) {
         const category = document.getElementById('edit-product-category').value;
         if (!category) {
             alert('Пожалуйста, выберите категорию товара');
-=======
-        if (price < 0.1) {
-            alert('Минимальная цена товара — 0.1$');
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
             loader.style.display = 'none';
             return;
         }
 
         const productId = editProductForm.getAttribute('data-id');
         const updatedProduct = {
-<<<<<<< HEAD
             category: category,
-=======
-            category: document.getElementById('edit-product-category').value,
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
             title: {
                 RU: document.getElementById('edit-product-title-ru').value,
                 UK: document.getElementById('edit-product-title-uk').value,
@@ -1447,22 +1241,15 @@ async function renderOrders(orders) {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-<<<<<<< HEAD
                     'Authorization': getAuthToken()
-=======
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
                 },
                 body: JSON.stringify(updatedProduct),
             });
 
-<<<<<<< HEAD
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.error || 'Ошибка при сохранении изменений');
             }
-=======
-            if (!response.ok) throw new Error('Ошибка при сохранении изменений');
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
 
             const result = await response.json();
             console.log('Товар обновлен:', result);
@@ -1472,32 +1259,19 @@ async function renderOrders(orders) {
             await loadProducts();
         } catch (error) {
             console.error('Ошибка:', error);
-<<<<<<< HEAD
             alert('Не удалось сохранить изменения: ' + error.message);
-=======
-            alert('Не удалось сохранить изменения');
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
         } finally {
             loader.style.display = 'none';
         }
     });
-<<<<<<< HEAD
-=======
-
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
     // Добавление товара
     addProductForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         loader.style.display = 'flex';
 
         const price = parseFloat(document.getElementById('product-price').value);
-<<<<<<< HEAD
         if (price < 0.01) {
             alert('Минимальная цена товара — 0.01$');
-=======
-        if (price < 0.1) {
-            alert('Минимальная цена товара — 0.1$');
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
             loader.style.display = 'none';
             return;
         }
@@ -1525,10 +1299,7 @@ async function renderOrders(orders) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-<<<<<<< HEAD
                     'Authorization': getAuthToken()
-=======
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
                 },
                 body: JSON.stringify({
                     products: {
@@ -1537,30 +1308,19 @@ async function renderOrders(orders) {
                 }),
             });
 
-<<<<<<< HEAD
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.error || 'Ошибка при добавлении товара');
             }
-=======
-            if (!response.ok) throw new Error('Ошибка при добавлении товара');
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
 
             const result = await response.json();
             console.log('Товар добавлен:', result);
             addProductModal.style.display = 'none';
-<<<<<<< HEAD
             addProductForm.reset();
             await loadProducts();
         } catch (error) {
             console.error('Ошибка:', error);
             alert('Не удалось добавить товар: ' + error.message);
-=======
-            await loadProducts();
-        } catch (error) {
-            console.error('Ошибка:', error);
-            alert('Не удалось добавить товар');
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
         } finally {
             loader.style.display = 'none';
         }
@@ -1818,8 +1578,4 @@ async function renderOrders(orders) {
             return null;
         }
     }
-<<<<<<< HEAD
 });
-=======
-});
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1

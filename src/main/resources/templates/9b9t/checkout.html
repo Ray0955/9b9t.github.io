@@ -3,323 +3,857 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Оформление заказа</title>
-    <link rel="stylesheet" href="/9b9t/css/style.css">
+    <title>Оформление заказа | Endles.fun</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" href="images/ic.png">
     <script src="https://js.stripe.com/v3/"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Стили для 3D фона */
-        body, html {
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            width: 100%;
-            height: 100%;
+        :root {
+            --primary: #6c43ff;
+            --primary-dark: #4a2bdb;
+            --secondary: #ff6bff;
+            --accent: #00f2ff;
+            --dark: #0f0f1a;
+            --darker: #0a0a12;
+            --light: rgba(255, 255, 255, 0.1);
+            --text: #ffffff;
+            --text-light: #e0e0e0;
+            --text-muted: #b0b0b0;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --error: #f44336;
+            --radius: 16px;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
         }
 
-        .background {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .bg-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
-            overflow: hidden;
+            z-index: -2;
         }
 
-        #bg-iframe {
+        .bg-iframe {
             width: 100%;
             height: 100%;
             border: none;
             pointer-events: none;
+            opacity: 0.7;
         }
 
-        /* Основные стили контента */
-        .main-container {
-            position: relative;
-            width: 100%;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .checkout-container {
-            flex: 1;
-            padding-bottom: 150px; /* Отступ для футера */
-        }
-
-        .pay-button.visible {
-            display: block;
-            opacity: 1;
-        }
-
-        /* Стили для маленькой иконки Discord */
-        .discord-icon-bottom {
+        .bg-overlay {
             position: fixed;
-            bottom: 80px;
-            right: 20px;
-            z-index: 100;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #5865F2;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(15, 15, 26, 0.9) 0%, rgba(15, 15, 26, 0.6) 100%);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .back-btn {
             display: flex;
             align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
+            gap: 8px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 16px;
+            transition: var(--transition);
+            background: var(--light);
+            padding: 12px 20px;
+            border-radius: var(--radius);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .discord-icon-bottom:hover {
-            transform: scale(1.1);
-            background-color: #4752C4;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        .back-btn:hover {
+            color: var(--accent);
+            transform: translateX(-5px);
+            border-color: rgba(108, 67, 255, 0.3);
         }
 
-        .discord-icon-bottom i {
-            color: white;
-            font-size: 20px;
+        .page-title {
+            font-size: 2.5rem;
+            margin: 30px 0;
+            text-align: center;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+            position: relative;
         }
 
-        /* Стили для компактного футера */
-        .compact-footer {
-            background-color: rgba(34, 34, 34, 0.8);
-            color: white;
-            padding: 10px 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        .checkout-layout {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 992px) {
+            .checkout-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-block {
+            background: var(--light);
+            border-radius: var(--radius);
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .form-block:hover {
+            border-color: rgba(108, 67, 255, 0.3);
+        }
+
+        .block-title {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .block-title i {
+            font-size: 1.2rem;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title i {
+            font-size: 1rem;
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
             font-size: 14px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 14px 18px;
+            color: var(--text);
+            font-size: 15px;
+            transition: var(--transition);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 67, 255, 0.2);
+        }
+
+        .form-note {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .delivery-select {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 14px 18px;
+            color: var(--text);
+            font-size: 15px;
+            margin-bottom: 15px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .delivery-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 67, 255, 0.2);
+        }
+
+        .delivery-desc {
+            font-size: 14px;
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .coords-input {
+            display: none;
+            margin-top: 20px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .coords-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .order-summary {
+            position: sticky;
+            top: 20px;
+            background: var(--light);
+            border-radius: var(--radius);
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow);
+        }
+
+        .summary-title {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .summary-title i {
+            font-size: 1.2rem;
+        }
+
+        .order-items {
+            list-style: none;
+            margin-bottom: 25px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .order-items::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .order-items::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+        }
+
+        .order-items::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            font-weight: 500;
+        }
+
+        .item-price {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .order-totals {
+            margin-top: 25px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding: 8px 0;
+        }
+
+        .total-label {
+            color: var(--text-light);
+        }
+
+        .total-value {
+            font-weight: 600;
+        }
+
+        .grand-total {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1.3rem;
+            color: var(--accent);
+        }
+
+        .promo-container {
+            margin: 25px 0;
+        }
+
+        .promo-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .promo-input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 14px 18px;
+            color: var(--text);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .promo-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 67, 255, 0.2);
+        }
+
+        .promo-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 0 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .promo-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .promo-message {
+            font-size: 13px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .promo-success {
+            display: block;
+            background: rgba(76, 175, 80, 0.2);
+            color: #a5d6a7;
+            border-left: 3px solid var(--success);
+        }
+
+        .promo-error {
+            display: block;
+            background: rgba(244, 67, 54, 0.2);
+            color: #ef9a9a;
+            border-left: 3px solid var(--error);
+        }
+
+        .pay-btn-container {
+            margin-top: 30px;
+        }
+
+        .pay-btn {
+            width: 100%;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            padding: 18px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(108, 67, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+            display: none;
+        }
+
+        .pay-btn.visible {
+            display: block;
+        }
+
+        .pay-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(108, 67, 255, 0.6);
+        }
+
+        .pay-btn:active {
+            transform: translateY(1px);
+        }
+
+        .pay-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .pay-btn:hover::before {
+            left: 100%;
+        }
+
+        .warning-box {
+            display: none;
+            background: rgba(255, 152, 0, 0.15);
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            margin-bottom: 30px;
+            animation: fadeIn 0.5s ease-out;
+            backdrop-filter: blur(5px);
+        }
+
+        .warning-box i {
+            color: var(--warning);
+            margin-right: 10px;
+        }
+
+        .footer {
+            background: rgba(15, 15, 26, 0.8);
+            padding: 20px 0;
             position: fixed;
             bottom: 0;
             width: 100%;
             z-index: 90;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
         .footer-links {
-            max-width: 800px;
-            margin: 0 auto;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 15px 30px;
-            padding: 0 20px;
         }
 
-        .footer-links a {
-            color: #ddd;
+        .footer-link {
+            color: var(--text-light);
             text-decoration: none;
-            transition: color 0.3s;
-            white-space: nowrap;
+            transition: var(--transition);
+            font-size: 14px;
+            position: relative;
         }
 
-        .footer-links a:hover {
-            color: #ff6600;
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: var(--transition);
+        }
+
+        .footer-link:hover {
+            color: var(--accent);
+        }
+
+        .footer-link:hover::after {
+            width: 100%;
         }
 
         .footer-copyright {
             text-align: center;
-            margin-top: 10px;
-            color: #777;
+            margin-top: 15px;
+            color: var(--text-muted);
             font-size: 13px;
         }
 
-        /* Скрываем неактивные языки */
-        .footer-links span,
-        .footer-copyright span {
+        .discord-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #5865F2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(88, 101, 242, 0.4);
+            transition: var(--transition);
+        }
+
+        .discord-btn:hover {
+            transform: translateY(-5px) scale(1.1);
+            background: #4752C4;
+            box-shadow: 0 8px 30px rgba(88, 101, 242, 0.6);
+        }
+
+        .discord-btn i {
+            color: white;
+            font-size: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .form-block {
+                padding: 25px;
+            }
+
+            .block-title, .summary-title {
+                font-size: 1.3rem;
+            }
+
+            .discord-btn {
+                width: 45px;
+                height: 45px;
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .footer-links {
+                gap: 10px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.8rem;
+            }
+
+            .block-title, .summary-title {
+                font-size: 1.2rem;
+            }
+
+            .form-input, .delivery-select, .promo-input {
+                padding: 12px 15px;
+            }
+
+            .footer-links {
+                gap: 8px 15px;
+            }
+
+            .footer-link {
+                font-size: 13px;
+            }
+        }
+
+        /* Скрытие языков */
+        [data-lang] {
             display: none;
         }
-        .footer-links span[data-lang="ru"],
-        .footer-copyright span[data-lang="ru"] {
-            display: inline;
-        }
 
-        /* Адаптация существующих стилей */
-        .checkout-content {
-            padding-bottom: 60px;
-        }
-
-        .pay-button {
-            margin-bottom: 20px;
+        [data-lang="ru"] {
+            display: block;
         }
     </style>
 </head>
 <body>
-<!-- 3D фон в iframe -->
-<div class="background">
-    <iframe id="bg-iframe" src="/2b2t/dd"></iframe>
+<div class="bg-container">
+    <iframe class="bg-iframe" src="/2b2t/dd"></iframe>
 </div>
+<div class="bg-overlay"></div>
 
-<!-- Основной контейнер -->
-<div class="main-container">
-    <!-- Основной контент страницы -->
-    <div class="header">
-        <div class="back-icon" onclick="window.location.href='/9b9t/cart'">
+<div class="container">
+    <header class="header">
+        <a href="/9b9t/cart" class="back-btn">
             <i class="fas fa-arrow-left"></i>
-        </div>
-        <div class="language-selector">
-            <select id="language-select">
-                <option value="ru">Русский</option>
-                <option value="uk">Українська</option>
-                <option value="en">English</option>
-            </select>
-        </div>
+            <span data-lang="ru">Назад в корзину</span>
+            <span data-lang="uk">Назад у кошик</span>
+            <span data-lang="en">Back to cart</span>
+        </a>
+    </header>
+
+    <h1 class="page-title" data-lang="ru">Оформление заказа</h1>
+    <h1 class="page-title" data-lang="uk">Оформлення замовлення</h1>
+    <h1 class="page-title" data-lang="en">Checkout</h1>
+
+    <div class="warning-box" id="min-order-warning">
+        <i class="fas fa-exclamation-triangle"></i>
+        <p data-lang="ru">Минимальная сумма заказа $2. Добавьте больше товаров!</p>
+        <p data-lang="uk">Мінімальна сума замовлення $2. Додайте більше товарів!</p>
+        <p data-lang="en">Minimum order amount is $2. Add more items!</p>
     </div>
 
-    <div class="checkout-container">
-        <div class="checkout-content">
-            <h1 data-lang="ru">Оформление заказа</h1>
-            <h1 data-lang="uk">Оформлення замовлення</h1>
-            <h1 data-lang="en">Checkout</h1>
+    <div class="checkout-layout" id="checkout-main">
+        <div class="form-column">
+            <div class="form-block">
+                <h2 class="block-title">
+                    <i class="fas fa-user-circle"></i>
+                    <span data-lang="ru">Контактная информация</span>
+                    <span data-lang="uk">Контактна інформація</span>
+                    <span data-lang="en">Contact Information</span>
+                </h2>
 
-            <div class="min-order-warning" id="min-order-warning">
-                <i class="fas fa-exclamation-triangle"></i>
-                <p data-lang="ru">Минимальная общая цена $2. Добавьте еще несколько товаров в корзину и возвращайтесь!</p>
-                <p data-lang="uk">Мінімальна загальна ціна $2. Додайте ще кілька товарів у кошик і повертайтесь!</p>
-                <p data-lang="en">Minimum total price is $2. Add more items to your cart and come back!</p>
-            </div>
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-user"></i>
+                        <span data-lang="ru">Основные данные</span>
+                        <span data-lang="uk">Основні дані</span>
+                        <span data-lang="en">Basic Information</span>
+                    </h3>
 
-            <div class="checkout-main" id="checkout-main">
-                <div class="contact-info">
-                    <h2 data-lang="ru">Контактная информация</h2>
-                    <h2 data-lang="uk">Контактна інформація</h2>
-                    <h2 data-lang="en">Contact Information</h2>
+                    <div class="form-group">
+                        <label class="form-label" for="username" data-lang="ru">Имя пользователя:</label>
+                        <label class="form-label" for="username" data-lang="uk">Ім'я користувача:</label>
+                        <label class="form-label" for="username" data-lang="en">Username:</label>
+                        <input type="text" id="username" name="username" class="form-input" required>
+                    </div>
 
-                    <form id="contact-form">
-                        <label for="username" data-lang="ru">Имя Пользователя:</label>
-                        <label for="username" data-lang="uk">Ім'я Користувача:</label>
-                        <label for="username" data-lang="en">Username:</label>
-                        <input type="text" id="username" name="username" required>
-
-                        <label for="discord" data-lang="ru">Ник Discord:</label>
-                        <label for="discord" data-lang="uk">Нік Discord:</label>
-                        <label for="discord" data-lang="en">Discord Nickname:</label>
-                        <input type="text" id="discord" name="discord" required>
-
-                        <label for="email" data-lang="ru">Электронная почта:</label>
-                        <label for="email" data-lang="uk">Електронна пошта:</label>
-                        <label for="email" data-lang="en">Email:</label>
-                        <input type="email" id="email" name="email" required>
-                    </form>
-
-                    <div class="contact-notice">
-                        <p data-lang="ru">Нам нужна некоторая информация, чтобы мы могли уведомить вас о завершении заказа и связаться с вами в случае возникновения каких-либо проблем.</p>
-                        <p data-lang="uk">Нам потрібна деяка інформація, щоб ми могли повідомити вас про завершення замовлення та зв'язатися з вами у разі виникнення будь-яких проблем.</p>
-                        <p data-lang="en">We need some information so we can notify you when your order is complete and contact you if there are any issues.</p>
+                    <div class="form-group">
+                        <label class="form-label" for="email" data-lang="ru">Электронная почта:</label>
+                        <label class="form-label" for="email" data-lang="uk">Електронна пошта:</label>
+                        <label class="form-label" for="email" data-lang="en">Email:</label>
+                        <input type="email" id="email" name="email" class="form-input" required>
+                        <p class="form-note" data-lang="ru">На этот адрес будет отправлена информация о заказе</p>
+                        <p class="form-note" data-lang="uk">На цю адресу буде надіслано інформацію про замовлення</p>
+                        <p class="form-note" data-lang="en">Order information will be sent to this address</p>
                     </div>
                 </div>
 
-                <div class="delivery-method">
-                    <h2 data-lang="ru">Способ доставки</h2>
-                    <h2 data-lang="uk">Спосіб доставки</h2>
-                    <h2 data-lang="en">Delivery Method</h2>
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-comment-alt"></i>
+                        <span data-lang="ru">Связь</span>
+                        <span data-lang="uk">Зв'язок</span>
+                        <span data-lang="en">Communication</span>
+                    </h3>
 
-                    <select id="delivery-select">
+                    <div class="form-group">
+                        <label class="form-label" for="discord" data-lang="ru">Discord ник:</label>
+                        <label class="form-label" for="discord" data-lang="uk">Discord нік:</label>
+                        <label class="form-label" for="discord" data-lang="en">Discord nickname:</label>
+                        <input type="text" id="discord" name="discord" class="form-input" required>
+                        <p class="form-note" data-lang="ru">Пример: User#1234 (для уведомлений)</p>
+                        <p class="form-note" data-lang="uk">Приклад: User#1234 (для сповіщень)</p>
+                        <p class="form-note" data-lang="en">Example: User#1234 (for notifications)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-block">
+                <h2 class="block-title">
+                    <i class="fas fa-truck"></i>
+                    <span data-lang="ru">Доставка</span>
+                    <span data-lang="uk">Доставка</span>
+                    <span data-lang="en">Delivery</span>
+                </h2>
+
+                <div class="form-group">
+                    <label class="form-label" data-lang="ru">Способ доставки:</label>
+                    <label class="form-label" data-lang="uk">Спосіб доставки:</label>
+                    <label class="form-label" data-lang="en">Delivery method:</label>
+                    <select class="delivery-select" id="delivery-select">
                         <option value="random" data-lang="ru">Рандомный</option>
                         <option value="random" data-lang="uk">Випадковий</option>
                         <option value="random" data-lang="en">Random</option>
 
-                        <option value="specific" data-lang="ru">Указанным</option>
+                        <option value="specific" data-lang="ru">Указанный</option>
                         <option value="specific" data-lang="uk">Вказаний</option>
                         <option value="specific" data-lang="en">Specific</option>
                     </select>
+                </div>
 
-                    <div class="delivery-description" id="delivery-description">
-                        <p data-lang="ru" data-delivery="random">Мы доставим ваши вещи в случайное место недалеко от места возрождения, а затем отправим вам координаты по электронной почте.</p>
-                        <p data-lang="uk" data-delivery="random">Ми доставимо ваші речі у випадкове місце неподалік від місця відродження, а потім надішлемо вам координати електронною поштою.</p>
-                        <p data-lang="en" data-delivery="random">We will deliver your items to a random location near the spawn point and then send you the coordinates via email.</p>
+                <div class="delivery-desc" id="delivery-description">
+                    <p data-lang="ru" data-delivery="random">Мы доставим ваши вещи в случайное место недалеко от спавна. Координаты будут отправлены на вашу почту после выполнения заказа.</p>
+                    <p data-lang="uk" data-delivery="random">Ми доставимо ваші речі у випадкове місце неподалік від спавну. Координати будуть надіслані на вашу пошту після виконання замовлення.</p>
+                    <p data-lang="en" data-delivery="random">We will deliver your items to a random location near spawn. Coordinates will be sent to your email after order completion.</p>
 
-                        <p data-lang="ru" data-delivery="specific">Мы доставим ваши товары по указанным вами координатам, а затем отправим вам электронное письмо, когда закончим. Мы доставляем только по координатам надземного мира, и плата увеличивается по мере удаления ваших координат от спауна.</p>
-                        <p data-lang="uk" data-delivery="specific">Ми доставимо ваші товари за вказаними вами координатами, а потім надішлемо вам електронного листа, коли закінчимо. Ми доставляємо лише за координатами надземного світу, і плата збільшується в міру віддалення ваших координат від спауну.</p>
-                        <p data-lang="en" data-delivery="specific">We will deliver your items to the coordinates you specify and then send you an email when we're done. We only deliver to overworld coordinates, and the fee increases as your coordinates move further from spawn.</p>
-                    </div>
-                    <div class="promo-code-container">
-                        <div class="promo-input-wrapper">
-                            <input type="text" id="promo-code-input"
-                                   placeholder="Введите промокод (необязательно)" data-lang="ru"
-                                   class="promo-code-input">
-                            <input type="text" id="promo-code-input"
-                                   placeholder="Введіть промокод (необов'язково)" data-lang="uk"
-                                   class="promo-code-input">
-                            <input type="text" id="promo-code-input"
-                                   placeholder="Enter promo code (optional)" data-lang="en"
-                                   class="promo-code-input">
-                            <button id="apply-promo-btn" data-lang="ru" class="promo-code-btn">Применить</button>
-                            <button id="apply-promo-btn" data-lang="uk" class="promo-code-btn">Застосувати</button>
-                            <button id="apply-promo-btn" data-lang="en" class="promo-code-btn">Apply</button>
+                    <p data-lang="ru" data-delivery="specific">Доставка по указанным координатам в основном мире. Стоимость зависит от расстояния от спавна.</p>
+                    <p data-lang="uk" data-delivery="specific">Доставка за вказаними координатами в основному світі. Вартість залежить від відстані від спавну.</p>
+                    <p data-lang="en" data-delivery="specific">Delivery to specified coordinates in the overworld. Cost depends on distance from spawn.</p>
+                </div>
+
+                <div class="coords-input" id="coordinates-input">
+                    <div class="coords-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="x-coord" data-lang="ru">Координата X:</label>
+                            <label class="form-label" for="x-coord" data-lang="uk">Координата X:</label>
+                            <label class="form-label" for="x-coord" data-lang="en">X Coordinate:</label>
+                            <input type="number" id="x-coord" name="x-coord" class="form-input" step="1" required>
                         </div>
-                        <p id="promo-message" class="promo-message"></p>
+                        <div class="form-group">
+                            <label class="form-label" for="z-coord" data-lang="ru">Координата Z:</label>
+                            <label class="form-label" for="z-coord" data-lang="uk">Координата Z:</label>
+                            <label class="form-label" for="z-coord" data-lang="en">Z Coordinate:</label>
+                            <input type="number" id="z-coord" name="z-coord" class="form-input" step="1" required>
+                        </div>
                     </div>
+                    <p class="form-note" data-lang="ru">Укажите координаты в основном мире</p>
+                    <p class="form-note" data-lang="uk">Вкажіть координати в основному світі</p>
+                    <p class="form-note" data-lang="en">Enter coordinates in the overworld</p>
+                </div>
+            </div>
+        </div>
 
-                    <div class="coordinates-input" id="coordinates-input" style="display: none;">
-                        <label for="x-coord" data-lang="ru">Координата X:</label>
-                        <label for="x-coord" data-lang="uk">Координата X:</label>
-                        <label for="x-coord" data-lang="en">X Coordinate:</label>
-                        <input type="number" id="x-coord" name="x-coord" step="1" required>
+        <div class="order-summary">
+            <h2 class="summary-title">
+                <i class="fas fa-shopping-bag"></i>
+                <span data-lang="ru">Ваш заказ</span>
+                <span data-lang="uk">Ваше замовлення</span>
+                <span data-lang="en">Your Order</span>
+            </h2>
 
-                        <label for="z-coord" data-lang="ru">Координата Z:</label>
-                        <label for="z-coord" data-lang="uk">Координата Z:</label>
-                        <label for="z-coord" data-lang="en">Z Coordinate:</label>
-                        <input type="number" id="z-coord" name="z-coord" step="1" required>
-                    </div>
+            <ul class="order-items" id="order-items">
+                <!-- Товары будут добавлены через JS -->
+            </ul>
+
+            <div class="promo-container">
+                <div class="promo-row">
+                    <input type="text" id="promo-code-input" placeholder="Введите промокод" data-lang="ru" class="promo-input">
+                    <input type="text" id="promo-code-input" placeholder="Введіть промокод" data-lang="uk" class="promo-input">
+                    <input type="text" id="promo-code-input" placeholder="Enter promo code" data-lang="en" class="promo-input">
+                    <button id="apply-promo-btn" data-lang="ru" class="promo-btn">Применить</button>
+                    <button id="apply-promo-btn" data-lang="uk" class="promo-btn">Застосувати</button>
+                    <button id="apply-promo-btn" data-lang="en" class="promo-btn">Apply</button>
+                </div>
+                <p id="promo-message" class="promo-message"></p>
+            </div>
+
+            <div class="order-totals">
+                <div class="total-row">
+                    <span class="total-label" data-lang="ru">Промокод:</span>
+                    <span class="total-label" data-lang="uk">Промокод:</span>
+                    <span class="total-label" data-lang="en">Promo code:</span>
+                    <span class="total-value">-$<span id="discount-amount">0.00</span></span>
+                </div>
+
+                <div class="total-row">
+                    <span class="total-label" data-lang="ru">Доставка:</span>
+                    <span class="total-label" data-lang="uk">Доставка:</span>
+                    <span class="total-label" data-lang="en">Delivery:</span>
+                    <span class="total-value">$<span id="delivery-fee">0.00</span></span>
+                </div>
+
+                <div class="total-row grand-total">
+                    <span class="total-label" data-lang="ru">Итого:</span>
+                    <span class="total-label" data-lang="uk">Разом:</span>
+                    <span class="total-label" data-lang="en">Total:</span>
+                    <span class="total-value">$<span id="order-total">0</span></span>
                 </div>
             </div>
 
-            <div class="order-summary">
-                <h2 data-lang="ru">Ваш заказ:</h2>
-                <h2 data-lang="uk">Ваше замовлення:</h2>
-                <h2 data-lang="en">Your Order:</h2>
-                <ul class="order-items"></ul>
-                <p class="discount" data-lang="ru">Промокод: -$<span id="discount-amount">0.00</span></p>
-                <p class="discount" data-lang="uk">Промокод: -$<span id="discount-amount">0.00</span></p>
-                <p class="discount" data-lang="en">Promo code: -$<span id="discount-amount">0.00</span></p>
-                <p class="order-total" data-lang="ru">Общая сумма: $<span id="order-total">0</span></p>
-                <p class="order-total" data-lang="uk">Загальна сума: $<span id="order-total">0</span></p>
-                <p class="order-total" data-lang="en">Total: $<span id="order-total">0</span></p>
-                <p class="delivery-fee" data-lang="ru">Доставка: $<span id="delivery-fee">0.00</span></p>
-                <p class="delivery-fee" data-lang="uk">Доставка: $<span id="delivery-fee">0.00</span></p>
-                <p class="delivery-fee" data-lang="en">Delivery Fee: $<span id="delivery-fee">0.00</span></p>
+            <div class="pay-btn-container">
+                <button class="pay-btn" id="pay-button" data-lang="ru">Перейти к оплате</button>
+                <button class="pay-btn" id="pay-button" data-lang="uk">Перейти до оплати</button>
+                <button class="pay-btn" id="pay-button" data-lang="en">Proceed to Payment</button>
             </div>
-
-            <button class="pay-button" id="pay-button" data-lang="ru" style="display: none;">Оплатить</button>
-            <button class="pay-button" id="pay-button" data-lang="uk" style="display: none;">Оплатити</button>
-            <button class="pay-button" id="pay-button" data-lang="en" style="display: none;">Pay</button>
         </div>
     </div>
+</div>
 
-    <!-- Компактный футер с многоязычной поддержкой -->
-    <footer class="compact-footer">
+<footer class="footer">
+    <div class="footer-content">
         <div class="footer-links">
-            <!-- главная -->
-            <a href="/">
+            <a href="/" class="footer-link">
                 <span data-lang="ru">Главная</span>
                 <span data-lang="uk">Головна</span>
                 <span data-lang="en">Home</span>
             </a>
-
-            <!-- Контакты -->
-            <a href="/info/contact">
+            <a href="/info/contact" class="footer-link">
                 <span data-lang="ru">Контакты</span>
                 <span data-lang="uk">Контакти</span>
                 <span data-lang="en">Contacts</span>
             </a>
-
-            <!-- О нас -->
-            <a href="/info/about">
+            <a href="/info/about" class="footer-link">
                 <span data-lang="ru">О нас</span>
                 <span data-lang="uk">Про нас</span>
                 <span data-lang="en">About us</span>
             </a>
-
-            <!-- Политика конфиденциальности -->
-            <a href="/info/privacy">
+            <a href="/info/privacy" class="footer-link">
                 <span data-lang="ru">Политика конфиденциальности</span>
                 <span data-lang="uk">Політика конфіденційності</span>
                 <span data-lang="en">Privacy policy</span>
             </a>
-
-            <!-- FAQ -->
-            <a href="/info/faq">
+            <a href="/info/faq" class="footer-link">
                 <span data-lang="ru">FAQ</span>
                 <span data-lang="uk">Часті питання</span>
                 <span data-lang="en">FAQ</span>
@@ -331,84 +865,44 @@
             <span data-lang="uk">© 2025 endles.fun. Всі права захищені.</span>
             <span data-lang="en">© 2025 endles.fun. All rights reserved.</span>
         </div>
-    </footer>
-</div>
+    </div>
+</footer>
 
-<!-- Маленькая иконка Discord внизу -->
-<a href="https://discord.gg/Sc4v7nr" class="discord-icon-bottom" target="_blank">
+<a href="https://discord.gg/Sc4v7nr" class="discord-btn" target="_blank">
     <i class="fab fa-discord"></i>
 </a>
 
 <script src="/9b9t/js/checkout.js"></script>
-
 <script>
-    // Скрипт для взаимодействия с 3D фоном
-    document.addEventListener('mousemove', (e) => {
-        const iframe = document.getElementById('bg-iframe');
-        if (iframe.contentWindow) {
-            const mouseEvent = new MouseEvent('mousemove', {
-                clientX: e.clientX,
-                clientY: e.clientY,
-                view: window
-            });
-            iframe.contentWindow.dispatchEvent(mouseEvent);
-        }
+    // Получаем сохраненный язык из localStorage
+    const savedLanguage = localStorage.getItem('selectedLanguage') || 'ru';
+
+    // Показываем только контент на выбранном языке
+    document.querySelectorAll(`[data-lang="${savedLanguage}"]`).forEach(el => {
+        el.style.display = el.classList.contains('pay-btn') ||
+                          el.classList.contains('promo-input') ||
+                          el.classList.contains('promo-btn')
+                          ? 'inline-block' : 'block';
     });
 
-    window.addEventListener('resize', function() {
-        const iframe = document.getElementById('bg-iframe');
-        if (iframe.contentWindow && iframe.contentWindow.onWindowResize) {
-            iframe.contentWindow.onWindowResize();
-        }
-    });
+    // Обработчик изменения способа доставки
+    document.getElementById('delivery-select').addEventListener('change', function() {
+        const method = this.value;
+        document.getElementById('coordinates-input').style.display = method === 'specific' ? 'block' : 'none';
 
-    // Инициализация языка
-    document.addEventListener('DOMContentLoaded', function() {
-        const languageSelect = document.getElementById('language-select');
-        const savedLanguage = localStorage.getItem('selectedLanguage') || 'ru';
-        languageSelect.value = savedLanguage;
-        updateLanguage(savedLanguage);
-
-        languageSelect.addEventListener('change', function() {
-            const selectedLanguage = this.value;
-            localStorage.setItem('selectedLanguage', selectedLanguage);
-            updateLanguage(selectedLanguage);
+        // Обновляем описание способа доставки
+        document.querySelectorAll('#delivery-description [data-delivery]').forEach(el => {
+            el.style.display = el.getAttribute('data-lang') === savedLanguage &&
+                              el.getAttribute('data-delivery') === method ? 'block' : 'none';
         });
+    });
 
-        function updateLanguage(lang) {
-            // Обновление контента страницы
-            document.querySelectorAll('[data-lang]').forEach(el => {
-                if (el.classList.contains('pay-button') || el.classList.contains('promo-code-input') || el.classList.contains('promo-code-btn')) {
-                    el.style.display = el.getAttribute('data-lang') === lang ? 'inline-block' : 'none';
-                } else {
-                    el.style.display = el.getAttribute('data-lang') === lang ? 'block' : 'none';
-                }
-            });
-
-            // Обновление описания способа доставки
-            const deliveryMethod = document.getElementById('delivery-select').value;
-            document.querySelectorAll('#delivery-description [data-delivery]').forEach(el => {
-                el.style.display = (el.getAttribute('data-lang') === lang && el.getAttribute('data-delivery') === deliveryMethod) ? 'block' : 'none';
-            });
-
-            // Обновление футера
-            document.querySelectorAll('.footer-links span, .footer-copyright span').forEach(el => {
-                el.style.display = el.getAttribute('data-lang') === lang ? 'inline' : 'none';
-            });
-        }
-
-        // Обработчик изменения способа доставки
-        document.getElementById('delivery-select').addEventListener('change', function() {
-            const method = this.value;
-            const lang = document.getElementById('language-select').value;
-
-            // Показываем/скрываем поле ввода координат
-            document.getElementById('coordinates-input').style.display = method === 'specific' ? 'block' : 'none';
-
-            // Обновляем описание способа доставки
-            document.querySelectorAll('#delivery-description [data-delivery]').forEach(el => {
-                el.style.display = (el.getAttribute('data-lang') === lang && el.getAttribute('data-delivery') === method) ? 'block' : 'none';
-            });
+    // Инициализация описания доставки при загрузке
+    document.addEventListener('DOMContentLoaded', function() {
+        const deliveryMethod = document.getElementById('delivery-select').value;
+        document.querySelectorAll('#delivery-description [data-delivery]').forEach(el => {
+            el.style.display = el.getAttribute('data-lang') === savedLanguage &&
+                              el.getAttribute('data-delivery') === deliveryMethod ? 'block' : 'none';
         });
     });
 </script>

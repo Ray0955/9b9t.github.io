@@ -297,52 +297,10 @@ body, html {
     margin-top: 20px;
 }
 
-.checkout-button {
-    background: linear-gradient(90deg, #28a745, #17a2b8, #28a745); /* Градиентный фон */
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
-    font-size: 16px;
-    display: none; /* Скрыта по умолчанию */
-    background-size: 200% 100%; /* Увеличиваем размер фона для анимации */
-    transition: background-position 0.5s ease, transform 0.2s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень для объема */
-}
 
-.checkout-button:hover {
-    background-position: -100% 0; /* Анимация градиента */
-    transform: scale(1.05); /* Увеличение кнопки при наведении */
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Увеличенная тень при наведении */
-}
-
-.checkout-button:active {
-    transform: scale(0.95); /* Эффект нажатия */
-    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1); /* Уменьшенная тень при нажатии */
-}
-
-@keyframes gradientShift {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-.checkout-button {
-    animation: gradientShift 3s infinite ease-in-out; /* Бесконечная анимация градиента */
-}
 
 .min-order-warning {
     display: none;
-    background: #fff3cd;
-    color: #666666c5;
     padding: 10px;
     border-radius: 5px;
     margin-top: 20px;
@@ -670,15 +628,16 @@ body, html {
 }
 
 .card__description {
-    max-height: 85px; /* Ограничиваем максимальную высоту */
-    overflow-y: auto; /* Добавляем вертикальную прокрутку при необходимости */
-    margin: 0.5rem 0;
-    padding: 0.2rem;
-    font-size: 0.9rem;
-    line-height: 1.4;
-    color: #ccc;
-    scrollbar-width: thin; /* Для Firefox */
-    scrollbar-color: #555 #333; /* Для Firefox */
+    font-size: 16px;
+    color: rgb(255, 255, 255);
+    text-align: center;
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    bottom: 10.5rem; /* Статичное положение */
+    transition: opacity 0.5s ease;
 }
 
 .card__price {
@@ -1056,17 +1015,3 @@ html, body {
 .promo-message.error {
     color: #f44336;
 }
-<style>
-    #paypal-button-container {
-        margin: 20px 0;
-        width: 100%;
-        max-width: 500px;
-    }
-
-    /* Для мобильных устройств */
-    @media (max-width: 768px) {
-        #paypal-button-container {
-            width: 100%;
-        }
-    }
-</style>

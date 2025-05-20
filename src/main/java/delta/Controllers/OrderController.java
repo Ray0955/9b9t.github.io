@@ -1,7 +1,6 @@
 package delta.Controllers;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import delta.Entity.Order;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +13,7 @@ import java.util.UUID;
 @CrossOrigin(origins = "*") // Разрешаем запросы с фронтенда
 public class OrderController {
 
-    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private final Gson gson = new Gson();
 
     @GetMapping
     public String getOrders(
@@ -32,12 +31,12 @@ public class OrderController {
                 new User("3d56b9501bd6167bfdb96f72e2ffb09776c0678428ef3ed6b6b9e536447ebb56",
                         "e30bca7e270c84f10c531f8f999034f28799ef6a660d35e4cdb86a0246769474",
                         "moderator", "9b9t"),
-                new User("0316c5640787d0af725750c238d04b0c00001adc741770c7addf40dec63b897f",
-                        "1ba119d21891c4d219ca2216845cbb3e2fc6654dd3c73b62a70c91459ed54826",
-                        "admin", "2b2t"),
+                new User("adc32ec674a8e58e9b661856beb0db36ae2b542388800829700097ee5f37a3a1",
+                        "de4455aa92230d8a2e8f061ac4170a0885c25c68f1684011a65fc88f9609f473",
+                        "admin", "6b6t"),
                 new User("adbacbf2fea81a2159eb2af9e2170fd018b85af23b4f3e06e3301b5af780f5b3",
-                        "443def92e889d868bfc7a3df83bd610907bec5182c8c2a34f710724c48cb13de",
-                        "moderator", "2b2t")
+                        "ecebff77ed41d1e51844be45c554804b56403861c4a9a251f5bacab358fd8903",
+                        "moderator", "6b6t")
         };
 
         try {

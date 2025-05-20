@@ -182,7 +182,7 @@ function updateRoleTag() {
 // Функция для получения суммы заказа
 async function fetchOrderAmount() {
     try {
-        const response = await fetch(`https://endles.fun/api/6b6t/orders/${uuid}`);
+        const response = await fetch(`https://endles.fun/api/9b9t/orders/${uuid}`);
         if (!response.ok) throw new Error('Failed to fetch order');
 
         const orderData = await response.json();
@@ -245,7 +245,7 @@ async function initChat() {
     // Функция загрузки сообщений
     async function loadMessages() {
         try {
-            const response = await fetch(`https://endles.fun/api/6b6t/orders/${uuid}`);
+            const response = await fetch(`https://endles.fun/api/9b9t/orders/${uuid}`);
             if (!response.ok) throw new Error('Failed to load messages');
 
             const data = await response.json();
@@ -295,7 +295,7 @@ async function initChat() {
 
         try {
             // Получаем текущий заказ
-            const response = await fetch(`https://endles.fun/api/6b6t/orders/${uuid}`);
+            const response = await fetch(`https://endles.fun/api/9b9t/orders/${uuid}`);
             if (!response.ok) throw new Error('Failed to load order');
 
             const order = await response.json();
@@ -313,7 +313,7 @@ async function initChat() {
             order.messages[Date.now()] = { author, message: text };
 
             // Сохраняем изменения
-            const putResponse = await fetch(`https://endles.fun/api/6b6t/orders/${uuid}`, {
+            const putResponse = await fetch(`https://endles.fun/api/9b9t/orders/${uuid}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(order)

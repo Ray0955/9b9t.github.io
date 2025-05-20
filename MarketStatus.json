@@ -1,13 +1,9 @@
 {
-<<<<<<< HEAD
-  "work": true,
+  "work": false,
   "protectedPaths": [
     "/9b9t",
     "/9b9t/cart",
     "/9b9t/checkout",
     "/9b9t/chat"
   ]
-=======
-  "work": true
->>>>>>> 576c3fd7322332020d4f3b51206c153ff109ded1
 }

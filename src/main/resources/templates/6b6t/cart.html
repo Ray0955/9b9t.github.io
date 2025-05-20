@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Корзина</title>
-    <link rel="stylesheet" href="/6b6t/css/style.css">
+    <link rel="stylesheet" href="/9b9t/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .background {
@@ -24,17 +24,15 @@
             pointer-events: none;
         }
 
-        /* Для интерактивных элементов */
         .interactive {
             pointer-events: auto;
         }
 
         .cart-content {
             padding: 20px;
-            margin-bottom: 120px; /* Добавлено для футера */
+            margin-bottom: 120px;
         }
 
-        /* Стили для футера */
         .compact-footer {
             background-color: rgba(34, 34, 34, 0.8);
             color: white;
@@ -70,7 +68,6 @@
             font-size: 13px;
         }
 
-        /* Скрываем неактивные языки */
         [data-lang] {
             display: none;
         }
@@ -78,7 +75,6 @@
             display: block;
         }
 
-        /* Стили для иконки Discord */
         .discord-icon-bottom {
             position: fixed;
             bottom: 90px;
@@ -105,21 +101,189 @@
             color: white;
             font-size: 20px;
         }
+
+        /* Стили для корзины */
+        .cart-items {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        .cart-item-image img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-right: 15px;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-details h3 {
+            margin: 0 0 5px 0;
+            font-size: 1rem;
+        }
+
+        .cart-item-details p {
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quantity-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .remove-btn {
+            width: 30px;
+            height: 30px;
+            border: none;
+            background-color: rgba(255, 0, 0, 0.2);
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .remove-btn:hover {
+            background-color: rgba(255, 0, 0, 0.3);
+        }
+
+        .empty-cart-message {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+            display: none;
+        }
+
+        .total-amount {
+            text-align: right;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .checkout-button {
+    padding: 14px 32px;
+    background: #1a252f; /* Темный фон кнопки */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: all 0.4s ease;
+    position: relative;
+    z-index: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Контейнер для градиентной границы */
+.checkout-button::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg,
+        #ff0000,  /* Красный */
+        #ff00ff,  /* Фиолетовый */
+        #0000ff,  /* Синий */
+        #ff00ff,  /* Фиолетовый */
+        #ff0000); /* Красный */
+    background-size: 300%;
+    border-radius: 10px; /* Чуть больше, чем у кнопки */
+    z-index: -1;
+    opacity: 0.8;
+    animation: rainbow-border 3s linear infinite;
+}
+
+/* Темная "маска" внутри (чтобы градиент был только по краям) */
+.checkout-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #1a252f; /* Совпадает с фоном кнопки */
+    border-radius: 8px;
+    z-index: -1;
+}
+
+/* Анимация градиента */
+@keyframes rainbow-border {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+/* Эффекты при наведении */
+.checkout-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.checkout-button:hover::before {
+    opacity: 1;
+    animation-duration: 1.5s;
+}
+
+.checkout-button:active {
+    transform: translateY(0);
+}
     </style>
 </head>
 <body>
-<!-- 3D фон в iframe -->
 <div class="background">
     <iframe id="bg-iframe" src="/2b2t/dd"></iframe>
 </div>
 
-<!-- Основной контент страницы -->
 <div class="header">
-    <!-- Иконка "Назад" -->
-    <div class="back-icon" onclick="window.location.href='/6b6t'">
+    <div class="back-icon" onclick="window.location.href='/9b9t'">
         <i class="fas fa-arrow-left"></i>
     </div>
-    <!-- Выбор языка -->
     <div class="language-selector">
         <select id="language-select">
             <option value="ru">Русский</option>
@@ -135,28 +299,26 @@
         <h1 data-lang="uk">Кошик</h1>
         <h1 data-lang="en">Cart</h1>
 
-        <!-- Список товаров в корзине -->
         <ul class="cart-items"></ul>
 
-        <!-- Сообщение, если корзина пуста -->
-        <p class="empty-cart-message" data-lang="ru">Ваша корзина пуста. Выберите товар!</p>
-        <p class="empty-cart-message" data-lang="uk">Ваш кошик порожній. Виберіть товар!</p>
-        <p class="empty-cart-message" data-lang="en">Your cart is empty. Choose a product!</p>
+        <div class="empty-cart-message">
+            <p data-lang="ru">Ваша корзина пуста. Выберите товар!</p>
+            <p data-lang="uk">Ваш кошик порожній. Виберіть товар!</p>
+            <p data-lang="en">Your cart is empty. Choose a product!</p>
+        </div>
 
-        <!-- Общая сумма -->
         <p class="total-amount" data-lang="ru">Общая сумма: $<span class="total">0</span></p>
         <p class="total-amount" data-lang="uk">Загальна сума: $<span class="total">0</span></p>
         <p class="total-amount" data-lang="en">Total: $<span class="total">0</span></p>
 
-        <!-- Кнопка "Перейти к оформлению" -->
         <div class="checkout-button-container">
             <button class="checkout-button" data-lang="ru">Перейти к оформлению</button>
             <button class="checkout-button" data-lang="uk">Перейти до оформлення</button>
             <button class="checkout-button" data-lang="en">Proceed to checkout</button>
         </div>
+    </div>
 </div>
 
-<!-- Футер -->
 <footer class="compact-footer">
     <div class="footer-links">
         <a href="/">
@@ -192,15 +354,13 @@
     </div>
 </footer>
 
-<!-- Иконка Discord -->
 <a href="https://discord.gg/Sc4v7nr" class="discord-icon-bottom" target="_blank">
     <i class="fab fa-discord"></i>
 </a>
 
-<script src="/6b6t/js/cart.js"></script>
+<script src="/9b9t/js/cart.js"></script>
 
 <script>
-    // Передача движения мыши во фрейм с фоном
     document.addEventListener('mousemove', (e) => {
         const iframe = document.getElementById('bg-iframe');
         if (iframe.contentWindow) {
@@ -213,7 +373,6 @@
         }
     });
 
-    // Ресайз фона при изменении размера окна
     window.addEventListener('resize', function() {
         const iframe = document.getElementById('bg-iframe');
         if (iframe.contentWindow && iframe.contentWindow.onWindowResize) {
@@ -221,7 +380,6 @@
         }
     });
 
-    // Инициализация языка
     document.addEventListener('DOMContentLoaded', function() {
         const languageSelect = document.getElementById('language-select');
         const savedLanguage = localStorage.getItem('selectedLanguage') || 'ru';

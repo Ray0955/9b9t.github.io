@@ -1,1 +1,238 @@
-"[]"
+{
+  "products": {
+    "75798265-7dc0-43a5-bea0-e56c97caf3c2": {
+      "category": "block",
+      "isNew": false,
+      "isAvailable": true,
+      "title": {
+        "RU": "Test title"
+      },
+      "description": {
+        "RU": "Test description"
+      },
+      "price": 39.99,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg"
+    },
+    "6673195f-987f-4390-a933-84f3d975d030": {
+      "category": "block",
+      "isNew": false,
+      "isAvailable": true,
+      "title": {
+        "RU": "Test title"
+      },
+      "description": {
+        "RU": "Test description"
+      },
+      "price": 39.99,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg"
+    },
+    "a2693da8-8490-4f5a-a218-4ed2b3ce9ded": {
+      "category": "block",
+      "isNew": false,
+      "isAvailable": true,
+      "title": {
+        "RU": "Test title"
+      },
+      "description": {
+        "RU": "Test description"
+      },
+      "price": 39.99,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg"
+    },
+    "fde231c8-f411-4a01-8807-9be902f88ffa": {
+      "category": "block",
+      "isNew": false,
+      "isAvailable": true,
+      "title": {
+        "RU": "Test title"
+      },
+      "description": {
+        "RU": "Test description"
+      },
+      "price": 39.99,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg"
+    },
+    "8f32a636-0be1-430e-a66d-009182b71ad9": {
+      "category": "block",
+      "isNew": false,
+      "isAvailable": true,
+      "title": {
+        "RU": "Test title"
+      },
+      "description": {
+        "RU": "Test description"
+      },
+      "price": 39.99,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg"
+    },
+    "37d2e92d-f897-4574-bcdd-03108630e4ca": {
+      "category": "block",
+      "isNew": false,
+      "isAvailable": true,
+      "title": {
+        "RU": "Test title"
+      },
+      "description": {
+        "RU": "Test description"
+      },
+      "price": 39.99,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg"
+    },
+    "1fb2014b-3ff8-4a61-868d-fb7f2f40a651": {
+      "category": "block",
+      "isNew": false,
+      "isAvailable": true,
+      "title": {
+        "RU": "Test title"
+      },
+      "description": {
+        "RU": "Test description"
+      },
+      "price": 39.99,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg"
+    },
+    "fd2228fc-4baf-465c-8875-4b1314fa00a3": {
+      "category": "block",
+      "isNew": false,
+      "isAvailable": true,
+      "title": {
+        "RU": "Test title"
+      },
+      "description": {
+        "RU": "Test description"
+      },
+      "price": 39.99,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg"
+    },
+    "42546ad8-e4e7-4d4d-94d8-79c730cf3394": {
+      "category": "block",
+      "isNew": false,
+      "isAvailable": true,
+      "title": {
+        "RU": "Test title"
+      },
+      "description": {
+        "RU": "Test description"
+      },
+      "price": 39.99,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg"
+    },
+    "7874f560-4391-4ae8-8574-49ed949a8c19": {
+      "category": "block",
+      "isNew": false,
+      "isAvailable": true,
+      "title": {
+        "RU": "Test title"
+      },
+      "description": {
+        "RU": "Test description"
+      },
+      "price": 39.99,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg"
+    },
+    "5e5ea537-a9dc-4018-a5a7-11507516b980": {
+      "category": "block",
+      "isNew": false,
+      "isAvailable": true,
+      "title": {
+        "RU": "Test title"
+      },
+      "description": {
+        "RU": "Test description"
+      },
+      "price": 39.99,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg"
+    },
+    "be766b4b-1aca-453f-932b-7876473b1e84": {
+      "category": "block",
+      "isNew": false,
+      "isAvailable": true,
+      "title": {
+        "RU": "Test title"
+      },
+      "description": {
+        "RU": "Test description"
+      },
+      "price": 39.99,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg"
+    },
+    "4dc56f43-3e36-4645-9881-bc87c5b31bd0": {
+      "category": "block",
+      "isNew": false,
+      "isAvailable": true,
+      "title": {
+        "RU": "Test title"
+      },
+      "description": {
+        "RU": "Test description"
+      },
+      "price": 39.99,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg"
+    },
+    "68358328-0cc1-46be-9134-06b6512c275c": {
+      "category": "block",
+      "isNew": false,
+      "isAvailable": true,
+      "title": {
+        "RU": "Test title"
+      },
+      "description": {
+        "RU": "Test description"
+      },
+      "price": 39.99,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg"
+    },
+    "6d87f61a-becb-49fe-a750-2375ad536f2c": {
+      "category": "block",
+      "isNew": false,
+      "isAvailable": true,
+      "title": {
+        "RU": "Test title"
+      },
+      "description": {
+        "RU": "Test description"
+      },
+      "price": 39.99,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg"
+    },
+    "001c461e-9129-467b-83bb-2c34c1951c30": {
+      "category": "block",
+      "isNew": true,
+      "isAvailable": true,
+      "title": {
+        "RU": "Test title"
+      },
+      "description": {
+        "RU": "Test description"
+      },
+      "price": 39.99,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg"
+    },
+    "c54c1b16-86fc-4c15-8185-25f6a8ff384f": {
+      "category": "block",
+      "isNew": true,
+      "isAvailable": true,
+      "title": {
+        "RU": "Test title"
+      },
+      "description": {
+        "RU": "Test description"
+      },
+      "price": 39.99,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg"
+    },
+    "b03acb6d-dcf5-42c5-a014-8248a99f46fa": {
+      "category": "block",
+      "isNew": true,
+      "isAvailable": true,
+      "title": {
+        "RU": "Test title"
+      },
+      "description": {
+        "RU": "Test description"
+      },
+      "price": 39.99,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg"
+    }
+  }
+}
